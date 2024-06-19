@@ -1,55 +1,24 @@
 <template>
     <v-card>
         <v-layout>
-            <v-app-bar :elevation="2">
-                <template v-slot:prepend>
-                    <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-                </template>
-                <v-app-bar-title>Application Bar</v-app-bar-title>
-                <v-spacer></v-spacer>
-                <template v-slot:append>
-                    <v-btn icon="mdi-heart"></v-btn>
-                    <v-btn icon="mdi-magnify"></v-btn>
-                    <v-btn @click="toggleTheme">toggle theme</v-btn>
-                    <v-btn icon="mdi-dots-vertical"></v-btn>
-                </template>
-            </v-app-bar>
-            <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
-                <v-list :items="items" :href="items"></v-list>
-            </v-navigation-drawer>
+            
 
             <v-main>
-                <v-container class="bg-surface-variant" fluid>
+                <v-container class="d-flex bg-surface-variant" fluid>
                     <v-row justify="start" dense>
-                        <v-col v-for="card in list" :key="card.title" :cols="card.flex" offset="0" order="1">
-                            <v-card class="mx-auto" max-width="344" href="https://github.com/vuetifyjs/vuetify/" hover>
-                                <v-img :src="card.src" class="align-end text-white"
-                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px" cover>
-                                    <!-- <v-card-title class="text-white" v-text="card.title"></v-card-title> -->
+                        <v-col v-for="card in list" :key="card.title" :sm="card.flex" offset="0" order="1" cols="6">
+                            <v-card class="mx-auto" max-width="336" href="https://github.com/vuetifyjs/vuetify/" hover>
+                                <v-img :src="card.src" class="h-auto align-end text-white"
+                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
+
                                     <v-toolbar color="transparent">
-                                        <!-- <template v-slot:prepend>
-                                <v-btn icon="$menu"></v-btn>
-                            </template> -->
-
-                                        <!-- <v-toolbar-title class="text-h6" text="Messages"></v-toolbar-title> -->
-
                                         <template v-slot:append>
                                             <span class="subheading">01:34:21</span>
-                                            <!-- <v-btn icon="mdi-dots-vertical"></v-btn> -->
                                         </template>
                                     </v-toolbar>
                                 </v-img>
 
-                                <v-card-title class="overflow-x-auto" v-text="card.title"></v-card-title>
-
-                                <!-- <v-card-subtitle class="pt-4">
-                        Number 10
-                    </v-card-subtitle> -->
-
-                                <!-- <v-card-text>
-                        <div>Whitehaven Beach</div>
-                        <div>Whitsunday Island, Whitsunday Islands</div>
-                    </v-card-text> -->
+                                <v-card-title class="overflow-x-hidden" v-text="card.title"></v-card-title>
 
                                 <v-card-actions>
                                     <v-btn color="medium-emphasis" icon="mdi-heart" size="small"></v-btn>
@@ -84,15 +53,6 @@
     </v-card>
 </template>
 
-<script setup>
-import { useTheme } from 'vuetify'
-
-const theme = useTheme()
-
-function toggleTheme() {
-    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-}
-</script>
 <script>
 export default {
     data: () => ({
@@ -117,14 +77,14 @@ export default {
             },
         ],
         list: [
-            { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-            { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-            { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-            { title: 'Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 3 },
-            { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-            { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-            { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-            { title: 'Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 3 }
+            { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 2 },
+            { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 2 },
+            { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 2 },
+            { title: 'Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 2 },
+            { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 2 },
+            { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 2 },
+            { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 2 },
+            { title: 'Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 2 }
         ],
         // cards: [
         //     { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 12 },

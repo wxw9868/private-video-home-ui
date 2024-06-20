@@ -13,7 +13,7 @@
         </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
-        <router-link to="/login"><v-list :items="items"></v-list></router-link>
+        <router-link to="/play"><v-list :items="items"></v-list></router-link>
     </v-navigation-drawer>
 </template>
 

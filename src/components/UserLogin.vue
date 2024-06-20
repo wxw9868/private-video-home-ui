@@ -21,9 +21,8 @@
 <script>
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://127.0.0.1:8081';
+axios.defaults.baseURL = '/api';
 axios.defaults.withCredentials = true;
-// axios.defaults.crossDomain = true;
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -47,20 +46,15 @@ export default {
 
             axios.post('/user/doLogin', formData, {
                 headers: { 'content-type': 'application/json' },
-                // httpsAgent: new https.Agent({
-                //     rejectUnauthorized: false
-                // })
             })
                 .then(function (response) {
                     // 登录成功的处理逻辑
                     console.log('Login successful', response);
-                    console.log('cookie: ');
-                    console.log(document.cookie);
-                    console.log(response.headers['set-cookie']);
+                    console.log('cookie: '+document.cookie);
                     // 处理cookie，例如保存到Vuex或localStorage
                     if (response) {
                         //3秒钟之后跳转到指定的页面 
-                        // setTimeout(window.location.href = '/', 3);
+                        setTimeout(window.location.href = '/', 3);
                     }
                 })
                 .catch(function (error) {

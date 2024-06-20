@@ -12,6 +12,7 @@
     "axios": "^1.7.2",
     "axios-cookiejar-support": "^5.0.2",
     "core-js": "^3.34.0",
+    "dplayer": "^1.27.1",
     "roboto-fontface": "*",
     "vue": "^3.4.0",
     "vuetify": "^3.5.0"

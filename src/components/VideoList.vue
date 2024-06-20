@@ -54,6 +54,42 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://127.0.0.1:8081';
+axios.defaults.withCredentials = true;
+// axios.defaults.crossDomain = true;
+
+// 例如，保存token到本地存储
+//  localStorage.setItem('token', response.data.token);
+
+let actress_id = 0;
+let pagepage = 0;
+let pagesize = 0;
+let action = '';
+let sort = '';
+axios.get('/video/getList', { params: {actress_id: actress_id, page: pagepage, size: pagesize, action: action, sort: sort } })
+    .then(function (response) {
+        console.log(response)
+    }).catch(function (error) {
+        if (error.response) {
+            // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // 请求已经成功发起，但没有收到响应
+            // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+            // 而在node.js中是 http.ClientRequest 的实例
+            console.log(error.request);
+        } else {
+            // 发送请求时出了点问题
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+        console.log(error);
+    });
+
 export default {
     data: () => ({
         drawer: false,

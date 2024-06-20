@@ -20,7 +20,10 @@
 </template>
 <script>
 import axios from 'axios';
-axios.defaults.baseURL = 'https://api.example.com';
+
+axios.defaults.baseURL = 'http://127.0.0.1:8081';
+axios.defaults.withCredentials = true;
+// axios.defaults.crossDomain = true;
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -42,13 +45,19 @@ export default {
             formData['email'] = this.email
             formData['password'] = this.password
 
-            axios.post('http://192.168.0.3/user/doLogin', formData, { headers: { 'content-type': 'application/json' } })
+            axios.post('/user/doLogin', formData, {
+                headers: { 'content-type': 'application/json' },
+                // httpsAgent: new https.Agent({
+                //     rejectUnauthorized: false
+                // })
+            })
                 .then(function (response) {
-                    
                     // 登录成功的处理逻辑
                     console.log('Login successful', response);
-                    // 例如，保存token到本地存储
-                    localStorage.setItem('token', response.data.token);
+                    console.log('cookie: ');
+                    console.log(document.cookie);
+                    console.log(response.headers['set-cookie']);
+                    // 处理cookie，例如保存到Vuex或localStorage
                     if (response) {
                         //3秒钟之后跳转到指定的页面 
                         // setTimeout(window.location.href = '/', 3);

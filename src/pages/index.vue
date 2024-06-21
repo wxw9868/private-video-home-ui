@@ -1,5 +1,5 @@
 <template>
-  <VideoList />
+  <VideoIndex />
 </template>
 
 <script setup>

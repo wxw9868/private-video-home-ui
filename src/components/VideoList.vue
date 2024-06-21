@@ -3,7 +3,7 @@
         <v-layout>
 
             <v-main>
-                <v-data-iterator :items="cards" :items-per-page="20" :search="search">
+                <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :search="search" :loading="true">
                     <template v-slot:header>
                         <v-toolbar class="px-2">
                             <v-text-field v-model="search" density="comfortable" placeholder="Search"
@@ -15,9 +15,8 @@
                     <template v-slot:default="{ items }">
                         <v-container class="d-flex bg-surface-variant" fluid>
                             <v-row justify="start" dense>
-                                <v-col v-for="card in items" :key="card.title" sm="3" offset="0" order="1" cols="6">
-                                    <v-card class="mx-auto" max-width="336" :href="path"
-                                        hover>
+                                <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
+                                    <v-card class="mx-auto" max-width="336" :href="path" hover>
                                         <v-img :src="host + card.raw.poster" class="h-auto align-end text-white"
                                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
 
@@ -41,6 +40,13 @@
                             </v-row>
                         </v-container>
                     </template>
+                    <template v-slot:loader>
+                        <v-row>
+                            <v-col v-for="(_, k) in [0, 1, 2, 3]" :key="k" cols="12" sm="6" xl="3">
+                                <v-skeleton-loader class="border" type="image, article"></v-skeleton-loader>
+                            </v-col>
+                        </v-row>
+                    </template>
 
                     <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
                         <div class="d-flex align-center justify-center pa-4">
@@ -56,24 +62,6 @@
                         </div>
                     </template>
                 </v-data-iterator>
-
-                <!-- <v-list lines="two">
-                    <v-list-item v-for="file in files" :key="file.title" :subtitle="file.subtitle" :title="file.title">
-                        <template v-slot:prepend>
-                            <v-avatar :color="file.color">
-                                <v-icon color="white">{{ file.icon }}</v-icon>
-                            </v-avatar>
-                        </template>
-
-                        <template v-slot:append>
-                            <v-btn color="grey-lighten-1" icon="mdi-information" variant="text"></v-btn>
-                        </template>
-                    </v-list-item>
-                </v-list> -->
-
-                <!-- <v-pagination v-model="page" :length="5" rounded="0"></v-pagination> -->
-
-
             </v-main>
         </v-layout>
     </v-card>
@@ -95,10 +83,11 @@ let sort = '';
 
 export default {
     data: () => ({
+        itemsPerPage: 20,
         host: 'http://192.168.0.3:80/',
-        path: 'play', 
+        path: 'play?id=',
         search: '',
-        cards: []
+        cards: [],
     }),
 
     methods: {
@@ -107,7 +96,6 @@ export default {
                 .then(response => {
                     console.log(response.data.data.list);
                     this.cards = response.data.data.list;
-                    // console.log('list: ' + this.cards);
                 }).catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
@@ -132,59 +120,4 @@ export default {
     mounted() {
         this.getData();
     },
-    // watch: {
-    //     group() {
-    //         this.drawer = false
-    //     },
-    // },
 }
-
-// page: Object,
-// list: [
-//     { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 2 },
-//     { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 2 },
-//     { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 2 },
-//     { title: 'Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 2 },
-//     { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 2 },
-//     { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 2 },
-//     { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 2 },
-//     { title: 'Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', flex: 2 }
-// ],
-// cards: [
-//     { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 12 },
-//     { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 6 },
-//     { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 6 }
-// ],
-// drawer: false,
-// group: null,
-
-
-// files: [
-//     {
-//         color: 'blue',
-//         icon: 'mdi-clipboard-text',
-//         subtitle: 'Jan 20, 2014',
-//         title: 'Vacation itinerary',
-//     },
-//     {
-//         color: 'amber',
-//         icon: 'mdi-gesture-tap-button',
-//         subtitle: 'Jan 10, 2014',
-//         title: 'Kitchen remodel',
-//     },
-// ],
-// folders: [
-//     {
-//         subtitle: 'Jan 9, 2014',
-//         title: 'Photos',
-//     },
-//     {
-//         subtitle: 'Jan 17, 2014',
-//         title: 'Recipes',
-//     },
-//     {
-//         subtitle: 'Jan 28, 2014',
-//         title: 'Work',
-//     },
-// ],
-</script>

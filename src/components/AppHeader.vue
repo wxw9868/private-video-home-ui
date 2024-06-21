@@ -3,7 +3,7 @@
         <template v-slot:prepend>
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </template>
-        <v-app-bar-title>Application Bar</v-app-bar-title>
+        <v-app-bar-title>Application Video</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-slot:append>
             <v-btn icon="mdi-heart"></v-btn>
@@ -13,7 +13,9 @@
         </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
-        <router-link to="/play"><v-list :items="items"></v-list></router-link>
+        <v-list v-for="item in items">
+            <v-list-item :to="item.href" v-text="item.title"></v-list-item>
+        </v-list>
     </v-navigation-drawer>
 </template>
 
@@ -33,26 +35,20 @@ export default {
         group: null,
         items: [
             {
-                path:'/',
                 title: 'Home',
-                value: 'Foo',
+                href: '/',
             },
             {
-                path:'/login',
+                title: 'List',
+                href: '/list',
+            },
+            {
+                title: 'Actress',
+                href: '/actress',
+            },
+            {
                 title: 'Login',
-                value: 'Login',
-            },
-            {
-                title: 'Bar',
-                value: 'bar',
-            },
-            {
-                title: 'Fizz',
-                value: 'fizz',
-            },
-            {
-                title: 'Buzz',
-                value: 'buzz',
+                href: '/login',
             },
         ],
     }),

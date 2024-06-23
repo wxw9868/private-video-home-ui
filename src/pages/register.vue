@@ -1,6 +1,5 @@
 <template>
-    <VideoPlay />
-    <!-- <app /> -->
+    <UserRegister />
 </template>
 
 <script setup>

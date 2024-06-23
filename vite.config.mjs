@@ -64,12 +64,13 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://192.168.0.3:80',
-        target: 'http://127.0.0.1:8081',
+        target: 'http://192.168.0.4:80',
+        // target: 'http://127.0.0.1:8081',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
+    host: '0.0.0.0', // 监听所有接口，可以通过IP访问
     port: 3000,
   },
 })

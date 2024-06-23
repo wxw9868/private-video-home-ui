@@ -1,20 +1,24 @@
 <template>
-    <v-app-bar :elevation="2">
+    <v-app-bar :elevation="1">
         <template v-slot:prepend>
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </template>
-        <v-app-bar-title>Application Video</v-app-bar-title>
+        <v-app-bar-title>Video</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-slot:append>
-            <v-btn icon="mdi-heart"></v-btn>
-            <v-btn icon="mdi-magnify"></v-btn>
-            <v-btn @click="toggleTheme">toggle theme</v-btn>
-            <v-btn icon="mdi-dots-vertical"></v-btn>
+            <v-btn icon="mdi-magnify" size="large" @click="toggleSearch"></v-btn>
+            <v-btn :prepend-icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+                size="large" slim @click="toggleTheme"></v-btn>
+            <v-btn icon="mdi-account" size="large" to="/login"></v-btn>
         </template>
+        <v-expand-x-transition>
+            <v-text-field v-model="searchQuery" hide-details v-show="isSearchVisible" @click:append="submitSearch"
+                @click:prepend="collapseSearch" :style="{ width: searchWidth }" density="comfortable" placeholder="Search" prepend-inner-icon="mdi-magnify" variant="solo"></v-text-field>
+        </v-expand-x-transition>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
-        <v-list v-for="item in items">
-            <v-list-item :to="item.href" v-text="item.title"></v-list-item>
+    <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'left' : undefined" temporary>
+        <v-list v-for="item in items" :key="item" density="compact" nav>
+            <v-list-item :prepend-icon="item.icon" :to="item.href">{{ item.title }}</v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -31,27 +35,50 @@ function toggleTheme() {
 <script>
 export default {
     data: () => ({
+        isSearchVisible: false,
+        searchWidth: '150px', // 初始宽度
+        searchQuery: '',
+        dialog: false,
+        visible: false,
         drawer: false,
         group: null,
         items: [
             {
                 title: 'Home',
                 href: '/',
+                icon: 'mdi-home-circle',
             },
             {
                 title: 'List',
                 href: '/list',
+                icon: 'mdi-list-box',
             },
             {
                 title: 'Actress',
                 href: '/actress',
-            },
-            {
-                title: 'Login',
-                href: '/login',
+                icon: 'mdi-account-group',
             },
         ],
     }),
+
+    methods: {
+        toggleSearch() {
+            this.isSearchVisible = !this.isSearchVisible;
+            if (this.isSearchVisible) {
+                this.searchWidth = '300px'; // 设置搜索框展开后的宽度
+            } else {
+                this.searchWidth = '100px'; // 设置搜索框收起后的宽度
+            }
+        },
+        submitSearch() {
+            // 提交搜索逻辑
+            console.log('提交搜索:', this.searchQuery);
+        },
+        collapseSearch() {
+            this.isSearchVisible = false;
+            this.searchWidth = '100px'; // 设置收起时的宽度
+        }
+    },
 
     watch: {
         group() {

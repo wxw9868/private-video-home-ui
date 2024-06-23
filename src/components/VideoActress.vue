@@ -3,17 +3,27 @@
         <v-layout>
             <v-main>
                 <v-list lines="two">
-                    <v-list-item v-for="file in files" :key="file.title" :subtitle="file.subtitle" :title="file.title">
-                        <template v-slot:prepend>
-                            <v-avatar :color="file.color">
-                                <v-icon color="white">{{ file.icon }}</v-icon>
-                            </v-avatar>
-                        </template>
-
-                        <template v-slot:append>
-                            <v-btn color="grey-lighten-1" icon="mdi-information" variant="text"></v-btn>
-                        </template>
-                    </v-list-item>
+                    <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
+                        <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="page" :loading="loading">
+                            <template v-slot:default="{ items }">
+                                <v-container class="d-flex" fluid>
+                                    <v-row justify="start" dense>
+                                        <v-col v-for="(file, i) in items" :key="i" cols="6" sm="3" order="1">
+                                            <v-list-item :subtitle="file.raw.count + subtitle" :title="file.raw.actress"
+                                                :href="path + file.raw.id">
+                                                <template v-slot:prepend>
+                                                    <v-avatar>
+                                                        <v-img :src="host + file.raw.avatar"></v-img>
+                                                    </v-avatar>
+                                                </template>
+                                            </v-list-item>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                                <v-pagination v-model="page" :length="length" @click="pagination()"></v-pagination>
+                            </template>
+                        </v-data-iterator>
+                    </v-lazy>
                 </v-list>
             </v-main>
         </v-layout>
@@ -21,22 +31,70 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { ref } from 'vue';
+import { useGoTo } from 'vuetify';
+
+axios.defaults.baseURL = '/api';
+axios.defaults.withCredentials = true;
+
 export default {
+    setup() {
+        const goTo = useGoTo()
+        return { goTo }
+    },
     data: () => ({
-        files: [
-            {
-                color: 'blue',
-                icon: 'mdi-clipboard-text',
-                subtitle: 'Jan 20, 2014',
-                title: 'Vacation itinerary',
-            },
-            {
-                color: 'amber',
-                icon: 'mdi-gesture-tap-button',
-                subtitle: 'Jan 10, 2014',
-                title: 'Kitchen remodel',
-            },
-        ],
+        host: 'http://192.168.0.4:80/',
+        path: 'list?id=',
+        subtitle: ' 部影片',
+        itemsPerPage: 40,
+        page: ref(1),
+        items: [],
+        loading: true,
+        length: 0,
     }),
+    methods: {
+        pagination() {
+            localStorage.setItem('actress-currentPage',this.page);
+            this.goTo(0, { container: '#goto-container' });
+        },
+        loadPage() {
+            let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
+            this.page = currentPage || this.page;
+        },
+        getList(action, sort) {
+            axios.get('/video/getActress', { params: { action: action, sort: sort } })
+                .then(response => {
+                    console.log(response.data.data.list);
+                    this.items = response.data.data.list;
+                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    this.loading = false;
+                    this.loadPage(); 
+                }).catch(function (error) {
+                    if (error.response) {
+                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // 请求已经成功发起，但没有收到响应
+                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                        // 而在node.js中是 http.ClientRequest 的实例
+                        console.log(error.request);
+                    } else {
+                        // 发送请求时出了点问题
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    console.log(error);
+                });
+        }
+    },
+    mounted() {
+        this.getList('', '');
+        let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
+        this.page = currentPage? currentPage: this.page;
+        console.log(this.page)
+    },
 }
 </script>

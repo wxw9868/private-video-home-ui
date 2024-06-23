@@ -1,6 +1,5 @@
 <template>
-    <VideoPlay />
-    <!-- <app /> -->
+    <VideoList />
 </template>
 
 <script setup>

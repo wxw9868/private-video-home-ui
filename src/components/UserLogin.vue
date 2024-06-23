@@ -1,22 +1,42 @@
 <template>
-    <v-sheet class="bg-deep-purple h-100 pa-12" rounded>
-        <v-card class="mx-auto px-6 py-8" max-width="344">
+    <div>
+        <v-img class="mx-auto my-6" max-width="228"
+            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"></v-img>
+
+        <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+
             <v-form v-model="form" @submit.prevent="onSubmit">
-                <v-text-field v-model="email" :readonly="loading" :rules="[required]" class="mb-2" label="Email"
+                <div class="text-subtitle-1 text-medium-emphasis">Account</div>
+
+                <v-text-field v-model="email" :readonly="loading" :rules="[required]" density="compact"
+                    placeholder="Email address" prepend-inner-icon="mdi-email-outline" variant="outlined"
                     clearable></v-text-field>
 
+                <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+                    Password
+                    <a class="text-caption text-decoration-none text-blue" href="#" rel="noopener noreferrer"
+                        target="_blank">
+                        Forgot login password?</a>
+                </div>
+
                 <v-text-field v-model="password" :readonly="loading" :rules="[required]" label="Password"
-                    placeholder="Enter your password" clearable></v-text-field>
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" :type="visible ? 'text' : 'password'"
+                    density="compact" placeholder="Enter your password" prepend-inner-icon="mdi-lock-outline"
+                    variant="outlined" @click:append-inner="visible = !visible" clearable></v-text-field>
 
-                <br>
-
-                <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit"
-                    variant="elevated" block>
+                <v-btn :disabled="!form" :loading="loading" size="large" type="submit" class="mb-8" color="blue"
+                    variant="tonal" block>
                     Sign In
                 </v-btn>
+
+                <v-card-text class="text-center">
+                    <a class="text-blue text-decoration-none" href="/register" rel="noopener noreferrer" target="_blank">
+                        Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
+                    </a>
+                </v-card-text>
             </v-form>
         </v-card>
-    </v-sheet>
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -50,7 +70,7 @@ export default {
                 .then(function (response) {
                     // 登录成功的处理逻辑
                     console.log('Login successful', response);
-                    console.log('cookie: '+document.cookie);
+                    console.log('cookie: ' + document.cookie);
                     // 处理cookie，例如保存到Vuex或localStorage
                     if (response) {
                         //3秒钟之后跳转到指定的页面 

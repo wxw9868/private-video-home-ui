@@ -42,20 +42,17 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { inject } from 'vue';
 import { ref } from 'vue';
 import { useGoTo } from 'vuetify';
 
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
-
 export default {
     setup() {
+        const host = inject('serverHost');
         const goTo = useGoTo()
-        return { goTo }
+        return { host, goTo }
     },
     data: () => ({
-        host: 'http://192.168.0.4:80/',
         path: 'play?id=',
         itemsPerPage: 24,
         page: ref(1),
@@ -77,7 +74,7 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(actress_id) {
-            axios.get('/video/getList', { params: { actress_id: actress_id, page: this.pagepage, size: this.pagesize, action: this.action, sort: this.sort } })
+            this.$http.get('/video/getList', { params: { actress_id: actress_id, page: this.pagepage, size: this.pagesize, action: this.action, sort: this.sort } })
                 .then(response => {
                     console.log(response.data.data.list);
                     this.cards = response.data.data.list;
@@ -106,6 +103,7 @@ export default {
     },
 
     mounted() {
+        console.log(this.host)
         this.getData(this.$route.query.id);
     },
 }

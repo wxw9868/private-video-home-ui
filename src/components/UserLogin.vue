@@ -39,14 +39,13 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
-
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+import { inject } from 'vue';
 
 export default {
+    setup() {
+        const host = inject('serverHost');
+        return { host }
+    },
     data: () => ({
         form: false,
         email: 'wxw9868@163.com',
@@ -64,7 +63,7 @@ export default {
             formData['email'] = this.email
             formData['password'] = this.password
 
-            axios.post('/user/doLogin', formData, {
+            this.$http.post('/user/doLogin', formData, {
                 headers: { 'content-type': 'application/json' },
             })
                 .then(function (response) {

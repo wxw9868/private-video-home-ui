@@ -78,18 +78,18 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
+import { inject } from 'vue';
 
 export default {
+    setup() {
+        const host = inject('serverHost');
+        return { host }
+    },
     data: () => ({
         model: null,
         itemsPerPage: 8,
         loading: true,
-        host: 'http://192.168.0.4:80/',
-        path: 'play?id=1',
+        path: '/play?id=1',
         search: '',
         list: [],
         cards: [
@@ -111,7 +111,7 @@ export default {
     },
     methods: {
         getData() {
-            axios.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
+            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     console.log(response.data.data.list);
                     this.list = response.data.data.list;

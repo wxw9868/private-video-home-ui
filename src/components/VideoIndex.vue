@@ -4,7 +4,7 @@
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
                     <v-slide-group v-model="model" class="pa-4" selected-class="bg-success">
-                        <v-slide-group-item v-for="(card, n) in list" :key="n"
+                        <v-slide-group-item v-for="(card, n) in cards" :key="n"
                             v-slot="{ isSelected, toggle, selectedClass }">
                             <v-card :class="['ma-4', selectedClass]" color="grey-lighten-1" height="189" width="336"
                                 @click="toggle" :href="path + card.id" target="_blank" hover>
@@ -78,18 +78,18 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
+import { inject } from 'vue';
 
 export default {
+    setup() {
+        const host = inject('serverHost');
+        return { host }
+    },
     data: () => ({
         model: null,
         itemsPerPage: 8,
         loading: true,
-        host: 'http://192.168.0.4:80/',
-        path: 'play?id=1',
+        path: '/play?id=1',
         search: '',
         list: [],
         cards: [
@@ -111,7 +111,7 @@ export default {
     },
     methods: {
         getData() {
-            axios.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
+            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     console.log(response.data.data.list);
                     this.list = response.data.data.list;

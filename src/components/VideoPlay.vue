@@ -7,8 +7,8 @@
                         <v-col>
                             <v-card variant="flat" class="mx-auto">
                                 <v-responsive :aspect-ratio="16 / 9" id="videoContainer">
-                                    <!-- <div id="videoPlayer" :style="style"></div> -->
-                                    <video id="videoPlayer" :style="style"></video>
+                                    <div id="videoPlayer" :style="style"></div>
+                                    <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
                                 <div id="videoPlayer"></div>
                                 <v-card-text class="text-h6">
@@ -30,15 +30,14 @@
                                     <span class="subheading" v-text="duration"></span>
                                 </v-card-actions>
 
-                                <v-item-group class="pb-6">
-                                    <!-- <small>切换播放器：</small> pt-2-->
+                                <!-- <v-item-group class="pb-6">
                                     <v-item v-for="logo in logos" :key="logo">
                                         <v-btn class="rounded-circle" height="40" width="40" variant="text">
                                             <v-img :src="logo.src" class="rounded-circle" height="40" width="40"
                                                 cover></v-img>
                                         </v-btn>
                                     </v-item>
-                                </v-item-group>
+                                </v-item-group> -->
                             </v-card>
                         </v-col>
                     </v-row>
@@ -50,10 +49,10 @@
 
 <script>
 import axios from 'axios';
-import Plyr from 'plyr';
-import 'plyr/dist/plyr.css';
+// import Plyr from 'plyr';
+// import 'plyr/dist/plyr.css';
 // import DPlayer from 'dplayer';
-// import Artplayer from "artplayer";
+import Artplayer from "artplayer";
 // import XGplayer, { Events } from 'xgplayer';
 // import 'xgplayer/dist/index.min.css';
 
@@ -123,9 +122,9 @@ export default {
                     this.videoUrl = this.host + data.videoUrl;
                     this.poster = this.host + data.Poster;
 
-                    this.loadPlyr();
+                    // this.loadPlyr();
                     // this.loadDPlayer();
-                    // this.loadArtplayer();
+                    this.loadArtplayer();
                     // this.loadXgplayer();
                     // let playerType = localStorage.getItem("playerType") ? localStorage.getItem("playerType") : 'plyr';
                     // this.loadPlayer(playerType);
@@ -240,41 +239,41 @@ export default {
         //         contextmenu: [],
         //     });
         // },
-        // loadArtplayer() {
-        //     const art = new Artplayer({
-        //         container: '#videoPlayer',
-        //         url: this.videoUrl,
-        //         poster: this.poster,
-        //         volume: 1,
-        //         muted: true, // 是否默认静音
-        //         autoplay: false, // 是否自动播放
-        //         pip: true,
-        //         autoSize: true,
-        //         autoMini: true,
-        //         screenshot: true,
-        //         setting: true,
-        //         loop: true, // 是否循环播放
-        //         flip: true,
-        //         playbackRate: true,
-        //         aspectRatio: true,
-        //         fullscreen: true,
-        //         fullscreenWeb: true,
-        //         subtitleOffset: true,
-        //         miniProgressBar: true,
-        //         mutex: false, // 假如页面里同时存在多个播放器，是否只能让一个播放器播放
-        //         backdrop: true,
-        //         playsInline: true,
-        //         autoPlayback: true,
-        //         airplay: true,
-        //         theme: '#23ade5',
-        //         lang: navigator.language.toLowerCase(),
-        //         moreVideoAttr: {
-        //             crossOrigin: 'anonymous',
-        //         },
-        //         contextmenu: [],
-        //     });
+        loadArtplayer() {
+            const art = new Artplayer({
+                container: '#videoPlayer',
+                url: this.videoUrl,
+                poster: this.poster,
+                volume: 1,
+                muted: true, // 是否默认静音
+                autoplay: false, // 是否自动播放
+                pip: true,
+                autoSize: true,
+                autoMini: true,
+                screenshot: true,
+                setting: true,
+                loop: true, // 是否循环播放
+                flip: true,
+                playbackRate: true,
+                aspectRatio: true,
+                fullscreen: true,
+                fullscreenWeb: true,
+                subtitleOffset: true,
+                miniProgressBar: true,
+                mutex: false, // 假如页面里同时存在多个播放器，是否只能让一个播放器播放
+                backdrop: true,
+                playsInline: true,
+                autoPlayback: true,
+                airplay: true,
+                theme: '#23ade5',
+                lang: navigator.language.toLowerCase(),
+                moreVideoAttr: {
+                    crossOrigin: 'anonymous',
+                },
+                contextmenu: [],
+            });
 
-        // },
+        },
         // loadXgplayer() {
         //     const player = new XGplayer({
         //         id: 'videoPlayer',
@@ -310,49 +309,49 @@ export default {
         //         }
         //     })
         // },
-        loadPlyr() {
-            const player = new Plyr('#videoPlayer', {
-                captions: {
-                    active: true,
-                },
-                controls: [
-                    'play-large', // The large play button in the center
-                    // 'restart', // Restart playback
-                    'rewind', // Rewind by the seek time (default 10 seconds)
-                    'play', // Play/pause playback
-                    'fast-forward', // Fast forward by the seek time (default 10 seconds)
-                    'progress', // The progress bar and scrubber for playback and buffering
-                    'current-time', // The current time of playback
-                    'duration', // The full duration of the media
-                    // 'mute', // Toggle mute
-                    // 'volume', // Volume control
-                    'captions', // Toggle captions
-                    'settings', // Settings menu
-                    'pip', // Picture-in-picture (currently Safari only)
-                    'airplay', // Airplay (currently Safari only)
-                    // 'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
-                    'fullscreen', // Toggle fullscreen
-                ],
-                settings: ['captions', 'quality', 'speed', 'loop'],
-                volume: 1,
-            });
+        // loadPlyr() {
+        //     const player = new Plyr('#videoPlayer', {
+        //         captions: {
+        //             active: true,
+        //         },
+        //         controls: [
+        //             'play-large', // The large play button in the center
+        //             // 'restart', // Restart playback
+        //             'rewind', // Rewind by the seek time (default 10 seconds)
+        //             'play', // Play/pause playback
+        //             'fast-forward', // Fast forward by the seek time (default 10 seconds)
+        //             'progress', // The progress bar and scrubber for playback and buffering
+        //             'current-time', // The current time of playback
+        //             'duration', // The full duration of the media
+        //             // 'mute', // Toggle mute
+        //             // 'volume', // Volume control
+        //             'captions', // Toggle captions
+        //             'settings', // Settings menu
+        //             'pip', // Picture-in-picture (currently Safari only)
+        //             'airplay', // Airplay (currently Safari only)
+        //             // 'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+        //             'fullscreen', // Toggle fullscreen
+        //         ],
+        //         settings: ['captions', 'quality', 'speed', 'loop'],
+        //         volume: 1,
+        //     });
 
-            player.source = {
-                type: 'video',
-                title: this.title,
-                sources: [
-                    {
-                        src: this.videoUrl,
-                        type: 'video/mp4',
-                        size: 1080,
-                    },
-                ],
-                poster: this.poster,
-            };
+        //     player.source = {
+        //         type: 'video',
+        //         title: this.title,
+        //         sources: [
+        //             {
+        //                 src: this.videoUrl,
+        //                 type: 'video/mp4',
+        //                 size: 1080,
+        //             },
+        //         ],
+        //         poster: this.poster,
+        //     };
 
-            // Expose player so it can be used from the console
-            window.player = player;
-        },
+        //     // Expose player so it can be used from the console
+        //     window.player = player;
+        // },
     },
 }
 </script>

@@ -40,72 +40,113 @@
                                     </v-item>
                                 </v-item-group> -->
                             </v-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
 
-                            <v-card variant="flat">
-                                <v-row>
-                                    <v-avatar size="40" class="ml-2"
-                                        image="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-avatar>
+                <v-container>
+                    <v-row>
+                        <div class="pt-3">
+                            <v-avatar size="40px" image="https://via.placeholder.com/50"></v-avatar>
+                        </div>
+                        <v-col>
+                            <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined"
+                                auto-grow shaped clearable></v-textarea>
+                            <v-btn>发布评论</v-btn>
+                        </v-col>
+
+                        <v-divider class="pt-10"></v-divider>
+                    </v-row>
+                    <v-div v-for="(comment, i) in comments" :key="i"></v-div>
+                    <v-row class="pt-5" v-for="(comment, i) in comments" :key="i">
+                        <div class="pt-3">
+                            <v-avatar size="40px" :image="host+comment.Avatar"></v-avatar>
+                        </div>
+                        <v-col>
+                            <v-row style="font-size: 13px;">
+                                <v-col class="me-auto" cols="auto">
+                                    <v-span class="me-2">{{comment.Nickname}}</v-span>
+                                    <v-small class="me-2">位置</v-small>
+                                </v-col>
+                                <v-col cols="auto" style="font-size: 15px;">
+                                    <v-small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</v-small>
+                                </v-col>
+                            </v-row>
+                            <p class="my-2" style="font-size: 15px;">{{ comment.Content }}</p>
+                            <div class="d-flex justify-start" style="font-size: 13px;">
+                                <v-btn variant="text" text :color="liked ? 'blue' : ''" @click="likeComment">
+                                    <v-icon left small>mdi-thumb-up</v-icon>
+                                    <span>{{ comment.Support }}</span>
+                                </v-btn>
+                                <v-btn variant="text" text :color="disliked ? 'red' : ''" @click="dislikeComment">
+                                    <v-icon left small>mdi-thumb-down</v-icon>
+                                    <span>{{ comment.Oppose }}</span>
+                                </v-btn>
+                                <v-btn variant="text" text color="green" @click="replyShow = !replyShow">
+                                    <v-icon left small>mdi-comment-outline</v-icon>
+                                </v-btn>
+                                <v-btn variant="text" text color="orange" @click="openReportDialog">
+                                    <v-icon left small>mdi-flag-outline</v-icon>
+                                </v-btn>
+                            </div>
+                            <v-col v-show="replyShow">
+                                <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined"
+                                    auto-grow shaped clearable></v-textarea>
+                                <v-btn>发送回复</v-btn>
+                            </v-col>
+
+                            <v-div v-show="show">
+                                <v-row v-for="(reply, i) in comment.Childrens" :key="i">
+                                    <div class="pt-3">
+                                        <v-avatar size="24px" :image="host+reply.Avatar"></v-avatar>
+                                    </div>
                                     <v-col>
-                                        <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle"
-                                            variant="outlined" auto-grow shaped clearable></v-textarea>
+                                        <v-row style="font-size: 13px;">
+                                            <v-col class="me-auto" cols="auto">
+                                                <v-span class="me-2">{{ reply.Nickname }}</v-span>
+                                                <v-small class="me-2">位置</v-small>
+                                            </v-col>
+                                            <v-col cols="auto" style="font-size: 15px;">
+                                                <v-small class="justify-end align-end">{{ doTime(reply.CreatedAt) }}</v-small>
+                                            </v-col>
+                                        </v-row>
+                                        <p class="my-2" style="font-size: 15px;">{{ reply.Content }}</p>
+                                        <div class="d-flex justify-start" style="font-size: 13px;">
+                                            <v-btn variant="text" text :color="liked ? 'blue' : ''"
+                                                @click="likeComment">
+                                                <v-icon left small>mdi-thumb-up</v-icon>
+                                                <span>{{ reply.Support }}</span>
+                                            </v-btn>
+                                            <v-btn variant="text" text :color="disliked ? 'red' : ''"
+                                                @click="dislikeComment">
+                                                <v-icon left small>mdi-thumb-down</v-icon>
+                                                <span>{{ reply.Oppose }}</span>
+                                            </v-btn>
+                                            <v-btn variant="text" text color="green" @click="replyShow1 = !replyShow1">
+                                                <v-icon left small>mdi-comment-outline</v-icon>
+                                            </v-btn>
+                                            <v-btn variant="text" text color="orange" @click="openReportDialog">
+                                                <v-icon left small>mdi-flag-outline</v-icon>
+                                            </v-btn>
+                                        </div>
+                                        <v-col v-show="replyShow1">
+                                            <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle"
+                                                variant="outlined" auto-grow shaped clearable></v-textarea>
+                                            <v-btn>发送回复</v-btn>
+                                        </v-col>
                                     </v-col>
                                 </v-row>
-                            </v-card>
+                            </v-div>
+
+                            <v-btn variant="text" @click="show = !show" data="展开 1 条回复">展开 {{ comment.Childrens.length }} 条回复 <v-icon
+                                    :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon></v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
             </v-main>
         </v-layout>
     </v-card>
-
-    <v-container>
-        <!-- 评论列表 -->
-        <div v-for="(comment, index) in comments" :key="index" class="comment-item">
-            <v-avatar :color="getColor(comment.rating)">
-                <!-- 这里可以用评论者的头像或者默认的占位符 -->
-                <v-icon>account_circle</v-icon>
-            </v-avatar>
-            <div class="comment-content">
-                <span class="comment-username">{{ comment.username }}</span>
-                <p class="comment-text">{{ comment.text }}</p>
-                <v-rating v-model="comment.rating"
-                    :colors="['#ff0000', '#ffa500', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#800080']"
-                    readonly></v-rating>
-                <span class="comment-date">{{ formatDate(comment.date) }}</span>
-            </div>
-        </div>
-
-        <!-- 添加评论的表单（可选） -->
-        <v-textarea v-model="newComment" label="添加评论" placeholder="输入你的评论..."></v-textarea>
-        <v-btn @click="addComment">提交评论</v-btn>
-    </v-container>    
 </template>
-<style scoped>
-        .comment-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .comment-avatar {
-            margin-right: 16px;
-        }
-
-        .comment-content {
-            flex: 1;
-        }
-
-        .comment-username,
-        .comment-date {
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .comment-text {
-            margin: 8px 0;
-        }
-    </style>
-
 <script>
 import { inject } from 'vue';
 // import Plyr from 'plyr';
@@ -121,11 +162,10 @@ export default {
         return { host }
     },
     data: () => ({
-        comments: [
-            { username: 'User1', text: '这是一个评论', rating: 3, date: new Date() },
-            // ... 更多的评论
-        ],
-        newComment: '',
+        comments: [],
+        show: false,
+        replyShow: false,
+        replyShow1: false,
         videoId: 0,
         videoUrl: 'src/assets/video/lc.mp4',
         videoTitle: '中华人民共和国',
@@ -140,16 +180,15 @@ export default {
             }
         ],
         path: '/actress?id=',
-        duration: null,
+        duration: 0,
+        avatar: '',
+        poster: '',
         browse: 0,
         collect: 0,
         icon: {
             collect: 'mdi-heart-outline',
         },
         isCollect: '',
-        duration: '',
-        avatar: '',
-        poster: '',
         style: {
             position: 'absolute',
             top: 0,
@@ -183,46 +222,23 @@ export default {
         this.videoId = id;
         this.getData(id);
         this.loadBrowse(id);
+        this.loadCommentList(id);
     },
     methods: {
-        getColor(rating) {
-            // 根据评分返回不同的颜色（可选）
-            if (rating >= 5) return 'success';
-            if (rating >= 3) return 'warning';
-            return 'error';
-        },
-        formatDate(date) {
-            // 格式化日期（可选）
-            return date.toLocaleString();
-        },
-        addComment() {
-            // 添加评论的逻辑（可选）
-            if (this.newComment) {
-                const newCommentData = {
-                    username: '匿名用户', // 可以从用户信息中获取
-                    text: this.newComment,
-                    rating: 3, // 默认评分或从用户处获取
-                    date: new Date(),
-                };
-                this.comments.push(newCommentData);
-                this.newComment = ''; // 清空输入框
-            }
-        },
         getData(id) {
             this.$http.get('/video/getPlay', { params: { id: id } })
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    // this.videoTitle = data.videoTitle;
+                    this.videoTitle = data.videoTitle;
+                    this.videoActress = data.videoActress;
+                    this.duration = data.Duration;
+                    this.videoUrl = this.host + data.videoUrl;
+                    this.poster = this.host + data.Poster;
+                    this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
                     this.collect = data.Collect;
                     this.browse = data.Browse;
-                    this.duration = data.Duration;
-                    this.avatar = this.host + data.Avatar;
-                    // this.videoActress = data.videoActress;
-                    // this.videoUrl = this.host + data.videoUrl;
-                    // this.poster = this.host + data.Poster;
-
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect
 
                     // this.loadPlyr();
@@ -322,115 +338,61 @@ export default {
                     console.log(error);
                 });
         },
+
+        doTime(timeString) {
+            let old = new Date(timeString);
+            let now = new Date();
+            // console.log(old.toLocaleString())
+            // console.log(now.toLocaleString())
+            // console.log(y,m,d,h,i,s)
+
+            let y = now.getFullYear() - old.getFullYear()
+            if (y == 0) {
+                let m = now.getMonth() - old.getMonth()
+                if (m == 0) {
+                    let d = now.getDate() - old.getDate()
+                    if (d == 0) {
+                        let h = now.getHours() - old.getHours()
+                        if (h == 0) {
+                            let i = now.getMinutes() - old.getMinutes()
+                            if (i == 0) {
+                                return i + '秒钟前'
+                            }
+                            return i + '分钟前'
+                        }
+                        return h + '小时前'
+                    }
+                    return d + '天前'
+                }
+                return m + '月前'
+            }
+            return y + '年前'
+        },
+
+        isZanAndCai(logUserID, userID, zan, cai) {
+            let isZan = 'bi-hand-thumbs-up'
+            let isCai = 'bi-hand-thumbs-down'
+            if (logUserID == userID) {
+                if (zan == 1) {
+                    isZan = 'bi-hand-thumbs-up-fill'
+                }
+                if (cai == 1) {
+                    isCai = 'bi-hand-thumbs-down-fill'
+                }
+            }
+            return { isZan, isCai }
+        },
+
         // 获取评论数据
-        loadCommentList() {
-            this.$http.get('/comment/list', { params: { video_id: parseInt(videoID) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+        loadCommentList(id) {
+            this.$http.get('/comment/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
                 .then(function (response) {
                     // console.log(response);
                     // console.log(response.data.data);
-                    let list = response.data.data;
-                    if (list) {
-                        let userID = storage.getItem("userID");
-                        // console.log(userID);
-                        let commentHTML = '';
-                        list.forEach(element => {
-                            let timeString = doTime(element.CreatedAt);
-                            // console.log(timeString);
-                            const { isZan, isCai } = isZanAndCai(element.LogUserID, userID, element.Zan, element.Cai)
-                            // console.log(isZan,isCai);
-                            // console.log(element);
-                            // console.log(element.Childrens);
-                            commentHTML +=
-                                `<div class="row mt-4">
-							<div class="col-auto">
-								<!-- User Avatar -->
-								<img src="/`+ element.Avatar + `" width="40" height="40" class="rounded-circle">
-							</div>
-							<div class="col text-dark">
-								<!-- User Name and Location -->
-								<div class="row comment-title">
-									<div class="col">`+ element.Nickname + ` <small class="text-muted">北京</small></div>
-									<!-- Comment Time -->
-									<small class="col-auto text-muted">`+ timeString + `</small>
-								</div>
-								<!-- Comment Text -->
-								<p class="my-2 comment-text">`+ element.Content + `</p>
-								<!-- Like, Dislike, Reply, Report Buttons -->
-								<div class="comment-button">
-									<button class="btn btn-sm border-0 comment-zan" data-comment-id="`+ element.ID + `" onclick="commentZan(this)"><i class="bi ` + isZan + `"></i> <span>` + element.Support + `</span></button>
-									<button class="btn btn-sm border-0 comment-cai" data-comment-id="`+ element.ID + `" onclick="commentCai(this)"><i class="bi ` + isCai + `"></i> <span>` + element.Oppose + `</span></button>
-									<button class="btn btn-sm border-0" onclick="toggleReplyForm(this)">回复</button>
-									<button class="btn btn-sm border-0">举报</button>
-								</div>
-								<!-- 回复表单（默认隐藏） -->
-								<div class="mt-3 reply-form d-none">
-									<form>
-										<div class="mb-3">
-											<input type="hidden" name="video_id" value="`+ videoID + `">
-											<input type="hidden" name="parent_id" value="`+ element.ID + `">
-											<textarea name="content" class="form-control comment-reply" rows="3" placeholder="回复`+ element.Nickname + `："></textarea>
-										</div>
-										<button type="button" class="btn btn-sm btn-primary" onclick="reply(this)" disabled>发送回复</button>
-									</form>
-								</div>`;
-                            if (element.Childrens) {
-                                commentHTML +=
-                                    `<!-- Reply Area -->
-									<div class="ms-3 mt-3 collapse">`;
-                                element.Childrens.forEach(element => {
-                                    const { isZan, isCai } = isZanAndCai(element.LogUserID, userID, element.Zan, element.Cai)
-                                    commentHTML +=
-                                        `<div class="row mt-3">
-											<div class="col-auto">
-												<!-- Reply User Avatar -->
-												<img src="/`+ element.Avatar + `" width="24" height="24" class="rounded-circle">
-											</div>
-											<div class="col">
-												<!-- Reply User Name and Location -->
-												<div class="row comment-title">
-													<div class="col" style="font-size: small;">`+ element.Nickname + ` <small class="text-muted">位置</small></div>
-													<!-- Reply Time -->
-													<small class="col-auto text-muted" style="font-size: small;">2小时前</small>
-												</div>
-												<!-- Reply Text -->
-												<p class="my-2 comment-text">`+ element.Content + `</p>
-												<!-- Like, Dislike, Reply, Report Buttons -->
-												<div class="comment-button">
-													<button class="btn btn-sm border-0 comment-zan" data-comment-id="`+ element.ID + `" onclick="commentZan(this)"><i class="bi ` + isZan + `"></i> <span>` + element.Support + `</span></button>
-													<button class="btn btn-sm border-0 comment-cai" data-comment-id="`+ element.ID + `" onclick="commentCai(this)"><i class="bi ` + isCai + `"></i> <span>` + element.Oppose + `</span></button>
-													<button class="btn btn-sm border-0"onclick="toggleReplyForm(this)">回复</button>
-													<button class="btn btn-sm border-0">举报</button>
-												</div>
-												<!-- 回复表单（默认隐藏） -->
-												<div class="mt-3 reply-form d-none">
-													<form>
-														<div class="mb-3">
-															<input type="hidden" name="video_id" value="`+ videoID + `">
-															<input type="hidden" name="parent_id" value="`+ element.ID + `">
-															<textarea name="content" class="form-control comment-reply" rows="3" placeholder="回复`+ element.Nickname + `："></textarea>
-														</div>
-														<button type="button" class="btn btn-sm btn-primary" onclick="reply(this)" disabled>发送回复</button>
-													</form>
-												</div>
-											</div>
-										</div>`;
-                                });
-                                let count = element.Childrens.length;
-                                commentHTML +=
-                                    `</div>
-									<!-- Show/Hide Reply Button -->
-									<div class="reply-collapse" data="展开 `+ count + ` 条回复" onclick="toggleReplyCollapse(this)" style="font-size:0.833rem;">展开 ` + count + ` 条回复 <i class="bi bi-chevron-down"></i></div>`;
-                            }
-                            commentHTML +=
-                                `</div>
-						</div>`;
-                        });
-
-                        document.getElementById('comment-list').innerHTML = commentHTML;
-
-                        loadCommentReply()
-                        loadCollapse()
-                    }
+                    this.comments = response.data.data;
+                    // let userID = localStorage.getItem("userID");
+                    console.log(this.comments);
+                
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -472,49 +434,8 @@ export default {
             this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    let data = response.data.data
-                    if (data) {
-                        let commentHTML =
-                            `<div class="row mt-4">
-						<div class="col-auto">
-							<!-- User Avatar -->
-							<img src="/`+ data.userAvatar + `" width="40" height="40" class="rounded-circle">
-						</div>
-						<div class="col">
-							<!-- User Name and Location -->
-							<div class="row comment-title">
-								<div class="col">`+ data.userNickname + ` <small class="text-muted">位置</small></div>
-								<!-- Comment Time -->
-								<small class="col-auto text-muted">刚刚</small>
-							</div>
-							<!-- Comment Text -->
-							<p class="my-2 comment-text">`+ data.content + `</p>
-							<!-- Like, Dislike, Reply, Report Buttons -->
-							<div class="comment-button">
-								<button class="btn btn-sm border-0 comment-zan" data-comment-id="`+ data.commentID + `" onclick="commentZan(this)"><i class="bi bi-hand-thumbs-up"></i> <span>0</span></button>
-								<button class="btn btn-sm border-0 comment-cai" data-comment-id="`+ data.commentID + `" onclick="commentCai(this)"><i class="bi bi-hand-thumbs-down"></i> <span>0</span></button>
-								<button class="btn btn-sm border-0" onclick="toggleReplyForm(this)">回复</button>
-								<button class="btn btn-sm border-0">举报</button>
-							</div>
-							<!-- 回复表单（默认隐藏） -->
-							<div class="mt-3 reply-form d-none">
-								<form>
-									<div class="mb-3">
-										<input type="hidden" name="video_id" value="`+ videoID + `">
-										<input type="hidden" name="parent_id" value="`+ data.commentID + `">
-										<textarea name="content" class="form-control comment-reply" rows="3" placeholder="回复`+ data.userNickname + `："></textarea>
-									</div>
-									<button type="button" class="btn btn-sm btn-primary" onclick="comment(this)" disabled>发送回复</button>
-								</form>
-							</div>
-						</div>
-					</div>`;
-
-                        document.getElementById('loadHTML').innerHTML = commentHTML;
-                        let node = document.getElementById('loadHTML').firstElementChild;
-                        let commentList = document.getElementById('comment-list');
-                        commentList.insertBefore(node, commentList.children[0]);
-                    }
+                    let data = response.data.
+                    console.log(data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -559,71 +480,7 @@ export default {
                 .then(function (response) {
                     // console.log(response);
                     let data = response.data.data
-                    if (data) {
-                        let rowHTML =
-                            `<div class="row mt-3">
-						<div class="col-auto">
-							<!-- Reply User Avatar -->
-							<img src="/`+ data.userAvatar + `" width="24" height="24" class="rounded-circle">
-						</div>
-						<div class="col">
-							<!-- Reply User Name and Location -->
-							<div class="row comment-title">
-								<div class="col">`+ data.userNickname + ` <small class="text-muted">位置</small></div>
-								<!-- Reply Time -->
-								<small class="col-auto text-muted">刚刚</small>
-							</div>
-							<!-- Reply Text -->
-							<p class="my-2 comment-text">`+ data.content + `</p>
-							<!-- Like, Dislike, Reply, Report Buttons -->
-							<div class="comment-button">
-								<button class="btn btn-sm border-0 comment-zan" data-comment-id="`+ element.ID + `" onclick="commentZan(this)"><i class="bi bi-hand-thumbs-up"></i> <span>0</span></button>
-								<button class="btn btn-sm border-0 comment-cai" data-comment-id="`+ element.ID + `" onclick="commentCai(this)"><i class="bi bi-hand-thumbs-down"></i> <span>0</span></button>
-								<button class="btn btn-sm border-0" onclick="toggleReplyForm(this)">回复</button>
-								<button class="btn btn-sm border-0">举报</button>
-							</div>
-							<!-- 回复表单（默认隐藏） -->
-							<div class="mt-3 reply-form d-none">
-								<form>
-									<div class="mb-3">
-										<input type="hidden" name="video_id" value="`+ videoID + `">
-										<input type="hidden" name="parent_id" value="`+ data.commentID + `">
-										<textarea class="form-control comment-reply" rows="3" placeholder="回复`+ data.userNickname + `："></textarea>
-									</div>
-									<button type="button" class="btn btn-sm btn-primary" onclick="reply(this)" disabled>发送回复</button>
-								</form>
-							</div>
-						</div>
-					</div>`;
-
-                        const replyElement = button.parentNode.parentNode.nextElementSibling;
-                        const loadHTML = document.getElementById('loadHTML')
-                        if (replyElement) {
-                            loadHTML.innerHTML = rowHTML;
-                            const node = loadHTML.firstElementChild;
-                            replyElement.insertBefore(node, replyElement.children[0]);
-                            const msg = '展开 ' + replyElement.children.length + ' 条回复';
-                            const button = replyElement.nextElementSibling
-                            button.setAttribute('data', msg);
-                            button.innerHTML = msg + `<i class="bi bi-chevron-down"></i>`;
-                        } else {
-                            let replyHTML =
-                                `<!-- Reply Area -->
-						<div class="ms-3 mt-3 collapse">
-							`+ rowHTML + `
-						</div>
-						<!-- Show/Hide Reply Button -->
-						<div class="reply-collapse" data="展开 1 条回复" onclick="toggleReplyCollapse(this)">展开 1 条回复 <i class="bi bi-chevron-down"></i></div>`;
-                            loadHTML.innerHTML = replyHTML;
-                            const firstNode = loadHTML.firstElementChild;
-                            const lastNode = loadHTML.lastElementChild;
-                            const comment = button.parentNode.parentNode.parentNode;
-                            comment.appendChild(firstNode);
-                            comment.appendChild(lastNode);
-                        }
-                        loadCommentReply()
-                        loadCollapse()
-                    }
+                    console.log(data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -848,7 +705,7 @@ export default {
                 },
                 contextmenu: [],
             });
-
+            console.log(art)
         },
         // loadXgplayer() {
         //     const player = new XGplayer({

@@ -1,6 +1,6 @@
 <template>
-    <!-- <VideoPlay /> -->
-    <comment />
+    <VideoPlay />
+    <!-- <comment /> -->
     <!-- <demo /> -->
 </template>
 

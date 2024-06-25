@@ -1,6 +1,7 @@
 <template>
-    <VideoPlay />
-    <!-- <app /> -->
+    <!-- <VideoPlay /> -->
+    <comment />
+    <!-- <demo /> -->
 </template>
 
 <script setup>

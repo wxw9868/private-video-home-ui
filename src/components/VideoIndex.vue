@@ -4,7 +4,7 @@
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
                     <v-slide-group v-model="model" class="pa-4" selected-class="bg-success">
-                        <v-slide-group-item v-for="(card, n) in list" :key="n"
+                        <v-slide-group-item v-for="(card, n) in cards" :key="n"
                             v-slot="{ isSelected, toggle, selectedClass }">
                             <v-card :class="['ma-4', selectedClass]" color="grey-lighten-1" height="189" width="336"
                                 @click="toggle" :href="path + card.id" target="_blank" hover>
@@ -26,7 +26,7 @@
                             <v-row justify="start" dense>
                                 <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
                                     <v-card class="mx-auto" max-width="336" :href="path" hover>
-                                        <v-img :src="card.raw.poster" class="h-auto align-end text-white"
+                                        <v-img :src="host + card.raw.poster" class="h-auto align-end text-white"
                                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
 
                                             <v-toolbar color="transparent">
@@ -91,18 +91,17 @@ export default {
         loading: true,
         path: '/play?id=1',
         search: '',
-        list: [],
         cards: [
-            { title: 'Pre-fab homes', poster: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Favorite road trips', poster: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Best airlines', poster: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Top 10 Australian beaches', poster: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Pre-fab homes', poster: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Favorite road trips', poster: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Top 10 Australian beaches', poster: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            { title: 'Pre-fab homes', poster: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 12 },
-            { title: 'Favorite road trips', poster: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
-            { title: 'Best airlines', poster: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
+            {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 2, title: 'Favorite road trips', poster: './assets/image/card/card2.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 3, title: 'Best airlines', poster: './assets/image/card/card3.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 4, title: 'Top 10 Australian beaches', poster: './assets/image/card/card4.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 5, title: 'Pre-fab homes', poster: './assets/image/card/card5.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 6, title: 'Favorite road trips', poster: './assets/image/card/card6.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 7, title: 'Top 10 Australian beaches', poster: './assets/image/card/card7.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+            {id: 8, title: 'Pre-fab homes', poster: './assets/image/card/card8.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 12 },
+            {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
+            {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
         ],
     }),
     mounted() {
@@ -114,7 +113,7 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     console.log(response.data.data.list);
-                    this.list = response.data.data.list;
+                    // this.cards = response.data.data.list;
                     this.loading = false;
                     // this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                 }).catch(function (error) {

@@ -32,9 +32,9 @@
                                 </v-card-actions>
 
                                 <!-- <v-item-group class="pb-6">
-                                    <v-item v-for="logo in logos" :key="logo">
+                                    <v-item v-for="player in players" :key="player">
                                         <v-btn class="rounded-circle" height="40" width="40" variant="text">
-                                            <v-img :src="host + logo.src" class="rounded-circle" height="40" width="40"
+                                            <v-img :src="host + player.src" class="rounded-circle" height="40" width="40"
                                                 cover></v-img>
                                         </v-btn>
                                     </v-item>
@@ -57,7 +57,54 @@
             </v-main>
         </v-layout>
     </v-card>
+
+    <v-container>
+        <!-- 评论列表 -->
+        <div v-for="(comment, index) in comments" :key="index" class="comment-item">
+            <v-avatar :color="getColor(comment.rating)">
+                <!-- 这里可以用评论者的头像或者默认的占位符 -->
+                <v-icon>account_circle</v-icon>
+            </v-avatar>
+            <div class="comment-content">
+                <span class="comment-username">{{ comment.username }}</span>
+                <p class="comment-text">{{ comment.text }}</p>
+                <v-rating v-model="comment.rating"
+                    :colors="['#ff0000', '#ffa500', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#800080']"
+                    readonly></v-rating>
+                <span class="comment-date">{{ formatDate(comment.date) }}</span>
+            </div>
+        </div>
+
+        <!-- 添加评论的表单（可选） -->
+        <v-textarea v-model="newComment" label="添加评论" placeholder="输入你的评论..."></v-textarea>
+        <v-btn @click="addComment">提交评论</v-btn>
+    </v-container>    
 </template>
+<style scoped>
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .comment-avatar {
+            margin-right: 16px;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-username,
+        .comment-date {
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .comment-text {
+            margin: 8px 0;
+        }
+    </style>
 
 <script>
 import { inject } from 'vue';
@@ -75,24 +122,34 @@ export default {
     },
     data: () => ({
         comments: [
-            { author: 'John Doe', text: 'This is a sample comment.' },
-            { author: 'Jane Roe', text: 'Another sample comment.' }
+            { username: 'User1', text: '这是一个评论', rating: 3, date: new Date() },
+            // ... 更多的评论
         ],
+        newComment: '',
         videoId: 0,
+        videoUrl: 'src/assets/video/lc.mp4',
+        videoTitle: '中华人民共和国',
+        videoActress: [
+            {
+                "id": "1",
+                "actress": "国务院"
+            },
+            {
+                "id": "2",
+                "actress": "检察院"
+            }
+        ],
         path: '/actress?id=',
-        videoTitle: '',
-        isCollect: '',
-        collect: '',
+        duration: null,
+        browse: 0,
+        collect: 0,
         icon: {
             collect: 'mdi-heart-outline',
         },
-        browse: '',
+        isCollect: '',
         duration: '',
         avatar: '',
-        videoActress: '',
-        videoUrl: 'src/assets/video/lc.mp4',
         poster: '',
-        logo: '',
         style: {
             position: 'absolute',
             top: 0,
@@ -102,7 +159,7 @@ export default {
             width: '100%',
             height: '100%'
         },
-        logos: [
+        players: [
             {
                 player: 'plyr',
                 src: '/assets/image/player/player.png',
@@ -128,20 +185,43 @@ export default {
         this.loadBrowse(id);
     },
     methods: {
+        getColor(rating) {
+            // 根据评分返回不同的颜色（可选）
+            if (rating >= 5) return 'success';
+            if (rating >= 3) return 'warning';
+            return 'error';
+        },
+        formatDate(date) {
+            // 格式化日期（可选）
+            return date.toLocaleString();
+        },
+        addComment() {
+            // 添加评论的逻辑（可选）
+            if (this.newComment) {
+                const newCommentData = {
+                    username: '匿名用户', // 可以从用户信息中获取
+                    text: this.newComment,
+                    rating: 3, // 默认评分或从用户处获取
+                    date: new Date(),
+                };
+                this.comments.push(newCommentData);
+                this.newComment = ''; // 清空输入框
+            }
+        },
         getData(id) {
             this.$http.get('/video/getPlay', { params: { id: id } })
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    this.videoTitle = data.videoTitle;
+                    // this.videoTitle = data.videoTitle;
                     this.isCollect = data.IsCollect;
                     this.collect = data.Collect;
                     this.browse = data.Browse;
                     this.duration = data.Duration;
                     this.avatar = this.host + data.Avatar;
-                    this.videoActress = data.videoActress;
-                    this.videoUrl = this.host + data.videoUrl;
-                    this.poster = this.host + data.Poster;
+                    // this.videoActress = data.videoActress;
+                    // this.videoUrl = this.host + data.videoUrl;
+                    // this.poster = this.host + data.Poster;
 
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect
 
@@ -212,7 +292,7 @@ export default {
             }
 
             const formData = {};
-            formData['video_id'] = this.videoId
+            formData['video_id'] = parseInt(this.videoId)
             formData['collect'] = num
 
             this.$http.post('/video/collect', formData, { headers: { 'content-type': 'application/json' } })

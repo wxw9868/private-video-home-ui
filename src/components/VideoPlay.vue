@@ -16,9 +16,9 @@
                                 </v-card-text>
 
                                 <v-card-subtitle>
-                                    <span class="me-2" v-for="item in videoActress" :key="item" :to="path + item.id">{{
-                                    item.actress
-                                }}</span>
+                                    <span class="me-2" v-for="item in videoActress" :key="item" :to="path + item.id">
+                                        {{item.actress}}
+                                    </span>
                                 </v-card-subtitle>
 
                                 <v-card-actions>
@@ -85,14 +85,14 @@
                                     <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
                                     <span>{{ comment.Oppose }}</span>
                                 </v-btn>
-                                <v-btn variant="text" text color="green" @click="replyShow = !replyShow">
+                                <v-btn variant="text" text color="green" @click="replyShow(comment.ID)">
                                     <v-icon left small>mdi-comment-outline</v-icon>
                                 </v-btn>
                                 <v-btn variant="text" text color="orange" @click="openReportDialog">
                                     <v-icon left small>mdi-flag-outline</v-icon>
                                 </v-btn>
                             </div>
-                            <v-col v-show="replyShow">
+                            <v-col v-show="reply===comment.ID">
                                 <v-form v-model="form" @submit.prevent="onReply">
                                     <v-input v-model="commentId" type="hidden" @input="insertContent" :value="comment.ID"></v-input>
                                     <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3" clear-icon="mdi-close-circle"
@@ -101,53 +101,53 @@
                                 </v-form>
                             </v-col>
 
-                            <v-div v-show="show">
-                                <v-row v-for="(reply, i) in comment.Childrens" :key="i">
+                            <v-div v-show="show==comment.ID">
+                                <v-row v-for="(replies, i) in comment.Childrens" :key="i">
                                     <div class="pt-3">
-                                        <v-avatar size="24px" :image="host + reply.Avatar"></v-avatar>
+                                        <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
                                     </div>
                                     <v-col>
                                         <v-row style="font-size: 13px;">
                                             <v-col class="me-auto" cols="auto">
-                                                <v-span class="me-2">{{ reply.Nickname }}</v-span>
+                                                <v-span class="me-2">{{ replies.Nickname }}</v-span>
                                                 <v-small class="me-2">北京</v-small>
                                             </v-col>
                                             <v-col cols="auto" style="font-size: 15px;">
-                                                <v-small class="justify-end align-end">{{ doTime(reply.CreatedAt)
+                                                <v-small class="justify-end align-end">{{ doTime(replies.CreatedAt)
                                                     }}</v-small>
                                             </v-col>
                                         </v-row>
-                                        <p class="my-2" style="font-size: 15px;">{{ reply.Content }}</p>
+                                        <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
                                         <div class="d-flex justify-start" style="font-size: 13px;">
                                             <v-btn variant="text" text :color="liked ? 'blue' : ''"
                                                 @click="likeComment">
                                                 <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                                <span>{{ reply.Support }}</span>
+                                                <span>{{ replies.Support }}</span>
                                             </v-btn>
                                             <v-btn variant="text" text :color="disliked ? 'red' : ''"
                                                 @click="dislikeComment">
                                                 <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                                <span>{{ reply.Oppose }}</span>
+                                                <span>{{ replies.Oppose }}</span>
                                             </v-btn>
-                                            <v-btn variant="text" text color="green" @click="replyShow1 = !replyShow1">
+                                            <v-btn variant="text" text color="green" @click="replyShow(replies.ID)">
                                                 <v-icon left small>mdi-comment-outline</v-icon>
                                             </v-btn>
                                             <v-btn variant="text" text color="orange" @click="openReportDialog">
                                                 <v-icon left small>mdi-flag-outline</v-icon>
                                             </v-btn>
                                         </div>
-                                        <v-col v-show="replyShow1">
-                                            <v-form>
-                                                <v-textarea row-height="25" rows="3" @input="insertContent" clear-icon="mdi-close-circle"
+                                        <v-col v-show="reply===replies.ID">
+                                            <v-form v-model="form" @submit.prevent="onReply">
+                                                <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3" @input="insertContent" clear-icon="mdi-close-circle"
                                                     variant="outlined" auto-grow shaped clearable></v-textarea>
-                                                <v-btn>发送回复</v-btn>
+                                                <v-btn :disabled="!form" :loading="loading" type="submit">发送回复</v-btn>
                                             </v-form>
                                         </v-col>
                                     </v-col>
                                 </v-row>
                             </v-div>
 
-                            <v-btn variant="text" @click="show = !show" data="展开 1 条回复">展开 {{ comment.Childrens?comment.Childrens.length:0
+                            <v-btn variant="text" @click="repliesShow(comment.ID)">展开 {{ comment.Childrens?comment.Childrens.length:0
                                 }} 条回复 <v-icon :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon></v-btn>
                         </v-col>
                     </v-row>
@@ -239,9 +239,8 @@ export default {
             },
         ],
         comments: [],
-        show: false,
-        replyShow: false,
-        replyShow1: false,
+        show: 0,
+        reply: 0,
         liked: false,
         disliked: false,
     }),
@@ -258,10 +257,10 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    // this.videoTitle = data.videoTitle;
-                    // this.videoActress = data.videoActress;
+                    this.videoTitle = data.videoTitle;
+                    this.videoActress = data.videoActress;
                     this.duration = data.Duration;
-                    // this.videoUrl = this.host + data.videoUrl;
+                    this.videoUrl = this.host + data.videoUrl;
                     this.poster = this.host + data.Poster;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
@@ -418,6 +417,22 @@ export default {
         dislikeComment() {
             this.disliked = !this.disliked;
             if (this.liked) this.liked = false;
+        },
+
+        replyShow(id) {
+            if (this.reply != id) {
+                this.reply = id
+            } else {
+                this.reply = 0
+            }
+        },
+
+        repliesShow(id) {
+            if (this.show != id) {
+                this.show = id
+            } else {
+                this.show = 0
+            }
         },
 
         // 获取评论数据
@@ -700,7 +715,7 @@ export default {
                 url: this.videoUrl,
                 poster: this.poster,
                 volume: 1,
-                muted: true, // 是否默认静音
+                muted: false, // 是否默认静音
                 autoplay: false, // 是否自动播放
                 pip: true,
                 autoSize: true,

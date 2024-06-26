@@ -19,8 +19,8 @@ import axios from 'axios'
 const app = createApp(App)
 
 // app.provide('serverHost', 'http://192.168.0.4:80/')
-// app.provide('serverHost', 'http://192.168.0.5:80/')
-app.provide('serverHost', 'http://127.0.0.1:8081/')
+app.provide('serverHost', 'http://192.168.0.5:80/')
+// app.provide('serverHost', 'http://127.0.0.1:8081/')
 
 axios.defaults.baseURL = "/api"
 axios.defaults.withCredentials = true;

@@ -47,26 +47,29 @@
                 <v-container>
                     <v-row>
                         <div class="pt-3">
-                            <v-avatar size="40px" image="https://via.placeholder.com/50"></v-avatar>
+                            <v-avatar size="40px" :image="avatar"></v-avatar>
                         </div>
                         <v-col>
-                            <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined"
-                                auto-grow shaped clearable></v-textarea>
-                            <v-btn>发布评论</v-btn>
+                            <v-form v-model="form" @submit.prevent="onComment">
+                                <v-textarea v-model="content" :rules="contentRules" @input="insertContent" row-height="25" rows="3"
+                                    clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
+                                    clearable></v-textarea>
+                                <v-btn :disabled="!form" :loading="loading" type="submit">发布评论</v-btn>
+                            </v-form>
                         </v-col>
 
                         <v-divider class="pt-10"></v-divider>
                     </v-row>
-                    <v-div v-for="(comment, i) in comments" :key="i"></v-div>
+                    
                     <v-row class="pt-5" v-for="(comment, i) in comments" :key="i">
                         <div class="pt-3">
-                            <v-avatar size="40px" :image="host+comment.Avatar"></v-avatar>
+                            <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
                         </div>
                         <v-col>
                             <v-row style="font-size: 13px;">
                                 <v-col class="me-auto" cols="auto">
-                                    <v-span class="me-2">{{comment.Nickname}}</v-span>
-                                    <v-small class="me-2">位置</v-small>
+                                    <v-span class="me-2">{{ comment.Nickname }}</v-span>
+                                    <v-small class="me-2">北京</v-small>
                                 </v-col>
                                 <v-col cols="auto" style="font-size: 15px;">
                                     <v-small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</v-small>
@@ -75,11 +78,11 @@
                             <p class="my-2" style="font-size: 15px;">{{ comment.Content }}</p>
                             <div class="d-flex justify-start" style="font-size: 13px;">
                                 <v-btn variant="text" text :color="liked ? 'blue' : ''" @click="likeComment">
-                                    <v-icon left small>mdi-thumb-up</v-icon>
+                                    <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
                                     <span>{{ comment.Support }}</span>
                                 </v-btn>
                                 <v-btn variant="text" text :color="disliked ? 'red' : ''" @click="dislikeComment">
-                                    <v-icon left small>mdi-thumb-down</v-icon>
+                                    <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
                                     <span>{{ comment.Oppose }}</span>
                                 </v-btn>
                                 <v-btn variant="text" text color="green" @click="replyShow = !replyShow">
@@ -90,36 +93,40 @@
                                 </v-btn>
                             </div>
                             <v-col v-show="replyShow">
-                                <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined"
-                                    auto-grow shaped clearable></v-textarea>
-                                <v-btn>发送回复</v-btn>
+                                <v-form v-model="form" @submit.prevent="onReply">
+                                    <v-input v-model="commentId" type="hidden" @input="insertContent" :value="comment.ID"></v-input>
+                                    <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3" clear-icon="mdi-close-circle"
+                                        variant="outlined" auto-grow shaped clearable></v-textarea>
+                                    <v-btn :disabled="!form" :loading="loading" type="submit">发送回复</v-btn>
+                                </v-form>
                             </v-col>
 
                             <v-div v-show="show">
                                 <v-row v-for="(reply, i) in comment.Childrens" :key="i">
                                     <div class="pt-3">
-                                        <v-avatar size="24px" :image="host+reply.Avatar"></v-avatar>
+                                        <v-avatar size="24px" :image="host + reply.Avatar"></v-avatar>
                                     </div>
                                     <v-col>
                                         <v-row style="font-size: 13px;">
                                             <v-col class="me-auto" cols="auto">
                                                 <v-span class="me-2">{{ reply.Nickname }}</v-span>
-                                                <v-small class="me-2">位置</v-small>
+                                                <v-small class="me-2">北京</v-small>
                                             </v-col>
                                             <v-col cols="auto" style="font-size: 15px;">
-                                                <v-small class="justify-end align-end">{{ doTime(reply.CreatedAt) }}</v-small>
+                                                <v-small class="justify-end align-end">{{ doTime(reply.CreatedAt)
+                                                    }}</v-small>
                                             </v-col>
                                         </v-row>
                                         <p class="my-2" style="font-size: 15px;">{{ reply.Content }}</p>
                                         <div class="d-flex justify-start" style="font-size: 13px;">
                                             <v-btn variant="text" text :color="liked ? 'blue' : ''"
                                                 @click="likeComment">
-                                                <v-icon left small>mdi-thumb-up</v-icon>
+                                                <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
                                                 <span>{{ reply.Support }}</span>
                                             </v-btn>
                                             <v-btn variant="text" text :color="disliked ? 'red' : ''"
                                                 @click="dislikeComment">
-                                                <v-icon left small>mdi-thumb-down</v-icon>
+                                                <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
                                                 <span>{{ reply.Oppose }}</span>
                                             </v-btn>
                                             <v-btn variant="text" text color="green" @click="replyShow1 = !replyShow1">
@@ -130,16 +137,18 @@
                                             </v-btn>
                                         </div>
                                         <v-col v-show="replyShow1">
-                                            <v-textarea row-height="25" rows="3" clear-icon="mdi-close-circle"
-                                                variant="outlined" auto-grow shaped clearable></v-textarea>
-                                            <v-btn>发送回复</v-btn>
+                                            <v-form>
+                                                <v-textarea row-height="25" rows="3" @input="insertContent" clear-icon="mdi-close-circle"
+                                                    variant="outlined" auto-grow shaped clearable></v-textarea>
+                                                <v-btn>发送回复</v-btn>
+                                            </v-form>
                                         </v-col>
                                     </v-col>
                                 </v-row>
                             </v-div>
 
-                            <v-btn variant="text" @click="show = !show" data="展开 1 条回复">展开 {{ comment.Childrens.length }} 条回复 <v-icon
-                                    :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon></v-btn>
+                            <v-btn variant="text" @click="show = !show" data="展开 1 条回复">展开 {{ comment.Childrens?comment.Childrens.length:0
+                                }} 条回复 <v-icon :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon></v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -148,7 +157,7 @@
     </v-card>
 </template>
 <script>
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 // import Plyr from 'plyr';
 // import 'plyr/dist/plyr.css';
 // import DPlayer from 'dplayer';
@@ -159,13 +168,16 @@ import Artplayer from "artplayer";
 export default {
     setup() {
         const host = inject('serverHost');
-        return { host }
+
+        const content = ref('');
+
+        function insertContent(event) {
+            content.value = event.target.value
+        }
+        return { host,content,insertContent }
     },
     data: () => ({
-        comments: [],
-        show: false,
-        replyShow: false,
-        replyShow1: false,
+        userId: localStorage.getItem("userID"),
         videoId: 0,
         videoUrl: 'src/assets/video/lc.mp4',
         videoTitle: '中华人民共和国',
@@ -216,6 +228,22 @@ export default {
                 src: '/assets/image/player/xgplayer.jpg',
             },
         ],
+        form: false,
+        loading: false,
+        // commentId: 0,
+        // content: '',
+        contentRules: [
+            value => {
+                if (value?.length > 3) return true
+                return 'content must be at least 3 characters.'
+            },
+        ],
+        comments: [],
+        show: false,
+        replyShow: false,
+        replyShow1: false,
+        liked: false,
+        disliked: false,
     }),
     mounted() {
         let id = this.$route.query.id;
@@ -230,10 +258,10 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    this.videoTitle = data.videoTitle;
-                    this.videoActress = data.videoActress;
+                    // this.videoTitle = data.videoTitle;
+                    // this.videoActress = data.videoActress;
                     this.duration = data.Duration;
-                    this.videoUrl = this.host + data.videoUrl;
+                    // this.videoUrl = this.host + data.videoUrl;
                     this.poster = this.host + data.Poster;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
@@ -383,16 +411,23 @@ export default {
             return { isZan, isCai }
         },
 
+        likeComment() {
+            this.liked = !this.liked;
+            if (this.disliked) this.disliked = false;
+        },
+        dislikeComment() {
+            this.disliked = !this.disliked;
+            if (this.liked) this.liked = false;
+        },
+
         // 获取评论数据
         loadCommentList(id) {
             this.$http.get('/comment/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-                .then(function (response) {
+                .then(response => {
                     // console.log(response);
-                    // console.log(response.data.data);
+                    console.log(response.data.data);
                     this.comments = response.data.data;
-                    // let userID = localStorage.getItem("userID");
-                    console.log(this.comments);
-                
+                    // console.log(this.comments);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -400,7 +435,6 @@ export default {
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
-
                     } else if (error.request) {
                         // 请求已经成功发起，但没有收到响应
                         // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
@@ -415,26 +449,20 @@ export default {
                 });
         },
         // 评论
-        comment(button) {
-            // 处理表单数据的代码
-            const form = button.parentNode;
+        onComment() {
+            console.log(this.form);
+            if (!this.form) return
+            setTimeout(() => (this.loading = false), 100)
+            this.loading = true
+           
             const formData = {};
-            for (let element of form.elements) {
-                // console.log(element.tagName)
-                if (element.tagName !== "BUTTON" && element.type !== "SUBMIT") {
-                    if (element.tagName === "INPUT") {
-                        formData[element.name] = parseInt(element.value);
-                    } else {
-                        formData[element.name] = element.value;
-                    }
-                }
-            }
-            // console.log(formData)
-
+            formData['content'] = this.content
+            formData['video_id'] = parseInt(this.videoId)
+            
             this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    let data = response.data.
+                    let data = response.data.data
                     console.log(data);
                 })
                 .catch(function (error) {
@@ -455,26 +483,20 @@ export default {
                     console.log(error.config);
                     console.log(error);
                 });
-
-            form.querySelector('textarea').value = '';
-            button.disabled = true;
         },
         // 回复
-        reply(button) {
-            // 处理表单数据的代码
-            const form = button.parentNode;
+        onReply() {
+            console.log(this.form);
+            if (!this.form) return
+            setTimeout(() => (this.loading = false), 100)
+            this.loading = true
+           
             const formData = {};
-            for (let element of form.elements) {
-                // console.log(element.tagName)
-                if (element.tagName !== "BUTTON" && element.type !== "SUBMIT") {
-                    if (element.tagName === "INPUT") {
-                        formData[element.name] = parseInt(element.value);
-                    } else {
-                        formData[element.name] = element.value;
-                    }
-                }
-            }
-            // console.log(formData)
+            formData['content'] = this.content
+            formData['parent_id'] = parseInt(this.commentId.value)
+            formData['video_id'] = parseInt(this.videoId)
+            console.log(formData)
+            return
 
             this.$http.post('/comment/reply', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {

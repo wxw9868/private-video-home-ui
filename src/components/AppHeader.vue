@@ -13,7 +13,8 @@
         </template>
         <v-expand-x-transition>
             <v-text-field v-model="searchQuery" hide-details v-show="isSearchVisible" @click:append="submitSearch"
-                @click:prepend="collapseSearch" :style="{ width: searchWidth }" density="comfortable" placeholder="Search" prepend-inner-icon="mdi-magnify" variant="solo"></v-text-field>
+                @click:prepend="collapseSearch" :style="{ width: searchWidth }" density="comfortable"
+                placeholder="Search" prepend-inner-icon="mdi-magnify" variant="solo"></v-text-field>
         </v-expand-x-transition>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'left' : undefined" temporary>
@@ -60,6 +61,11 @@ export default {
             },
         ],
     }),
+    mounted() {
+        if(document.cookie) {
+            this.getSession()
+        }
+    },
 
     methods: {
         toggleSearch() {
@@ -77,7 +83,41 @@ export default {
         collapseSearch() {
             this.isSearchVisible = false;
             this.searchWidth = '100px'; // 设置收起时的宽度
-        }
+        },
+
+        getSession() {
+            this.$http.get('/user/session')
+                .then(response => {
+                    let data = response.data.data;
+                    if (data) {
+                        console.log(data)
+                        localStorage.setItem("userID", data.id);
+                        localStorage.setItem("userAvatar", data.avatar);
+                        localStorage.setItem("userUsername", data.username);
+                        localStorage.setItem("userNickname", data.nickname);
+                        localStorage.setItem("userEmail", data.email);
+                        localStorage.setItem("userMobile", data.mobile);
+                    }
+                }).catch(function (error) {
+                    if (error.response) {
+                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+
+                    } else if (error.request) {
+                        // 请求已经成功发起，但没有收到响应
+                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                        // 而在node.js中是 http.ClientRequest 的实例
+                        console.log(error.request);
+                    } else {
+                        // 发送请求时出了点问题
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    console.log(error);
+                });
+        },
     },
 
     watch: {

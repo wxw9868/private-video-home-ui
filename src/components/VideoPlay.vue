@@ -92,14 +92,19 @@
                                     <v-icon left small>mdi-flag-outline</v-icon>
                                 </v-btn>
                             </div>
-                            <v-col v-show="replyTextareaShow === comment.ID">
-                                <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID)">
-                                    <v-textarea v-model="replyTexts[comment.ID]" :rules="replyRules[comment.ID]" row-height="25"
-                                        rows="3" clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
-                                        clearable></v-textarea>
-                                    <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]" type="submit">发送回复</v-btn>
-                                </v-form>
-                            </v-col>
+                            <v-row v-show="replyTextareaShow === comment.ID">
+                                <div class="pt-3">
+                                    <v-avatar size="40px" :image="avatar"></v-avatar>
+                                </div>
+                                <v-col>
+                                    <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID)">
+                                        <v-textarea v-model="replyTexts[comment.ID]" :rules="replyRules[comment.ID]" row-height="25"
+                                            rows="3" clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
+                                            clearable></v-textarea>
+                                        <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]" type="submit">发送回复</v-btn>
+                                    </v-form>
+                                </v-col>
+                            </v-row>
 
                             <div v-show="replyListShow == comment.ID">
                                 <v-row v-for="(replies, i) in comment.Childrens" :key="i">
@@ -136,14 +141,19 @@
                                                 <v-icon left small>mdi-flag-outline</v-icon>
                                             </v-btn>
                                         </div>
-                                        <v-col v-show="replyTextareaShow === replies.ID">
-                                            <v-form v-model="replyForms[replies.ID]" @submit.prevent="onReply(replies.ID)">
-                                                <v-textarea v-model="replyTexts[replies.ID]" :rules="replyRules[replies.ID]"
-                                                    row-height="25" rows="3" clear-icon="mdi-close-circle"
-                                                    variant="outlined" auto-grow shaped clearable></v-textarea>
-                                                <v-btn :disabled="!replyForms[replies.ID]" :loading="replyloadings[replies.ID]" type="submit">发送回复</v-btn>
-                                            </v-form>
-                                        </v-col>
+                                        <v-row v-show="replyTextareaShow === replies.ID">
+                                            <div class="pt-3">
+                                                <v-avatar size="40px" :image="avatar"></v-avatar>
+                                            </div>
+                                            <v-col v-show="replyTextareaShow === replies.ID">
+                                                <v-form v-model="replyForms[replies.ID]" @submit.prevent="onReply(replies.ID)">
+                                                    <v-textarea v-model="replyTexts[replies.ID]" :rules="replyRules[replies.ID]"
+                                                        row-height="25" rows="3" clear-icon="mdi-close-circle"
+                                                        variant="outlined" auto-grow shaped clearable></v-textarea>
+                                                    <v-btn :disabled="!replyForms[replies.ID]" :loading="replyloadings[replies.ID]" type="submit">发送回复</v-btn>
+                                                </v-form>
+                                            </v-col>
+                                        </v-row>
                                     </v-col>
                                 </v-row>
                             </div>
@@ -266,11 +276,11 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    // this.videoTitle = data.videoTitle;
-                    // this.videoActress = data.videoActress;
+                    this.videoTitle = data.videoTitle;
+                    this.videoActress = data.videoActress;
                     this.duration = data.Duration;
-                    // this.videoUrl = this.host + data.videoUrl;
-                    // this.poster = this.host + data.Poster;
+                    this.videoUrl = this.host + data.videoUrl;
+                    this.poster = this.host + data.Poster;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
                     this.collect = data.Collect;
@@ -440,6 +450,8 @@ export default {
                     console.log(error.config);
                     console.log(error);
                 });
+
+                this.content = '';
         },
         // 回复
         onReply(id) {
@@ -494,7 +506,7 @@ export default {
             this.$http.post('/comment/zan', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    // console.log(response.data);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -531,7 +543,7 @@ export default {
             this.$http.post('/comment/cai', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    // console.log(response.data);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -578,7 +590,7 @@ export default {
                 this.replyZans[comment.ID] = comment.Support
                 this.replyCais[comment.ID] = comment.Oppose
                 if (comment.Childrens > 0) {
-                    loadReplyText(comment.Childrens)
+                    this.loadReply(comment.Childrens)
                 }
             });
         },

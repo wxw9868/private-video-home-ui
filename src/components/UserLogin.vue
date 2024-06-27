@@ -30,7 +30,7 @@
                 </v-btn>
 
                 <v-card-text class="text-center">
-                    <a class="text-blue text-decoration-none" href="/register" rel="noopener noreferrer" target="_blank">
+                    <a class="text-blue text-decoration-none" href="/register" rel="noopener noreferrer">
                         Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
                     </a>
                 </v-card-text>
@@ -47,6 +47,7 @@ export default {
         return { host }
     },
     data: () => ({
+        visible: false,
         form: false,
         email: 'wxw9868@163.com',
         password: '123456',

@@ -17,7 +17,7 @@
 
                                 <v-card-subtitle>
                                     <span class="me-2" v-for="item in videoActress" :key="item" :to="path + item.id">
-                                        {{item.actress}}
+                                        {{ item.actress }}
                                     </span>
                                 </v-card-subtitle>
 
@@ -51,16 +51,16 @@
                         </div>
                         <v-col>
                             <v-form v-model="form" @submit.prevent="onComment">
-                                <v-textarea v-model="content" :rules="contentRules" @input="insertContent" row-height="25" rows="3"
-                                    clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
-                                    clearable></v-textarea>
+                                <v-textarea v-model="content" :rules="contentRules"
+                                    row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined" auto-grow
+                                    shaped clearable></v-textarea>
                                 <v-btn :disabled="!form" :loading="loading" type="submit">发布评论</v-btn>
                             </v-form>
                         </v-col>
 
                         <v-divider class="pt-10"></v-divider>
                     </v-row>
-                    
+
                     <v-row class="pt-5" v-for="(comment, i) in comments" :key="i">
                         <div class="pt-3">
                             <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
@@ -68,40 +68,40 @@
                         <v-col>
                             <v-row style="font-size: 13px;">
                                 <v-col class="me-auto" cols="auto">
-                                    <v-span class="me-2">{{ comment.Nickname }}</v-span>
-                                    <v-small class="me-2">北京</v-small>
+                                    <span class="me-2">{{ comment.Nickname }}</span>
+                                    <small class="me-2">北京</small>
                                 </v-col>
                                 <v-col cols="auto" style="font-size: 15px;">
-                                    <v-small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</v-small>
+                                    <small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</small>
                                 </v-col>
                             </v-row>
                             <p class="my-2" style="font-size: 15px;">{{ comment.Content }}</p>
                             <div class="d-flex justify-start" style="font-size: 13px;">
-                                <v-btn variant="text" text :color="liked ? 'blue' : ''" @click="likeComment">
+                                <v-btn variant="text" :color="replyIsZans[comment.ID] ? 'blue' : ''" @click="commentZan(comment.ID)">
                                     <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                    <span>{{ comment.Support }}</span>
+                                    <span>{{ replyZans[comment.ID] }}</span>
                                 </v-btn>
-                                <v-btn variant="text" text :color="disliked ? 'red' : ''" @click="dislikeComment">
+                                <v-btn variant="text" :color="replyIsCais[comment.ID] ? 'red' : ''" @click="commentCai(comment.ID)">
                                     <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                    <span>{{ comment.Oppose }}</span>
+                                    <span>{{ replyCais[comment.ID] }}</span>
                                 </v-btn>
-                                <v-btn variant="text" text color="green" @click="replyShow(comment.ID)">
+                                <v-btn variant="text" color="green" @click="replyShow(comment.ID)">
                                     <v-icon left small>mdi-comment-outline</v-icon>
                                 </v-btn>
-                                <v-btn variant="text" text color="orange" @click="openReportDialog">
+                                <v-btn variant="text" color="orange" @click="openReportDialog">
                                     <v-icon left small>mdi-flag-outline</v-icon>
                                 </v-btn>
                             </div>
-                            <v-col v-show="reply===comment.ID">
-                                <v-form v-model="form" @submit.prevent="onReply">
-                                    <v-input v-model="commentId" type="hidden" @input="insertContent" :value="comment.ID"></v-input>
-                                    <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3" clear-icon="mdi-close-circle"
-                                        variant="outlined" auto-grow shaped clearable></v-textarea>
-                                    <v-btn :disabled="!form" :loading="loading" type="submit">发送回复</v-btn>
+                            <v-col v-show="replyTextareaShow === comment.ID">
+                                <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID)">
+                                    <v-textarea v-model="replyTexts[comment.ID]" :rules="replyRules[comment.ID]" row-height="25"
+                                        rows="3" clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
+                                        clearable></v-textarea>
+                                    <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]" type="submit">发送回复</v-btn>
                                 </v-form>
                             </v-col>
 
-                            <v-div v-show="show==comment.ID">
+                            <div v-show="replyListShow == comment.ID">
                                 <v-row v-for="(replies, i) in comment.Childrens" :key="i">
                                     <div class="pt-3">
                                         <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
@@ -109,46 +109,50 @@
                                     <v-col>
                                         <v-row style="font-size: 13px;">
                                             <v-col class="me-auto" cols="auto">
-                                                <v-span class="me-2">{{ replies.Nickname }}</v-span>
-                                                <v-small class="me-2">北京</v-small>
+                                                <span class="me-2">{{ replies.Nickname }}</span>
+                                                <small class="me-2">北京</small>
                                             </v-col>
                                             <v-col cols="auto" style="font-size: 15px;">
-                                                <v-small class="justify-end align-end">{{ doTime(replies.CreatedAt)
-                                                    }}</v-small>
+                                                <small class="justify-end align-end">{{ doTime(replies.CreatedAt)
+                                                    }}</small>
                                             </v-col>
                                         </v-row>
                                         <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
                                         <div class="d-flex justify-start" style="font-size: 13px;">
-                                            <v-btn variant="text" text :color="liked ? 'blue' : ''"
-                                                @click="likeComment">
+                                            <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
+                                                @click="commentZan(replies.ID)">
                                                 <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                                <span>{{ replies.Support }}</span>
+                                                <span>{{ replyZans[replies.ID] }}</span>
                                             </v-btn>
-                                            <v-btn variant="text" text :color="disliked ? 'red' : ''"
-                                                @click="dislikeComment">
+                                            <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
+                                                @click="commentCai(replies.ID)">
                                                 <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                                <span>{{ replies.Oppose }}</span>
+                                                <span>{{ replyCais[replies.ID] }}</span>
                                             </v-btn>
-                                            <v-btn variant="text" text color="green" @click="replyShow(replies.ID)">
+                                            <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
                                                 <v-icon left small>mdi-comment-outline</v-icon>
                                             </v-btn>
-                                            <v-btn variant="text" text color="orange" @click="openReportDialog">
+                                            <v-btn variant="text" color="orange" @click="openReportDialog">
                                                 <v-icon left small>mdi-flag-outline</v-icon>
                                             </v-btn>
                                         </div>
-                                        <v-col v-show="reply===replies.ID">
-                                            <v-form v-model="form" @submit.prevent="onReply">
-                                                <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3" @input="insertContent" clear-icon="mdi-close-circle"
+                                        <v-col v-show="replyTextareaShow === replies.ID">
+                                            <v-form v-model="replyForms[replies.ID]" @submit.prevent="onReply(replies.ID)">
+                                                <v-textarea v-model="replyTexts[replies.ID]" :rules="replyRules[replies.ID]"
+                                                    row-height="25" rows="3" clear-icon="mdi-close-circle"
                                                     variant="outlined" auto-grow shaped clearable></v-textarea>
-                                                <v-btn :disabled="!form" :loading="loading" type="submit">发送回复</v-btn>
+                                                <v-btn :disabled="!replyForms[replies.ID]" :loading="replyloadings[replies.ID]" type="submit">发送回复</v-btn>
                                             </v-form>
                                         </v-col>
                                     </v-col>
                                 </v-row>
-                            </v-div>
+                            </div>
 
-                            <v-btn variant="text" @click="repliesShow(comment.ID)">展开 {{ comment.Childrens?comment.Childrens.length:0
-                                }} 条回复 <v-icon :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon></v-btn>
+                            <v-btn variant="text" @click="repliesShow(comment.ID)">
+                                展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
+                                <v-icon
+                                    :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+                            </v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -157,7 +161,7 @@
     </v-card>
 </template>
 <script>
-import { inject, ref } from 'vue';
+import { inject, reactive } from 'vue';
 // import Plyr from 'plyr';
 // import 'plyr/dist/plyr.css';
 // import DPlayer from 'dplayer';
@@ -168,13 +172,7 @@ import Artplayer from "artplayer";
 export default {
     setup() {
         const host = inject('serverHost');
-
-        const content = ref('');
-
-        function insertContent(event) {
-            content.value = event.target.value
-        }
-        return { host,content,insertContent }
+        return { host }
     },
     data: () => ({
         userId: localStorage.getItem("userID"),
@@ -230,26 +228,37 @@ export default {
         ],
         form: false,
         loading: false,
-        // commentId: 0,
-        // content: '',
+        content: '',
         contentRules: [
             value => {
+                if (value) return true
+
+                return 'Content is required.'
+            },
+            value => {
                 if (value?.length > 3) return true
+
                 return 'content must be at least 3 characters.'
             },
         ],
         comments: [],
-        show: 0,
-        reply: 0,
-        liked: false,
-        disliked: false,
+        replyListShow: 0,
+        replyTextareaShow: 0,
+        replyForms: reactive({}),
+        replyloadings: reactive({}),
+        replyTexts: reactive({}),
+        replyRules: reactive({}),
+        replyIsZans: reactive({}),
+        replyIsCais: reactive({}),
+        replyZans: reactive({}),
+        replyCais: reactive({}),  
     }),
     mounted() {
         let id = this.$route.query.id;
         this.videoId = id;
         this.getData(id);
-        this.loadBrowse(id);
-        this.loadCommentList(id);
+        this.addBrowse(id);
+        this.getCommentList(id);
     },
     methods: {
         getData(id) {
@@ -294,7 +303,7 @@ export default {
                 });
         },
         // 统计浏览量
-        loadBrowse(id) {
+        addBrowse(id) {
             this.browse = this.browse + 1
             this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
                 .then(function (response) {
@@ -365,84 +374,18 @@ export default {
                     console.log(error);
                 });
         },
-
-        doTime(timeString) {
-            let old = new Date(timeString);
-            let now = new Date();
-            // console.log(old.toLocaleString())
-            // console.log(now.toLocaleString())
-            // console.log(y,m,d,h,i,s)
-
-            let y = now.getFullYear() - old.getFullYear()
-            if (y == 0) {
-                let m = now.getMonth() - old.getMonth()
-                if (m == 0) {
-                    let d = now.getDate() - old.getDate()
-                    if (d == 0) {
-                        let h = now.getHours() - old.getHours()
-                        if (h == 0) {
-                            let i = now.getMinutes() - old.getMinutes()
-                            if (i == 0) {
-                                return i + '秒钟前'
-                            }
-                            return i + '分钟前'
-                        }
-                        return h + '小时前'
-                    }
-                    return d + '天前'
-                }
-                return m + '月前'
-            }
-            return y + '年前'
-        },
-
-        isZanAndCai(logUserID, userID, zan, cai) {
-            let isZan = 'bi-hand-thumbs-up'
-            let isCai = 'bi-hand-thumbs-down'
-            if (logUserID == userID) {
-                if (zan == 1) {
-                    isZan = 'bi-hand-thumbs-up-fill'
-                }
-                if (cai == 1) {
-                    isCai = 'bi-hand-thumbs-down-fill'
-                }
-            }
-            return { isZan, isCai }
-        },
-
-        likeComment() {
-            this.liked = !this.liked;
-            if (this.disliked) this.disliked = false;
-        },
-        dislikeComment() {
-            this.disliked = !this.disliked;
-            if (this.liked) this.liked = false;
-        },
-
-        replyShow(id) {
-            if (this.reply != id) {
-                this.reply = id
-            } else {
-                this.reply = 0
-            }
-        },
-
-        repliesShow(id) {
-            if (this.show != id) {
-                this.show = id
-            } else {
-                this.show = 0
-            }
-        },
-
         // 获取评论数据
-        loadCommentList(id) {
+        getCommentList(id) {
             this.$http.get('/comment/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
                 .then(response => {
                     // console.log(response);
-                    console.log(response.data.data);
-                    this.comments = response.data.data;
-                    // console.log(this.comments);
+                    // console.log(response.data.data);
+                    let list = response.data.data
+                    if (list) {
+                        this.comments = response.data.data;
+                        // console.log(this.comments);
+                        this.loadReply(this.comments)
+                    }
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -465,15 +408,14 @@ export default {
         },
         // 评论
         onComment() {
-            console.log(this.form);
             if (!this.form) return
             setTimeout(() => (this.loading = false), 100)
             this.loading = true
-           
+
             const formData = {};
             formData['content'] = this.content
             formData['video_id'] = parseInt(this.videoId)
-            
+
             this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
@@ -500,18 +442,15 @@ export default {
                 });
         },
         // 回复
-        onReply() {
-            console.log(this.form);
-            if (!this.form) return
-            setTimeout(() => (this.loading = false), 100)
-            this.loading = true
-           
+        onReply(id) {
+            if (!this.replyForms[id]) return
+            setTimeout(() => (this.replyloadings[id] = false), 100)
+            this.replyloadings[id] = true
+
             const formData = {};
-            formData['content'] = this.content
-            formData['parent_id'] = parseInt(this.commentId.value)
+            formData['content'] = this.replyTexts[id]
+            formData['parent_id'] = parseInt(id)
             formData['video_id'] = parseInt(this.videoId)
-            console.log(formData)
-            return
 
             this.$http.post('/comment/reply', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
@@ -537,41 +476,25 @@ export default {
                     console.log(error.config);
                     console.log(error);
                 });
-            form.querySelector('textarea').value = '';
-            button.disabled = true;
+            
+            this.replyTexts[id] = '';
         },
         // 赞
-        commentZan(button) {
-            let children = button.children
-            let zan = children[0].classList
-            let num = 0
-            if (zan[1] == 'bi-hand-thumbs-up') {
-                zan.remove('bi-hand-thumbs-up')
-                zan.add('bi-hand-thumbs-up-fill')
-                children[1].textContent = parseInt(children[1].textContent) + 1
-                num = 1
-            } else {
-                zan.remove('bi-hand-thumbs-up-fill')
-                zan.add('bi-hand-thumbs-up')
-                children[1].textContent = parseInt(children[1].textContent) - 1
-                num = -1
-            }
-            // console.log(children[0].classList[1])
-            // console.log(children[1].textContent)
+        commentZan(id) {
+            this.replyIsZans[id] = !this.replyIsZans[id];
+            if (this.replyIsCais[id]) this.replyIsCais[id] = false;
+    
+            let num = this.replyIsZans[id]? 1: -1;
+            this.replyZans[id] = this.replyZans[id] + num
 
             const formData = {};
-            formData['comment_id'] = parseInt(button.getAttribute('data-comment-id'))
+            formData['comment_id'] = parseInt(id)
             formData['zan'] = num
-
-            // console.log(formData)
-            // return
 
             this.$http.post('/comment/zan', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    if (response) {
-                        console.log(response.data);
-                    }
+                    // console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -594,34 +517,21 @@ export default {
                 });
         },
         // 踩
-        commentCai(button) {
-            let children = button.children
-            let zan = children[0].classList
-            let num = 0
-            if (zan[1] == 'bi-hand-thumbs-down') {
-                zan.remove('bi-hand-thumbs-down')
-                zan.add('bi-hand-thumbs-down-fill')
-                children[1].textContent = parseInt(children[1].textContent) + 1
-                num = 1
-            } else {
-                zan.remove('bi-hand-thumbs-down-fill')
-                zan.add('bi-hand-thumbs-down')
-                children[1].textContent = parseInt(children[1].textContent) - 1
-                num = -1
-            }
-            // console.log(children[0].classList[1])
-            // console.log(children[1].textContent)
+        commentCai(id) {
+            this.replyIsCais[id] = !this.replyIsCais[id];
+            if (this.replyIsZans[id]) this.replyIsZans[id] = false;
 
+            let num = this.replyIsCais[id]? 1: -1;
+            this.replyCais[id] = this.replyCais[id] + num
+    
             const formData = {};
-            formData['comment_id'] = parseInt(button.getAttribute('data-comment-id'))
+            formData['comment_id'] = parseInt(id)
             formData['cai'] = num
 
             this.$http.post('/comment/cai', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    if (response) {
-                        console.log(response.data);
-                    }
+                    // console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -642,6 +552,79 @@ export default {
                     console.log(error.config);
                     console.log(error);
                 });
+        },
+        openReportDialog() {},
+
+        loadReply(comments) {
+            comments.forEach((comment, index) => {
+                this.replyForms[comment.ID] = false
+                this.replyloadings[comment.ID] = false
+                this.replyTexts[comment.ID] = ''
+                this.replyRules[comment.ID] = [
+                    value => {
+                        if (value) return true
+
+                        return 'Content is required.'
+                    },
+                    value => {
+                        if (value?.length > 3) return true
+
+                        return 'content must be at least 3 characters.'
+                    },
+                ]
+                const { isZan, isCai } = this.isZanAndCai(comment.LogUserID,this.userID,comment.Zan,comment.Cai) 
+                this.replyIsZans[comment.ID] = isZan
+                this.replyIsCais[comment.ID] = isCai
+                this.replyZans[comment.ID] = comment.Support
+                this.replyCais[comment.ID] = comment.Oppose
+                if (comment.Childrens > 0) {
+                    loadReplyText(comment.Childrens)
+                }
+            });
+        },
+        replyShow(id) {
+            this.replyTextareaShow = (this.replyTextareaShow != id)? id: 0;
+        },
+        repliesShow(id) {
+            this.replyListShow = (this.replyListShow != id)? id: 0;
+        },
+        isZanAndCai(logUserID, userID, zan, cai) {
+            let isZan = false
+            let isCai = false
+            if (logUserID == userID) {
+                if (zan == 1) {
+                    isZan = true
+                }
+                if (cai == 1) {
+                    isCai = true
+                }
+            }
+            return { isZan, isCai }
+        },
+        doTime(timeString) {
+            let old = new Date(timeString);
+            let now = new Date();
+            let y = now.getFullYear() - old.getFullYear()
+            if (y == 0) {
+                let m = now.getMonth() - old.getMonth()
+                if (m == 0) {
+                    let d = now.getDate() - old.getDate()
+                    if (d == 0) {
+                        let h = now.getHours() - old.getHours()
+                        if (h == 0) {
+                            let i = now.getMinutes() - old.getMinutes()
+                            if (i == 0) {
+                                return i + '秒钟前'
+                            }
+                            return i + '分钟前'
+                        }
+                        return h + '小时前'
+                    }
+                    return d + '天前'
+                }
+                return m + '月前'
+            }
+            return y + '年前'
         },
 
         // loadPlayer(playerType) {

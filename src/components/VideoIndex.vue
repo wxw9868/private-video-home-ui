@@ -3,7 +3,7 @@
         <v-layout>
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
-                    <v-slide-group v-model="model" class="pa-4" selected-class="bg-success">
+                    <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" center-active mobile="true">
                         <v-slide-group-item v-for="(card, n) in cards" :key="n"
                             v-slot="{ isSelected, toggle, selectedClass }">
                             <v-card :class="['ma-4', selectedClass]" color="grey-lighten-1" height="189" width="336"
@@ -113,7 +113,7 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
+                    // this.cards = response.data.data.list;
                     this.loading = false;
                     // this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                 }).catch(function (error) {

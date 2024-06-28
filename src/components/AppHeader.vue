@@ -12,9 +12,18 @@
             <v-btn icon="mdi-account" size="large" to="/login"></v-btn>
         </template>
         <v-expand-x-transition>
-            <v-text-field v-model="searchQuery" hide-details v-show="isSearchVisible" @click:append="submitSearch"
-                @click:prepend="collapseSearch" :style="{ width: searchWidth }" density="comfortable"
-                placeholder="Search" prepend-inner-icon="mdi-magnify" variant="solo"></v-text-field>
+            <form action="/search" method="get">
+                <v-text-field 
+                    v-show="isSearchVisible" 
+                    hide-details
+                    type="search"
+                    name="query"
+                    :style="{ width: searchWidth }" 
+                    density="comfortable"
+                    placeholder="Search" 
+                    variant="solo"
+                ></v-text-field>
+            </form>
         </v-expand-x-transition>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'left' : undefined" temporary>
@@ -76,21 +85,12 @@ export default {
                 this.searchWidth = '100px'; // 设置搜索框收起后的宽度
             }
         },
-        submitSearch() {
-            // 提交搜索逻辑
-            console.log('提交搜索:', this.searchQuery);
-        },
-        collapseSearch() {
-            this.isSearchVisible = false;
-            this.searchWidth = '100px'; // 设置收起时的宽度
-        },
-
         getSession() {
             this.$http.get('/user/session')
                 .then(response => {
                     let data = response.data.data;
                     if (data) {
-                        console.log(data)
+                        // console.log(data)
                         localStorage.setItem("userID", data.id);
                         localStorage.setItem("userAvatar", data.avatar);
                         localStorage.setItem("userUsername", data.username);

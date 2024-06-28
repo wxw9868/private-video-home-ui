@@ -61,7 +61,7 @@
                         <v-divider class="pt-10"></v-divider>
                     </v-row>
 
-                    <v-row class="pt-5" v-for="(comment, i) in comments" :key="i">
+                    <v-row class="pt-5" v-for="(comment, i) in comments" :key="i" id="comment-list">
                         <div class="pt-3">
                             <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
                         </div>
@@ -106,57 +106,59 @@
                                 </v-col>
                             </v-row>
 
-                            <div v-show="replyListShow == comment.ID">
-                                <v-row v-for="(replies, i) in comment.Childrens" :key="i">
-                                    <div class="pt-3">
-                                        <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
-                                    </div>
-                                    <v-col>
-                                        <v-row style="font-size: 13px;">
-                                            <v-col class="me-auto" cols="auto">
-                                                <span class="me-2">{{ replies.Nickname }}</span>
-                                                <small class="me-2">北京</small>
-                                            </v-col>
-                                            <v-col cols="auto" style="font-size: 15px;">
-                                                <small class="justify-end align-end">{{ doTime(replies.CreatedAt)
-                                                    }}</small>
-                                            </v-col>
-                                        </v-row>
-                                        <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
-                                        <div class="d-flex justify-start" style="font-size: 13px;">
-                                            <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
-                                                @click="commentZan(replies.ID)">
-                                                <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                                <span>{{ replyZans[replies.ID] }}</span>
-                                            </v-btn>
-                                            <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
-                                                @click="commentCai(replies.ID)">
-                                                <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                                <span>{{ replyCais[replies.ID] }}</span>
-                                            </v-btn>
-                                            <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
-                                                <v-icon left small>mdi-comment-outline</v-icon>
-                                            </v-btn>
-                                            <v-btn variant="text" color="orange" @click="openReportDialog">
-                                                <v-icon left small>mdi-flag-outline</v-icon>
-                                            </v-btn>
+                            <v-expand-transition>
+                                <div v-show="replyListShow == comment.ID">
+                                    <v-row v-for="(replies, i) in comment.Childrens" :key="i">
+                                        <div class="pt-3 pl-3">
+                                            <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
                                         </div>
-                                        <v-row v-show="replyTextareaShow === replies.ID">
-                                            <div class="pt-3">
-                                                <v-avatar size="40px" :image="avatar"></v-avatar>
+                                        <v-col>
+                                            <v-row style="font-size: 13px;">
+                                                <v-col class="me-auto" cols="auto">
+                                                    <span class="me-2">{{ replies.Nickname }}</span>
+                                                    <small class="me-2">北京</small>
+                                                </v-col>
+                                                <v-col cols="auto" style="font-size: 15px;">
+                                                    <small class="justify-end align-end">{{ doTime(replies.CreatedAt)
+                                                        }}</small>
+                                                </v-col>
+                                            </v-row>
+                                            <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
+                                            <div class="d-flex justify-start" style="font-size: 13px;">
+                                                <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
+                                                    @click="commentZan(replies.ID)">
+                                                    <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
+                                                    <span>{{ replyZans[replies.ID] }}</span>
+                                                </v-btn>
+                                                <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
+                                                    @click="commentCai(replies.ID)">
+                                                    <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
+                                                    <span>{{ replyCais[replies.ID] }}</span>
+                                                </v-btn>
+                                                <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
+                                                    <v-icon left small>mdi-comment-outline</v-icon>
+                                                </v-btn>
+                                                <v-btn variant="text" color="orange" @click="openReportDialog">
+                                                    <v-icon left small>mdi-flag-outline</v-icon>
+                                                </v-btn>
                                             </div>
-                                            <v-col v-show="replyTextareaShow === replies.ID">
-                                                <v-form v-model="replyForms[replies.ID]" @submit.prevent="onReply(replies.ID)">
-                                                    <v-textarea v-model="replyTexts[replies.ID]" :rules="replyRules[replies.ID]"
-                                                        row-height="25" rows="3" clear-icon="mdi-close-circle"
-                                                        variant="outlined" auto-grow shaped clearable></v-textarea>
-                                                    <v-btn :disabled="!replyForms[replies.ID]" :loading="replyloadings[replies.ID]" type="submit">发送回复</v-btn>
-                                                </v-form>
-                                            </v-col>
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                            </div>
+                                            <v-row v-show="replyTextareaShow === replies.ID">
+                                                <div class="pt-3">
+                                                    <v-avatar size="40px" :image="avatar"></v-avatar>
+                                                </div>
+                                                <v-col v-show="replyTextareaShow === replies.ID">
+                                                    <v-form v-model="replyForms[replies.ID]" @submit.prevent="onReply(replies.ID)">
+                                                        <v-textarea v-model="replyTexts[replies.ID]" :rules="replyRules[replies.ID]"
+                                                            row-height="25" rows="3" clear-icon="mdi-close-circle"
+                                                            variant="outlined" auto-grow shaped clearable></v-textarea>
+                                                        <v-btn :disabled="!replyForms[replies.ID]" :loading="replyloadings[replies.ID]" type="submit">发送回复</v-btn>
+                                                    </v-form>
+                                                </v-col>
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                            </v-expand-transition>
 
                             <v-btn variant="text" @click="repliesShow(comment.ID)">
                                 展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
@@ -169,6 +171,7 @@
             </v-main>
         </v-layout>
     </v-card>
+    <div class="collapse" id="loadHTML"></div>
 </template>
 <script>
 import { inject, reactive } from 'vue';
@@ -261,7 +264,8 @@ export default {
         replyIsZans: reactive({}),
         replyIsCais: reactive({}),
         replyZans: reactive({}),
-        replyCais: reactive({}),  
+        replyCais: reactive({}), 
+        onCommentHtml: null, 
     }),
     mounted() {
         let id = this.$route.query.id;
@@ -276,11 +280,11 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     let data = response.data
-                    this.videoTitle = data.videoTitle;
-                    this.videoActress = data.videoActress;
+                    // this.videoTitle = data.videoTitle;
+                    // this.videoActress = data.videoActress;
                     this.duration = data.Duration;
-                    this.videoUrl = this.host + data.videoUrl;
-                    this.poster = this.host + data.Poster;
+                    // this.videoUrl = this.host + data.videoUrl;
+                    // this.poster = this.host + data.Poster;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
                     this.collect = data.Collect;
@@ -427,10 +431,75 @@ export default {
             formData['video_id'] = parseInt(this.videoId)
 
             this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
-                .then(function (response) {
+                .then( response => {
                     // console.log(response);
-                    let data = response.data.data
-                    console.log(data);
+                    let comment = response.data.data
+                    let comments = [comment]
+                    console.log(comments);
+                    this.loadReply(comments)
+                    let commentHTML = 
+                    `
+                        <div class="pt-3">
+                            <v-avatar size="40px" :image="`+ this.host + comment.userAvatar +`"></v-avatar>
+                        </div>
+                        <v-col>
+                            <v-row style="font-size: 13px;">
+                                <v-col class="me-auto" cols="auto">
+                                    <span class="me-2">`+ comment.userNickname +`</span>
+                                    <small class="me-2">北京</small>
+                                </v-col>
+                                <v-col cols="auto" style="font-size: 15px;">
+                                    <small class="justify-end align-end">刚刚</small>
+                                </v-col>
+                            </v-row>
+                            <p class="my-2" style="font-size: 15px;">`+ comment.content +`</p>
+                            <div class="d-flex justify-start" style="font-size: 13px;">
+                                <v-btn variant="text" :color="replyIsZans[comment.ID] ? 'blue' : ''" @click="commentZan(`+comment.commentID+`)">
+                                    <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
+                                    <span>{{ replyZans[comment.ID] }}</span>
+                                </v-btn>
+                                <v-btn variant="text" :color="replyIsCais[comment.ID] ? 'red' : ''" @click="commentCai(`+comment.commentID+`)">
+                                    <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
+                                    <span>replyCais[comment.ID]</span>
+                                </v-btn>
+                                <v-btn variant="text" color="green" @click="replyShow(`+comment.commentID+`)">
+                                    <v-icon left small>mdi-comment-outline</v-icon>
+                                </v-btn>
+                                <v-btn variant="text" color="orange" @click="openReportDialog">
+                                    <v-icon left small>mdi-flag-outline</v-icon>
+                                </v-btn>
+                            </div>
+                            <v-row v-show="replyTextareaShow === `+comment.commentID +`">
+                                <div class="pt-3">
+                                    <v-avatar size="40px" :image="avatar"></v-avatar>
+                                </div>
+                                <v-col>
+                                    <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(`+comment.commentID+`)">
+                                        <v-textarea v-model="replyTexts[comment.ID]" :rules="replyRules[comment.ID]" row-height="25"
+                                            rows="3" clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
+                                            clearable></v-textarea>
+                                        <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]" type="submit">发送回复</v-btn>
+                                    </v-form>
+                                </v-col>
+                            </v-row>
+
+                            <v-expand-transition>
+                                <div v-show="replyListShow == comment.ID">
+                                </div>
+                            </v-expand-transition>
+
+                            <v-btn variant="text" @click="repliesShow(`+comment.commentID+`)">
+                                展开 0 条回复
+                                <v-icon
+                                    :icon="(this.replyListShow === `+comment.commentID+`) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+                            </v-btn>
+                        </v-col>
+                    `;
+
+                    document.getElementById('loadHTML').innerHTML = commentHTML;
+					let node = document.getElementById('loadHTML').firstElementChild;
+					let commentList = document.getElementById('comment-list');
+					commentList.insertBefore(node, commentList.children[0]);
                 })
                 .catch(function (error) {
                     if (error.response) {

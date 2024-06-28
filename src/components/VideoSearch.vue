@@ -8,31 +8,41 @@
                             <v-container class="d-flex" fluid>
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
-                                        <v-card variant="flat" class="mx-auto" max-width="300"
-                                            :href="path + card.raw.id" target="_blank" hover>
-                                            <v-img :src="host + card.raw.poster" class="h-auto align-end text-white"
+                                        <v-card 
+                                            variant="flat"
+                                            :href="path + card.raw.document.id"
+                                            class="mx-auto" 
+                                            max-width="300"
+                                            target="_blank" 
+                                            hover
+                                        >
+                                            <v-img :src="host + card.raw.document.poster"
+                                                class="h-auto align-end text-white"
                                                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
                                                 <v-toolbar color="transparent">
                                                     <template v-slot:append>
-                                                        <span class="subheading" v-text="card.raw.duration"></span>
+                                                        <span class="subheading"
+                                                            v-text="card.raw.document.duration"></span>
                                                     </template>
                                                 </v-toolbar>
                                             </v-img>
-                                            <v-card-subtitle class="pt-2">{{ card.raw.title }}</v-card-subtitle>
+                                            <v-card-subtitle class="pt-2">{{ card.raw.document.title
+                                                }}</v-card-subtitle>
                                             <div class="px-4 text-overline text-grey-darken-1">
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye"
                                                     size="x-small"></v-icon>
-                                                <span class="subheading" v-text="card.raw.browse"></span>
+                                                <span class="subheading" v-text="card.raw.document.browse"></span>
                                                 <span class="me-2"></span>
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart"
                                                     size="x-small"></v-icon>
-                                                <span class="subheading" v-text="card.raw.collect"></span>
+                                                <span class="subheading" v-text="card.raw.document.collect"></span>
                                             </div>
                                         </v-card>
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination v-model="page" :length="length" :total-visible="5" @click="pagination()"></v-pagination>
+                            <v-pagination v-model="page" :length="length" :total-visible="5"
+                                @click="pagination()"></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>
@@ -59,10 +69,6 @@ export default {
         length: 0,
         cards: [],
         loading: true,
-        pagepage: 0,
-        pagesize: 0,
-        action: '',
-        sort: '',
     }),
     methods: {
         pagination() {
@@ -73,12 +79,15 @@ export default {
             let currentPage = parseInt(localStorage.getItem('list-currentPage'));
             this.page = currentPage || this.page;
         },
-        getData(actress_id) {
-            this.$http.get('/video/getList', { params: { actress_id: actress_id, page: this.pagepage, size: this.pagesize, action: this.action, sort: this.sort } })
+        getData(query) {
+            console.log(query);
+            this.$http.get('/video/getSearch', { params: { query: query } })
                 .then(response => {
-                    console.log(response.data.data.list);
-                    // this.cards = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    // console.log(response)
+                    // console.log(response.data.data)
+                    let data = response.data.data
+                    this.cards = data.documents
+                    this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
@@ -103,8 +112,7 @@ export default {
     },
 
     mounted() {
-        console.log(this.host)
-        this.getData(this.$route.query.id);
+        this.getData(this.$route.query.query);
     },
 }
 </script>

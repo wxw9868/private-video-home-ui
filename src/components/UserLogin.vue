@@ -1,16 +1,23 @@
 <template>
-    <div>
-        <v-img class="mx-auto my-6" max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"></v-img>
+     <v-main>
+        <v-img class="mx-auto my-6" max-width="100" max-height="80"
+            :src="host+'./assets/image/favicon/logo.png'"></v-img>
 
-        <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+        <v-card class="mx-auto pa-12 pb-8" elevation="0" max-width="448" rounded="lg">
 
             <v-form v-model="form" @submit.prevent="onSubmit">
                 <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
-                <v-text-field v-model="email" :readonly="loading" :rules="[required]" density="compact"
-                    placeholder="Email address" prepend-inner-icon="mdi-email-outline" variant="outlined"
-                    clearable></v-text-field>
+                <v-text-field 
+                    v-model="email" 
+                    :rules="emailRules" 
+                    :readonly="loading" 
+                    density="compact"
+                    placeholder="Email address" 
+                    prepend-inner-icon="mdi-email-outline" 
+                    variant="outlined"
+                    clearable
+                ></v-text-field>
 
                 <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                     Password
@@ -19,10 +26,20 @@
                         Forgot login password?</a>
                 </div>
 
-                <v-text-field v-model="password" :readonly="loading" :rules="[required]" label="Password"
-                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" :type="visible ? 'text' : 'password'"
-                    density="compact" placeholder="Enter your password" prepend-inner-icon="mdi-lock-outline"
-                    variant="outlined" @click:append-inner="visible = !visible" clearable></v-text-field>
+                <v-text-field 
+                    v-model="password" 
+                    :rules="passwordRules" 
+                    :readonly="loading" 
+                    label="Password"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" 
+                    :type="visible ? 'text' : 'password'"
+                    density="compact" 
+                    placeholder="Enter your password" 
+                    prepend-inner-icon="mdi-lock-outline"
+                    variant="outlined" 
+                    @click:append-inner="visible = !visible" 
+                    clearable
+                ></v-text-field>
 
                 <v-btn :disabled="!form" :loading="loading" size="large" type="submit" class="mb-8" color="blue"
                     variant="tonal" block>
@@ -36,7 +53,7 @@
                 </v-card-text>
             </v-form>
         </v-card>
-    </div>
+    </v-main>
 </template>
 <script>
 import { inject } from 'vue';
@@ -49,9 +66,23 @@ export default {
     data: () => ({
         visible: false,
         form: false,
-        email: 'wxw9868@163.com',
-        password: '123456',
         loading: false,
+        email: 'wxw9868@163.com',
+        emailRules: [
+            value => {
+                if (/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i.test(value)) return true
+
+                return '必须是有效的电子邮件'
+            },
+        ],
+        password: '123456',
+        passwordRules: [
+            value => {
+                if (value) return true
+
+                return 'password is required.'
+            },
+        ],
     }),
 
     methods: {

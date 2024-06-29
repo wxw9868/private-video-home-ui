@@ -1,6 +1,6 @@
 <template>
      <v-main>
-        <v-img class="mx-auto my-6" max-width="100" max-height="80"
+        <v-img class="mx-auto my-6" max-width="100" max-height="70"
             :src="host+'./assets/image/favicon/logo.png'"></v-img>
 
         <v-card class="mx-auto pa-12 pb-8" elevation="0" max-width="448" rounded="lg">

@@ -2,6 +2,15 @@
     <v-card>
         <v-layout>
             <v-main>
+                <v-tabs
+                    v-model="tab"
+                    align-tabs="center"
+                    :mandatory=true 
+                >
+                    <v-tab :value="1" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
+                    <v-tab :value="2" @click="getData('a.actress','desc')">名称顺序</v-tab>
+                    <v-tab :value="3" @click="getData('count','desc')">最多影片</v-tab>
+                </v-tabs>
                 <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                         <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="page" :loading="loading">
@@ -42,7 +51,7 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        host: 'http://192.168.0.4:80/',
+        tab: null,
         path: 'list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
@@ -60,10 +69,10 @@ export default {
             let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
             this.page = currentPage || this.page;
         },
-        getList(action, sort) {
+        getData(action, sort) {
             this.$http.get('/video/getActress', { params: { action: action, sort: sort } })
                 .then(response => {
-                    console.log(response.data.data.list);
+                    // console.log(response.data.data.list);
                     this.items = response.data.data.list;
                     this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                     this.loading = false;
@@ -89,7 +98,7 @@ export default {
         }
     },
     mounted() {
-        this.getList('', '');
+        this.getData('', '');
         let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
         this.page = currentPage? currentPage: this.page;
         console.log(this.page)

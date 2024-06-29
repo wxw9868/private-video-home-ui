@@ -80,7 +80,7 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(query) {
-            console.log(query);
+            // console.log(query);
             this.$http.get('/video/getSearch', { params: { query: query } })
                 .then(response => {
                     // console.log(response)

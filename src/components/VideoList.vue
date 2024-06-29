@@ -2,6 +2,16 @@
     <v-card>
         <v-layout>
             <v-main>
+                <v-tabs
+                    v-model="tab"
+                    align-tabs="center"
+                    :mandatory=true 
+                >
+                    <v-tab :value="1" @click="getData('v.CreatedAt','desc')">最近更新</v-tab>
+                    <v-tab :value="2" @click="getData('l.browse','desc')">播放次数</v-tab>
+                    <v-tab :value="3" @click="getData('l.collect','desc')">收藏数量</v-tab>
+                </v-tabs>
+
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
                         <template v-slot:default="{ items }">
@@ -53,6 +63,8 @@ export default {
         return { host, goTo }
     },
     data: () => ({
+        tab: null,
+        actress_id: 0,
         path: 'play?id=',
         itemsPerPage: 24,
         page: ref(1),
@@ -61,8 +73,6 @@ export default {
         loading: true,
         pagepage: 0,
         pagesize: 0,
-        action: '',
-        sort: '',
     }),
     methods: {
         pagination() {
@@ -73,11 +83,11 @@ export default {
             let currentPage = parseInt(localStorage.getItem('list-currentPage'));
             this.page = currentPage || this.page;
         },
-        getData(actress_id) {
-            this.$http.get('/video/getList', { params: { actress_id: actress_id, page: this.pagepage, size: this.pagesize, action: this.action, sort: this.sort } })
+        getData(action,sort) {
+            this.$http.get('/video/getList', { params: { actress_id: this.actress_id, page: this.pagepage, size: this.pagesize, action: action, sort: sort } })
                 .then(response => {
-                    console.log(response.data.data.list);
-                    // this.cards = response.data.data.list;
+                    // console.log(response.data.data.list);
+                    this.cards = response.data.data.list;
                     this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
@@ -103,8 +113,8 @@ export default {
     },
 
     mounted() {
-        console.log(this.host)
-        this.getData(this.$route.query.id);
+        this.actress_id = this.$route.query.id
+        this.getData('','');
     },
 }
 </script>

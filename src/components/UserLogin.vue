@@ -104,8 +104,9 @@ export default {
                     console.log('cookie: ' + document.cookie);
                     // 处理cookie，例如保存到Vuex或localStorage
                     if (response) {
+                        localStorage.setItem("isLogin", true); 
                         //3秒钟之后跳转到指定的页面 
-                        setTimeout(window.location.href = '/', 3);
+                        setTimeout(window.location.href = '/', 5);
                     }
                 })
                 .catch(function (error) {

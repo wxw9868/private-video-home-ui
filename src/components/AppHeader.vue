@@ -6,23 +6,25 @@
         <v-app-bar-title>Video</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-slot:append>
-            <v-btn icon="mdi-magnify" size="large" @click="toggleSearch"></v-btn>
-            <v-btn :prepend-icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-                size="large" slim @click="toggleTheme"></v-btn>
-            <v-btn icon="mdi-account" size="large" to="/login"></v-btn>
+            <v-btn icon="mdi-magnify" @click="toggleSearch"></v-btn>
+            <v-btn :icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+                @click="toggleTheme"></v-btn>
+            <v-menu :close-on-content-click="false" offset="8, 0">
+                <template v-slot:activator="{ props }">
+                    <v-btn icon="mdi-account" to="/user" v-bind="props">
+                        <v-avatar size="32"><v-img :src="'http://192.168.0.6:80/' + avatar"></v-img></v-avatar>
+                    </v-btn>
+                </template>
+                <v-sheet rounded="md" width="290">
+                    <ProfileDD />
+                </v-sheet>
+            </v-menu>
         </template>
         <v-expand-x-transition>
             <form action="/search" method="get">
-                <v-text-field 
-                    v-show="isSearchVisible" 
-                    hide-details
-                    type="search"
-                    name="query"
-                    :style="{ width: searchWidth }" 
-                    density="comfortable"
-                    placeholder="Search" 
-                    variant="solo"
-                ></v-text-field>
+                <v-text-field v-show="isSearchVisible" hide-details type="search" name="query"
+                    :style="{ width: searchWidth }" density="comfortable" placeholder="Search"
+                    variant="solo"></v-text-field>
             </form>
         </v-expand-x-transition>
     </v-app-bar>
@@ -69,9 +71,10 @@ export default {
                 icon: 'mdi-account-group',
             },
         ],
+        avatar: '',
     }),
     mounted() {
-        if(document.cookie) {
+        if (document.cookie) {
             this.getSession()
         }
     },
@@ -91,6 +94,7 @@ export default {
                     let data = response.data.data;
                     if (data) {
                         // console.log(data)
+                        this.avatar = data.avatar;
                         localStorage.setItem("userID", data.id);
                         localStorage.setItem("userAvatar", data.avatar);
                         localStorage.setItem("userUsername", data.username);
@@ -117,7 +121,7 @@ export default {
                     console.log(error.config);
                     console.log(error);
                 });
-        },
+        },  
     },
 
     watch: {

@@ -6,10 +6,13 @@
         <v-app-bar-title>Video</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-slot:append>
-            <v-btn icon="mdi-magnify" size="large" @click="toggleSearch"></v-btn>
-            <v-btn :prepend-icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-                size="large" slim @click="toggleTheme"></v-btn>
-            <v-btn icon="mdi-account" size="large" to="/login"></v-btn>
+            <v-btn icon="mdi-magnify" @click="toggleSearch"></v-btn>
+            <v-btn :icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'" @click="toggleTheme"></v-btn>
+            <v-btn icon="mdi-account" to="/login">
+                <v-avatar class="rounded-circle" size="32">
+                    <v-img :src="'http://127.0.0.1:8081/' + avatar" class="rounded-circle" alt="Julia" width="32px"  height="32px"></v-img>
+                </v-avatar>
+            </v-btn>
         </template>
         <v-expand-x-transition>
             <form action="/search" method="get">
@@ -32,9 +35,9 @@
         </v-list>
     </v-navigation-drawer>
 </template>
-
 <script setup>
 import { useTheme } from 'vuetify'
+import { inject } from 'vue'
 
 const theme = useTheme()
 
@@ -44,6 +47,10 @@ function toggleTheme() {
 </script>
 <script>
 export default {
+    setup() {
+        const host = inject('serverHost');
+        return { host }
+    },
     data: () => ({
         isSearchVisible: false,
         searchWidth: '150px', // 初始宽度
@@ -69,6 +76,7 @@ export default {
                 icon: 'mdi-account-group',
             },
         ],
+        avatar: '@/assets/images/users/avatar-1.png',
     }),
     mounted() {
         if(document.cookie) {
@@ -91,6 +99,7 @@ export default {
                     let data = response.data.data;
                     if (data) {
                         // console.log(data)
+                        this.avatar = data.avatar;
                         localStorage.setItem("userID", data.id);
                         localStorage.setItem("userAvatar", data.avatar);
                         localStorage.setItem("userUsername", data.username);

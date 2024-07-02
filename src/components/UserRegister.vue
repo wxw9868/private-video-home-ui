@@ -11,7 +11,7 @@
                 <v-text-field 
                     v-model="username.value.value" 
                     :error-messages="username.errorMessage.value"
-                    :readonly="loading" 
+                    :readonly="loading"
                     label="Username" 
                     density="compact" 
                     placeholder="Username"

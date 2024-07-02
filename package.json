@@ -8,7 +8,13 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@fontsource/inter": "^5.0.18",
+    "@fontsource/poppins": "^5.0.14",
+    "@fontsource/public-sans": "^5.0.18",
+    "@fontsource/roboto": "^5.0.13",
     "@mdi/font": "7.0.96",
+    "ant-design-vue": "4.2",
     "artplayer": "^5.1.6",
     "axios": "^1.7.2",
     "axios-cookiejar-support": "^5.0.2",
@@ -19,6 +25,7 @@
     "roboto-fontface": "*",
     "vee-validate": "^4.13.1",
     "vue": "^3.4.0",
+    "vue3-perfect-scrollbar": "^2.0.0",
     "vuetify": "^3.5.0",
     "xgplayer": "^3.0.18"
   },

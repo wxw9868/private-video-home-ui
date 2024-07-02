@@ -1,8 +1,7 @@
 <template>
-    <VideoSearch />
-  </template>
-  
-  <script setup>
-  //
-  </script>
-  
+  <VideoSearch />
+</template>
+
+<script setup>
+//
+</script>

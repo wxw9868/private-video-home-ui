@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">

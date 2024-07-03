@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
@@ -25,7 +25,7 @@
                         <v-container class="d-flex" fluid>
                             <v-row justify="start" dense>
                                 <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
-                                    <v-card class="mx-auto" max-width="336" :href="path" hover>
+                                    <v-card variant="flat" class="mx-auto" max-width="336" :href="path" hover>
                                         <v-img :src="host + card.raw.poster" class="h-auto align-end text-white"
                                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
 

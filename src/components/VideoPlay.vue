@@ -1,6 +1,6 @@
 <template>
-    <v-card>
-        <v-layout>
+    <v-card variant="flat" height="100%">
+        <v-layout :full-height=true>
             <v-main>
                 <v-container>
                     <v-row>
@@ -10,26 +10,20 @@
                                     <div id="videoPlayer" :style="style"></div>
                                     <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
-                                <div id="videoPlayer"></div>
-                                <v-card-text class="text-h6">
-                                    {{ videoTitle }}
-                                </v-card-text>
-
-                                <v-card-subtitle>
+                                <div class="text-h5 pt-4">{{ videoTitle }}</div>
+                                <div class="pt-4">
                                     <span class="me-2" v-for="item in videoActress" :key="item" :to="path + item.id">
                                         {{ item.actress }}
                                     </span>
-                                </v-card-subtitle>
-
-                                <v-card-actions>
-                                    <v-btn color="medium-emphasis" :icon="icon.collect" size="medium"
-                                        @click="statisticsCollect()"></v-btn>
-                                    <span class="subheading me-2" v-text="collect"></span>
-                                    <v-btn color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
-                                    <span class="subheading" v-text="browse"></span>
-                                    <v-btn color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
+                                </div>
+                                <div class="pt-4">
+                                    <v-btn class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
+                                    <span class="subheading me-5" v-text="collect"></span>
+                                    <v-btn class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
+                                    <span class="subheading me-5" v-text="browse"></span>
+                                    <v-btn class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
                                     <span class="subheading" v-text="duration"></span>
-                                </v-card-actions>
+                                </div>
 
                                 <!-- <v-item-group class="pb-6">
                                     <v-item v-for="player in players" :key="player">
@@ -46,7 +40,7 @@
 
                 <v-container>
                     <v-row>
-                        <div class="pt-3">
+                        <div class="pt-5 pl-3">
                             <v-avatar size="40px" :image="avatar"></v-avatar>
                         </div>
                         <v-col>
@@ -58,11 +52,11 @@
                             </v-form>
                         </v-col>
 
-                        <v-divider class="pt-10"></v-divider>
+                        <v-divider></v-divider>
                     </v-row>
 
-                    <v-row class="pt-5" v-for="(comment, i) in comments" :key="i" id="comment-list">
-                        <div class="pt-3">
+                    <v-row v-for="(comment, i) in comments" :key="i">
+                        <div class="pt-3 pl-3">
                             <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
                         </div>
                         <v-col>
@@ -95,7 +89,7 @@
                                 </v-btn>
                             </div>
                             <v-row v-show="replyTextareaShow === comment.ID">
-                                <div class="pt-3">
+                                <div class="pt-3 pl-3">
                                     <v-avatar size="40px" :image="avatar"></v-avatar>
                                 </div>
                                 <v-col>
@@ -146,7 +140,7 @@
                                                 </v-btn>
                                             </div>
                                             <v-row v-show="replyTextareaShow === replies.ID">
-                                                <div class="pt-3">
+                                                <div class="pt-3 pl-3">
                                                     <v-avatar size="40px" :image="avatar"></v-avatar>
                                                 </div>
                                                 <v-col v-show="replyTextareaShow === replies.ID">
@@ -167,11 +161,10 @@
                                 </div>
                             </v-expand-transition>
                             <div v-if="comment.Childrens">
-                                <v-btn variant="text" @click="repliesShow(comment.ID)">
+                                <div variant="text" @click="repliesShow(comment.ID)">
                                     展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
-                                    <v-icon
-                                        :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
-                                </v-btn>
+                                    <v-icon :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+                                </div>
                             </div>
                         </v-col>
                     </v-row>
@@ -775,32 +768,31 @@ export default {
                 volume: 1,
                 muted: false, // 是否默认静音
                 autoplay: false, // 是否自动播放
-                pip: true,
+                pip: true, // 是否在底部控制栏里显示 画中画 的开关按钮
                 autoSize: true,
                 autoMini: true,
-                screenshot: true,
+                screenshot: true, // 是否在底部控制栏里显示 视频截图 功能
                 setting: true,
                 loop: true, // 是否循环播放
                 flip: true,
                 playbackRate: true,
                 aspectRatio: true,
-                fullscreen: true,
-                fullscreenWeb: true,
+                fullscreen: true, // 是否在底部控制栏里显示播放器 窗口全屏 按钮
+                fullscreenWeb: true, // 是否在底部控制栏里显示播放器 网页全屏 按钮
                 subtitleOffset: true,
-                miniProgressBar: true,
+                miniProgressBar: true, // 迷你进度条，只在播放器失去焦点后且正在播放时出现
                 mutex: false, // 假如页面里同时存在多个播放器，是否只能让一个播放器播放
                 backdrop: true,
-                playsInline: true,
-                autoPlayback: true,
+                autoPlayback: true, // 是否使用自动 回放功能
                 airplay: true,
                 theme: '#23ade5',
                 lang: navigator.language.toLowerCase(),
-                moreVideoAttr: {
-                    crossOrigin: 'anonymous',
-                },
-                contextmenu: [],
+                playsInline: true, // 在移动端是否使用 playsInline 模式
+                lock: true, // 是否在移动端显示一个 锁定按钮 ，用于隐藏底部 控制栏
+                fastForward: true, // 是否在移动端添加长按视频快进功能
+                autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
             });
-            console.log(art)
+            // console.log(art)
         },
         // loadXgplayer() {
         //     const player = new XGplayer({

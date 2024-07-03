@@ -16,14 +16,6 @@ const tab = ref('one');
 function changeTab(e: string) {
   tab.value = e;
 }
-
-import { useDate } from 'vuetify';
-
-const date = useDate();
-
-const formatted = date.format(new Date(), 'keyboardDateTime24h');
-
-console.log(formatted); // Tuesday, April 13, 2010
 </script>
 
 <template>

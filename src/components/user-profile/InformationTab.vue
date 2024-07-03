@@ -1,387 +1,183 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-
-import Flag1 from '@/assets/images/flags/1.jpg';
-import Flag2 from '@/assets/images/flags/2.jpg';
-import Flag3 from '@/assets/images/flags/3.jpg';
-import Flag4 from '@/assets/images/flags/4.jpg';
-import Flag5 from '@/assets/images/flags/5.jpg';
-
-const items = ref([
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-]);
-
-const items1 = ref([
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23',
-  '24',
-  '25',
-  '26',
-  '27',
-  '28',
-  '29',
-  '30',
-  '31'
-]);
-
-const items2 = ref([
-  '1990',
-  '1991',
-  '1992',
-  '1993',
-  '1994',
-  '1995',
-  '1996',
-  '1997',
-  '1998',
-  '1999',
-  '2000',
-  '2001',
-  '2002',
-  '2003',
-  '2004',
-  '2005',
-  '2006',
-  '2007',
-  '2008',
-  '2009',
-  '2010',
-  '2011',
-  '2012',
-  '2013',
-  '2014',
-  '2015',
-  '2016',
-  '2017',
-  '2018',
-  '2019',
-  '2020',
-  '2021',
-  '2022',
-  '2023'
-]);
-
-const items3 = ref(['+91', '1-671', '+36', '(255)', '+39', '1-876', '+7', '(254)', '(373)', '1-664', '+95', '(264)']);
-
-const country = ref([
-  { name: 'Anguilla', avatar: Flag1 },
-  { name: 'Brazil', avatar: Flag2 },
-  { name: 'Germany', avatar: Flag3 },
-  { name: 'United Kingdom', avatar: Flag4 },
-  { name: 'United States', avatar: Flag5 }
-]);
-
-const countryflag = ref(['United States']);
-const isUpdating = ref(false);
-
-const multi_value = ref([
-  'Adobe XD',
-  'Angular',
-  'Corel Draw',
-  'Figma',
-  'HTML',
-  'Illustrator',
-  'Javascript',
-  'Logo Design',
-  'Material UI',
-  'NodeJs',
-  'npm',
-  'Photoshop',
-  'React',
-  'Reduxjs & tooltit',
-  'SASS'
-]);
-const items4 = ref([
-  'Adobe XD',
-  'After Effect',
-  'Angular',
-  'Animation',
-  'ASP.net',
-  'Bootstrap',
-  'C#',
-  'CC',
-  'Corel Draw',
-  'CSS',
-  'DIV',
-  'Dreamweaver',
-  'Figma',
-  'Graphics',
-  'HTML',
-  'Illustrator',
-  'J2Ee',
-  'Java',
-  'Javascript',
-  'Jquery',
-  'Logo Design',
-  'Material UI',
-  'Motion',
-  'MVC',
-  'MySQL',
-  'NodeJs',
-  'npm',
-  'Photoshop',
-  'PHP',
-  'React',
-  'Redux',
-  'Reduxjs & tooltit',
-  'SASS',
-  'SCSS',
-  'SQL Server',
-  'SVG',
-  'UI/UX',
-  'User interface designing',
-  'Wordpress'
-]);
-</script>
-
 <template>
-  <v-card class="bg-surface" variant="outlined">
+  <v-card class="bg-surface" variant="text">
     <v-card-text>
       <h5 class="text-subtitle-1 mb-0">Personal Information</h5>
     </v-card-text>
     <v-divider></v-divider>
-    <v-card-item>
-      <v-row>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">First name</v-label>
-          <v-text-field single-line aria-label="firstname" variant="outlined" hide-details model-value="Stebin"></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Last name</v-label>
-          <v-text-field single-line aria-label="lastname" variant="outlined" hide-details model-value="Ben"></v-text-field>
-        </v-col>
-        <v-col cols="12" lg="6" md="12">
-          <v-label class="mb-2">Email Address</v-label>
-          <v-text-field
-            single-line
-            aria-label="email address"
-            variant="outlined"
-            hide-details
-            type="email"
-            model-value="stebin.ben@gmail.com"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" lg="6" md="12">
-          <v-label class="mb-2">Date of Birth (+18)</v-label>
-          <v-row>
-            <v-col cols="6" sm="4">
-              <v-autocomplete
-                aria-label="autocomplete"
-                modelValue="March"
-                :items="items"
-                color="primary"
-                variant="outlined"
-                hide-details
-                single-line
-                density="default"
-              ></v-autocomplete>
-            </v-col>
-            <v-col cols="6" sm="4">
-              <v-autocomplete
-                aria-label="autocomplete"
-                modelValue="10"
-                :items="items1"
-                color="primary"
-                variant="outlined"
-                hide-details
-                single-line
-                density="default"
-              ></v-autocomplete>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-autocomplete
-                aria-label="autocomplete"
-                modelValue="1993"
-                :items="items2"
-                color="primary"
-                variant="outlined"
-                hide-details
-                single-line
-                density="default"
-              >
-              </v-autocomplete>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Phone Number</v-label>
-          <v-row>
-            <v-col cols="5" lg="3" md="5" sm="4">
-              <v-autocomplete
-                aria-label="autocomplete"
-                modelValue="+91"
-                :items="items3"
-                color="primary"
-                variant="outlined"
-                hide-details
-                single-line
-                density="default"
-              ></v-autocomplete>
-            </v-col>
-            <v-col cols="7" lg="9" md="7" sm="8">
-              <v-text-field
-                single-line
-                aria-label="phone number"
-                variant="outlined"
-                type="number"
-                hide-details
-                model-value="9652364852"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Designation</v-label>
-          <v-text-field
-            single-line
-            aria-label="designation"
-            variant="outlined"
-            hide-details
-            model-value="Full Stack Developer"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-    </v-card-item>
-    <v-card-item class="pa-0">
-      <h5 class="text-h5 mb-0 pa-5 pb-4">Address</h5>
-      <v-divider></v-divider>
-      <v-row class="pa-5">
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Address 01</v-label>
-          <v-textarea
-            variant="outlined"
-            rows="3"
-            hide-details
-            aria-label="address"
-            model-value="3801 Chalk Butte Rd, Cut Bank, MT 59427, United States"
-          ></v-textarea>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Address 02</v-label>
-          <v-textarea
-            variant="outlined"
-            aria-label="address"
-            rows="3"
-            hide-details
-            model-value="301 Chalk Butte Rd, Cut Bank, NY 96572, New York"
-          ></v-textarea>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">Country</v-label>
-          <v-autocomplete
-            v-model="countryflag"
-            :disabled="isUpdating"
-            :items="country"
-            variant="outlined"
-            item-title="name"
-            item-value="name"
-            class="remove-details"
-            label="Select"
-            single-line
-            color="primary"
-            clearable
-            aria-label="autocomplete"
-            clear-icon="$close"
-          >
-            <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :title="item?.raw?.name">
-                <template v-slot:prepend>
-                  <v-avatar size="18" rounded="sm">
-                    <img :src="item?.raw?.avatar" width="18" alt="flag" />
-                  </v-avatar>
-                </template>
-              </v-list-item>
-            </template>
-          </v-autocomplete>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-label class="mb-2">State</v-label>
-          <v-text-field single-line aria-label="state" variant="outlined" hide-details model-value="California"></v-text-field>
-        </v-col>
-      </v-row>
-    </v-card-item>
-    <v-card-item class="pa-0">
-      <h5 class="text-h5 mb-0 pa-5 pb-4">Skills</h5>
-      <v-divider></v-divider>
-      <v-row class="pa-5">
-        <v-col cols="12">
-          <v-autocomplete
-            aria-label="autocomplete"
-            v-model="multi_value"
-            :items="items4"
-            variant="outlined"
-            color="primary"
-            label="Outlined"
-            single-line
-            multiple
-            hide-details
-            closable-chips
-            role="combobox"
-          >
-            <template v-slot:chip>
-              <v-chip
-                label
-                variant="tonal"
-                color="secondary"
-                size="large"
-                class="my-1 text-subtitle-1 text-dark font-weight-regular"
-                border="secondary solid thin opacity-50"
-              ></v-chip>
-            </template>
-          </v-autocomplete>
-        </v-col>
-      </v-row>
-    </v-card-item>
-    <v-card-item class="pa-0">
-      <h5 class="text-h5 mb-0 pa-5 pb-4">Note</h5>
-      <v-divider></v-divider>
-      <v-row class="pa-5">
-        <v-col cols="12">
-          <v-textarea
-            aria-label="note"
-            variant="outlined"
-            hide-details
-            single-line
-            model-value="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
-          ></v-textarea>
-        </v-col>
-        <v-col cols="12" class="text-right">
-          <v-btn variant="outlined" color="secondary">Cancel</v-btn>
-          <v-btn variant="flat" color="primary" class="ml-2">Save</v-btn>
-        </v-col>
-      </v-row>
-    </v-card-item>
+    <v-form v-model="form" @submit.prevent="submit">
+      <v-card-item>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-label class="mb-2">Nick name</v-label>
+            <v-text-field v-model="nickname.value.value" :error-messages="nickname.errorMessage.value"
+              :readonly="loading" aria-label="nickname" variant="outlined" placeholder="Nick name"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-label class="mb-2">User name</v-label>
+            <v-text-field v-model="username.value.value" :error-messages="username.errorMessage.value"
+              :readonly="loading" aria-label="username" variant="outlined" placeholder="Ben"></v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="12">
+            <v-label class="mb-2">Email Address</v-label>
+            <v-text-field v-model="email.value.value" :error-messages="email.errorMessage.value" :readonly="loading"
+              aria-label="email address" variant="outlined" type="email"
+              placeholder="stebin.ben@gmail.com"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-label class="mb-2">Phone Number</v-label>
+            <v-row>
+              <v-col cols="7" lg="9" md="7" sm="8">
+                <v-text-field v-model="mobile.value.value" :error-messages="mobile.errorMessage.value"
+                  :readonly="loading" aria-label="phone number" variant="outlined" type="number"
+                  placeholder="phone number"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-label class="mb-2">Designation</v-label>
+            <v-text-field v-model="designation.value.value" :error-messages="designation.errorMessage.value"
+              :readonly="loading" aria-label="designation" variant="outlined" placeholder="Designation"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-label class="mb-2">Address</v-label>
+            <v-textarea v-model="address.value.value" :error-messages="address.errorMessage.value" :readonly="loading"
+              variant="outlined" rows="3" aria-label="address" placeholder="Address"></v-textarea>
+          </v-col>
+          <v-col cols="12">
+            <v-label class="mb-2">Note</v-label>
+            <v-textarea v-model="note.value.value" :error-messages="note.errorMessage.value" :readonly="loading"
+              aria-label="note" variant="outlined" placeholder="Note"></v-textarea>
+          </v-col>
+        </v-row>
+      </v-card-item>
+      <v-card-item class="pa-0">
+        <v-divider></v-divider>
+        <v-row class="pa-5">
+          <v-col cols="12" class="text-right">
+            <v-btn variant="outlined" color="secondary" @click="handleReset">Cancel</v-btn>
+            <v-btn :disabled="!form" :loading="loading" type="submit" variant="flat" color="primary"
+              class="ml-2">Save</v-btn>
+          </v-col>
+        </v-row>
+      </v-card-item>
+    </v-form>
   </v-card>
 </template>
+<script setup>
+import { useField, useForm } from 'vee-validate'
+import { ref, getCurrentInstance } from 'vue'
+
+const instance = getCurrentInstance();
+const http = instance.appContext.config.globalProperties.$http;
+
+let form = ref(false)
+let loading = ref(false)
+
+const { handleSubmit, handleReset } = useForm({
+  validationSchema: {
+    nickname(value) {
+      if (value?.length >= 3) return true
+
+      return '用户名至少需要3个字符'
+    },
+    username(value) {
+      if (value?.length >= 3) return true
+
+      return '用户名至少需要3个字符'
+    },
+    email(value) {
+      if (/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i.test(value)) return true
+
+      return '必须是有效的电子邮件'
+    },
+    mobile(value) {
+      if (value?.length > 7 && /^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/.test(value)) return true
+
+      return '必须是有效的手机号码'
+    },
+    // designation() {
+    //   return '称号'
+    // },
+    // address() {
+    //   return '地址'
+    // },
+    // note() {
+    //   return '简介'
+    // },
+  },
+})
+
+const nickname = useField('nickname')
+const username = useField('username')
+const email = useField('email')
+const mobile = useField('mobile')
+const designation = useField('designation')
+const address = useField('address')
+const note = useField('note')
+
+const submit = handleSubmit(values => {
+  loading = true
+  setTimeout(() => (loading = false), 200)
+  loading = false
+
+  const formData = JSON.stringify(values, null, 2)
+  http.post('/user/update', formData, { headers: { 'content-type': 'application/json' } })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // 请求已经成功发起，但没有收到响应
+        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+        // 而在node.js中是 http.ClientRequest 的实例
+        console.log(error.request);
+      } else {
+        // 发送请求时出了点问题
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+      console.log(error);
+    });
+})
+
+getUserInfo()
+function getUserInfo() {
+  http.get('/user/info')
+    .then(response => {
+      let data = response.data.data;
+      if (data) {
+        console.log(data)
+        nickname.value.value = data.Nickname
+        username.value.value = data.Username
+        email.value.value = data.Email
+        mobile.value.value = data.Mobile
+        designation.value.value = data.Designation
+        address.value.value = data.Address
+        note.value.value = data.Note
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+
+      } else if (error.request) {
+        // 请求已经成功发起，但没有收到响应
+        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+        // 而在node.js中是 http.ClientRequest 的实例
+        console.log(error.request);
+      } else {
+        // 发送请求时出了点问题
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+      console.log(error);
+    });
+}
+</script>

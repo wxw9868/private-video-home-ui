@@ -11,11 +11,11 @@
                 @click="toggleTheme"></v-btn>
             <v-menu :close-on-content-click="false" offset="8, 0">
                 <template v-slot:activator="{ props }">
-                    <v-btn icon="mdi-account" to="/user" v-bind="props">
+                    <v-btn icon="mdi-account" v-bind="props">
                         <v-avatar size="32"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
                     </v-btn>
                 </template>
-                <v-sheet rounded="md" width="290">
+                <v-sheet rounded="md" width="180">
                     <ProfileDD />
                 </v-sheet>
             </v-menu>
@@ -34,7 +34,6 @@
         </v-list>
     </v-navigation-drawer>
 </template>
-
 <script setup>
 import { useTheme } from 'vuetify'
 import { inject } from 'vue';
@@ -95,7 +94,7 @@ export default {
                 .then(response => {
                     let data = response.data.data;
                     if (data) {
-                        // console.log(data)
+                        console.log(data)
                         this.avatar = data.avatar;
                         localStorage.setItem("userID", data.id);
                         localStorage.setItem("userAvatar", data.avatar);
@@ -103,6 +102,7 @@ export default {
                         localStorage.setItem("userNickname", data.nickname);
                         localStorage.setItem("userEmail", data.email);
                         localStorage.setItem("userMobile", data.mobile);
+                        localStorage.setItem("userDesignation", data.designation);      
                     }
                 }).catch(function (error) {
                     if (error.response) {

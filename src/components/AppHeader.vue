@@ -12,7 +12,7 @@
             <v-menu :close-on-content-click="false" offset="8, 0">
                 <template v-slot:activator="{ props }">
                     <v-btn icon="mdi-account" to="/user" v-bind="props">
-                        <v-avatar size="32"><v-img :src="'http://192.168.0.6:80/' + avatar"></v-img></v-avatar>
+                        <v-avatar size="32"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
                     </v-btn>
                 </template>
                 <v-sheet rounded="md" width="290">
@@ -37,7 +37,9 @@
 
 <script setup>
 import { useTheme } from 'vuetify'
+import { inject } from 'vue';
 
+const host = inject('serverHost');
 const theme = useTheme()
 
 function toggleTheme() {
@@ -71,7 +73,7 @@ export default {
                 icon: 'mdi-account-group',
             },
         ],
-        avatar: '',
+        avatar: null,
     }),
     mounted() {
         if (document.cookie) {

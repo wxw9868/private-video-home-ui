@@ -112,8 +112,8 @@ export default {
         getData() {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
-                    console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
+                    // console.log(response.data.data.list);
+                    // this.cards = response.data.data.list;
                     this.loading = false;
                     // this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                 }).catch(function (error) {

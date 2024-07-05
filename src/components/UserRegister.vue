@@ -137,7 +137,7 @@ const submit = handleSubmit(values => {
     const formData = JSON.stringify(values, null, 2)
     http.post('/user/doRegister', formData, { headers: { 'content-type': 'application/json' } })
         .then(function (response) {
-            console.log(response);
+            // console.log(response);
             if (response) {
                 //3秒钟之后跳转到指定的页面 
                 setTimeout(window.location.href = '/login', 3);

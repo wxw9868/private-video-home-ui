@@ -86,7 +86,7 @@ export default {
                     // console.log(response)
                     // console.log(response.data.data)
                     let data = response.data.data
-                    this.cards = data.documents
+                    // this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;
                     this.loadPage();

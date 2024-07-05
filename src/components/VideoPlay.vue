@@ -280,11 +280,11 @@ export default {
                 .then(response => {
                     // console.log(response.data);
                     let data = response.data
-                    this.videoTitle = data.videoTitle;
-                    this.videoActress = data.videoActress;
+                    // this.videoTitle = data.videoTitle;
+                    // this.videoActress = data.videoActress;
+                    // this.videoUrl = this.host + data.videoUrl;
+                    // this.poster = this.host + data.Poster;
                     this.duration = data.Duration;
-                    this.videoUrl = this.host + data.videoUrl;
-                    this.poster = this.host + data.Poster;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
                     this.collect = data.Collect;

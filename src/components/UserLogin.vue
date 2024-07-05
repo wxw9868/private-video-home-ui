@@ -100,8 +100,8 @@ export default {
             })
                 .then(function (response) {
                     // 登录成功的处理逻辑
-                    console.log('Login successful', response);
-                    console.log('cookie: ' + document.cookie);
+                    // console.log('Login successful', response);
+                    // console.log('cookie: ' + document.cookie);
                     // 处理cookie，例如保存到Vuex或localStorage
                     if (response) {
                         localStorage.setItem("isLogin", true); 

@@ -123,7 +123,7 @@ const submit = handleSubmit(values => {
   const formData = JSON.stringify(values, null, 2)
   http.post('/user/update', formData, { headers: { 'content-type': 'application/json' } })
     .then(response => {
-      console.log(response);
+      // console.log(response);
     })
     .catch(function (error) {
       if (error.response) {
@@ -151,7 +151,7 @@ function getUserInfo() {
     .then(response => {
       let data = response.data.data;
       if (data) {
-        console.log(data)
+        // console.log(data)
         nickname.value.value = data.Nickname
         username.value.value = data.Username
         email.value.value = data.Email

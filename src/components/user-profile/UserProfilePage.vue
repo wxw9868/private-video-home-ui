@@ -6,10 +6,10 @@ import InformationTab from './InformationTab.vue';
 import ChangePasswordTab from './ChangePasswordTab.vue';
 // import SettingTab from './SettingTab.vue';
 
+// icons
+import { UserOutlined, LockOutlined} from '@ant-design/icons-vue';
+
 const tab = ref('one');
-function changeTab(e: string) {
-  tab.value = e;
-}
 </script>
 
 <template>

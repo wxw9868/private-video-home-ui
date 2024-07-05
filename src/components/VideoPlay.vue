@@ -7,7 +7,8 @@
                         <v-col>
                             <v-card variant="flat" class="mx-auto">
                                 <v-responsive :aspect-ratio="16 / 9" id="videoContainer">
-                                    <div id="videoPlayer" :style="style"></div>
+                                    <!-- <div id="videoPlayer" :style="style"></div> -->
+                                    <div id="videoPlayer"></div>
                                     <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
                                 <div class="text-h5 pt-4">{{ videoTitle }}</div>
@@ -178,9 +179,9 @@ import { inject, reactive } from 'vue';
 // import Plyr from 'plyr';
 // import 'plyr/dist/plyr.css';
 // import DPlayer from 'dplayer';
-import Artplayer from "artplayer";
-// import XGplayer, { Events } from 'xgplayer';
-// import 'xgplayer/dist/index.min.css';
+// import Artplayer from "artplayer";
+import XGplayer, { Events } from 'xgplayer';
+import 'xgplayer/dist/index.min.css';
 
 export default {
     setup() {
@@ -293,8 +294,8 @@ export default {
 
                     // this.loadPlyr();
                     // this.loadDPlayer();
-                    this.loadArtplayer();
-                    // this.loadXgplayer();
+                    // this.loadArtplayer();
+                    this.loadXgplayer();
                     // let playerType = localStorage.getItem("playerType") ? localStorage.getItem("playerType") : 'plyr';
                     // this.loadPlayer(playerType);
                 }).catch(function (error) {
@@ -768,17 +769,17 @@ export default {
                 volume: 1,
                 muted: false, // 是否默认静音
                 autoplay: false, // 是否自动播放
-                pip: true, // 是否在底部控制栏里显示 画中画 的开关按钮
                 autoSize: true,
                 autoMini: true,
+                pip: true, // 是否在底部控制栏里显示 画中画 的开关按钮
                 screenshot: true, // 是否在底部控制栏里显示 视频截图 功能
-                setting: true,
+                fullscreen: true, // 是否在底部控制栏里显示播放器 窗口全屏 按钮
+                fullscreenWeb: true, // 是否在底部控制栏里显示播放器 网页全屏 按钮
+                setting: false,
                 loop: true, // 是否循环播放
                 flip: true,
                 playbackRate: true,
                 aspectRatio: true,
-                fullscreen: true, // 是否在底部控制栏里显示播放器 窗口全屏 按钮
-                fullscreenWeb: true, // 是否在底部控制栏里显示播放器 网页全屏 按钮
                 subtitleOffset: true,
                 miniProgressBar: true, // 迷你进度条，只在播放器失去焦点后且正在播放时出现
                 mutex: false, // 假如页面里同时存在多个播放器，是否只能让一个播放器播放
@@ -794,41 +795,47 @@ export default {
             });
             // console.log(art)
         },
-        // loadXgplayer() {
-        //     const player = new XGplayer({
-        //         id: 'videoPlayer',
-        //         autoplay: true, // 是否自动播放
-        //         volume: 0.6, // 默认音量, 取值范围0 ~ 1
-        //         loop: true, // 是否循环播放
-        //         url: this.videoUrl,
-        //         poster: this.poster,
-        //         lang: 'zh-cn', // 播放器初始显示语言
-        //         startTime: localStorage.getItem(this.videoUrl), // 初始起播时间，仅点播
-        //         fitVideoSize: 'auto', // 初始起播时间，仅点播
-        //         seekedStatus: 'auto', // seek操作结束之后播放器的状态，如果取值为auto，则维持原播放状态, 默认是seek之后直接播放
-        //         pip: true, // 是否使用画中画插件
-        //         rotate: true,// 是否使用旋转插件
-        //         screenShot: true, //显示截图按钮
-        //         videoAttributes: {
-        //             crossOrigin: 'anonymous'
-        //         },
-        //         playbackRate: [0.5, 0.75, 1, 1.5, 2, 3, 4],
-        //         defaultPlaybackRate: 1.0,
-        //         width: 'auto',
-        //         hight: 'auto',
-        //         mini: true, //开启小窗插件
-        //     });
-        //     player.on(Events.TIME_UPDATE, (data) => {
-        //         localStorage.setItem(this.videoUrl, data.currentTime);
-        //     });
-        //     player.on(Events.MINI_STATE_CHANGE, (isMini) => {
-        //         if (isMini) {
-        //             console.log('enter miniScreen')
-        //         } else {
-        //             console.log('exit miniScreen')
-        //         }
-        //     })
-        // },
+        loadXgplayer() {
+            const player = new XGplayer({
+                id: 'videoPlayer',
+                url: this.videoUrl,
+                poster: this.poster,
+                volume: 1, // 默认音量, 取值范围0 ~ 1
+                width: 'auto',
+                hight: 'auto',
+                playsinline: true, // 是否启用内联播放模式，该配置项只在移动端生效
+                autoplay: true, // 是否自动播放
+                autoplayMuted: true, // 是否自动静音自动播放
+                loop: true, // 是否循环播放
+                lang: 'zh-cn', // 播放器初始显示语言
+                startTime: localStorage.getItem(this.videoUrl), // 初始起播时间，仅点播
+                fluid: false, // 是否启用流式布局
+                fitVideoSize: 'auto', // 初始起播时间，仅点播
+                videoFillMode: 'auto', // video画面填充模式
+                seekedStatus: 'auto', // seek操作结束之后播放器的状态，如果取值为auto，则维持原播放状态, 默认是seek之后直接播放
+                marginControls: false, // 是否开启画面和控制栏分离模式
+                mini: false, //开启小窗插件
+                pip: true, // 是否使用画中画插件
+                rotate: false,// 是否使用旋转插件
+                screenShot: false, //显示截图按钮
+                videoAttributes: {
+                    crossOrigin: 'anonymous'
+                },
+                playbackRate: false, // 倍速插件显示列表，当改配置为false的时候，相当于禁用倍速切换插件，也可以传入一组配置项    
+                // playbackRate: [0.5, 0.75, 1, 1.5, 2],
+                // defaultPlaybackRate: 1.0,
+            });
+            player.on(Events.TIME_UPDATE, (data) => {
+                localStorage.setItem(this.videoUrl, data.currentTime);
+            });
+            player.on(Events.MINI_STATE_CHANGE, (isMini) => {
+                if (isMini) {
+                    console.log('enter miniScreen')
+                } else {
+                    console.log('exit miniScreen')
+                }
+            })
+        },
         // loadPlyr() {
         //     const player = new Plyr('#videoPlayer', {
         //         captions: {

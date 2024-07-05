@@ -21,20 +21,15 @@
                                                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
                                                 <v-toolbar color="transparent">
                                                     <template v-slot:append>
-                                                        <span class="subheading"
-                                                            v-text="card.raw.document.duration"></span>
+                                                        <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.document.duration }}</v-chip>
                                                     </template>
                                                 </v-toolbar>
                                             </v-img>
-                                            <v-card-subtitle class="pt-2">{{ card.raw.document.title
-                                                }}</v-card-subtitle>
-                                            <div class="px-4 text-overline text-grey-darken-1">
-                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye"
-                                                    size="x-small"></v-icon>
-                                                <span class="subheading" v-text="card.raw.document.browse"></span>
-                                                <span class="me-2"></span>
-                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart"
-                                                    size="x-small"></v-icon>
+                                            <div class="text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
+                                            <div class="text-overline text-grey-darken-1">
+                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
+                                                <span class="subheading me-2" v-text="card.raw.document.browse"></span>
+                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
                                                 <span class="subheading" v-text="card.raw.document.collect"></span>
                                             </div>
                                         </v-card>
@@ -50,7 +45,12 @@
         </v-layout>
     </v-card>
 </template>
-
+<style>
+.bg-black-semi {
+    background-color: rgba(0, 0, 0, 0.3);
+    /* 黑色半透明 */
+}
+</style>
 <script>
 import { inject } from 'vue';
 import { ref } from 'vue';

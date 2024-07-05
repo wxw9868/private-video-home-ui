@@ -71,6 +71,6 @@ export default defineConfig({
       },
     },
     host: '0.0.0.0', // 监听所有接口，可以通过IP访问
-    port: 3000,
+    port: 80,
   },
 })

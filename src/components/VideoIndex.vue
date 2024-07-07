@@ -116,9 +116,8 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     // console.log(response.data.data.list);
-                    // this.cards = response.data.data.list;
+                    this.cards = response.data.data.list;
                     this.loading = false;
-                    // this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                 }).catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围

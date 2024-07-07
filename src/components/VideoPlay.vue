@@ -6,9 +6,9 @@
                     <v-row>
                         <v-col>
                             <v-card variant="flat" class="mx-auto">
-                                <v-responsive :aspect-ratio="16 / 9" id="videoContainer">
-                                    <!-- <div id="videoPlayer" :style="style"></div> -->
-                                    <div id="videoPlayer"></div>
+                                <v-responsive :aspect-ratio="16 / 9">
+                                    <div id="videoPlayer" :style="style"></div>
+                                    <!-- <div id="videoPlayer"></div> -->
                                     <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
                                 <div class="text-h5 pt-4">{{ videoTitle }}</div>
@@ -179,9 +179,9 @@ import { inject, reactive } from 'vue';
 // import Plyr from 'plyr';
 // import 'plyr/dist/plyr.css';
 // import DPlayer from 'dplayer';
-// import Artplayer from "artplayer";
-import XGplayer, { Events } from 'xgplayer';
-import 'xgplayer/dist/index.min.css';
+import Artplayer from "artplayer";
+// import XGplayer, { Events } from 'xgplayer';
+// import 'xgplayer/dist/index.min.css';
 
 export default {
     setup() {
@@ -281,10 +281,10 @@ export default {
                 .then(response => {
                     // console.log(response.data);
                     let data = response.data
-                    // this.videoTitle = data.videoTitle;
-                    // this.videoActress = data.videoActress;
-                    // this.videoUrl = this.host + data.videoUrl;
-                    // this.poster = this.host + data.Poster;
+                    this.videoTitle = data.videoTitle;
+                    this.videoActress = data.videoActress;
+                    this.videoUrl = this.host + data.videoUrl;
+                    this.poster = this.host + data.Poster;
                     this.duration = data.Duration;
                     this.avatar = this.host + data.Avatar;
                     this.isCollect = data.IsCollect;
@@ -294,8 +294,8 @@ export default {
 
                     // this.loadPlyr();
                     // this.loadDPlayer();
-                    // this.loadArtplayer();
-                    this.loadXgplayer();
+                    this.loadArtplayer();
+                    // this.loadXgplayer();
                     // let playerType = localStorage.getItem("playerType") ? localStorage.getItem("playerType") : 'plyr';
                     // this.loadPlayer(playerType);
                 }).catch(function (error) {
@@ -322,7 +322,7 @@ export default {
             this.browse = this.browse + 1
             this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
                 .then(function (response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -736,31 +736,31 @@ export default {
 
         //     element.appendChild(tag);
         // },
-        // loadDPlayer() {
-        //     const dp = new DPlayer({
-        //         container: document.getElementById('videoPlayer'), // 容器
-        //         autoplay: false,
-        //         theme: '#FADFA3',
-        //         loop: true, // 循环播放
-        //         lang: 'zh-cn',
-        //         lang: navigator.language.toLowerCase(), // 语言，可选'en', 'zh-cn', 'zh-tw',
-        //         screenshot: true,
-        //         hotkey: true,
-        //         airplay: true,
-        //         chromecast: false,
-        //         preload: 'auto',
-        //         logo: this.logo, // 在左上角展示一个logo
-        //         volume: 0.7,
-        //         playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
-        //         mutex: false, // 互斥，阻止多个播放器同时播放
-        //         video: {
-        //             url: this.videoUrl,
-        //             pic: this.poster,
-        //             type: 'auto',
-        //         },
-        //         contextmenu: [],
-        //     });
-        // },
+        loadDPlayer() {
+            const dp = new DPlayer({
+                container: document.getElementById('videoPlayer'), // 容器
+                video: {
+                    url: this.videoUrl,
+                    pic: this.poster,
+                    type: 'auto',
+                },
+                autoplay: true,
+                theme: '#FADFA3',
+                loop: true, // 循环播放
+                lang: 'zh-cn',
+                lang: navigator.language.toLowerCase(), // 语言，可选'en', 'zh-cn', 'zh-tw',
+                screenshot: true,
+                hotkey: true,
+                airplay: true,
+                chromecast: false,
+                preload: 'auto',
+                // logo: this.logo, // 在左上角展示一个logo
+                volume: 1,
+                playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                mutex: false, // 互斥，阻止多个播放器同时播放
+                contextmenu: [],
+            });
+        },
         loadArtplayer() {
             const art = new Artplayer({
                 container: '#videoPlayer',

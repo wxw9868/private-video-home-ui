@@ -22,6 +22,7 @@ router.beforeEach(async (to, from) => {
     // ❗️ 避免无限重定向
     to.name !== '/login'
   ) {
+    console.log('aaa')
     // 将用户重定向到登录页面
     return { name: '/login' }
   }

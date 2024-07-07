@@ -73,7 +73,7 @@ export default {
             this.$http.get('/video/getActress', { params: { action: action, sort: sort } })
                 .then(response => {
                     // console.log(response.data.data.list);
-                    // this.items = response.data.data.list;
+                    this.items = response.data.data.list;
                     this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage(); 

@@ -100,7 +100,7 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: this.actress_id, page: this.pagepage, size: this.pagesize, action: action, sort: sort } })
                 .then(response => {
                     // console.log(response.data.data.list);
-                    // this.cards = response.data.data.list;
+                    this.cards = response.data.data.list;
                     this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();

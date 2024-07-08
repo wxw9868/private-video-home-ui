@@ -18,11 +18,11 @@
                                     </span>
                                 </div>
                                 <div class="pt-4">
-                                    <v-btn class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
+                                    <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
                                     <span class="subheading me-5" v-text="collect"></span>
-                                    <v-btn class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
+                                    <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
                                     <span class="subheading me-5" v-text="browse"></span>
-                                    <v-btn class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
+                                    <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
                                     <span class="subheading" v-text="duration"></span>
                                 </div>
 

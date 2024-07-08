@@ -11,8 +11,8 @@
                 @click="toggleTheme"></v-btn>
             <v-menu :close-on-content-click="false" offset="8, 0">
                 <template v-slot:activator="{ props }">
-                    <v-btn variant="text" icon="mdi-account" v-bind="props">
-                        <v-avatar size="32"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
+                    <v-btn icon="mdi-account" v-bind="props">
+                        <v-avatar size="24"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
                     </v-btn>
                 </template>
                 <v-sheet rounded="md" width="180">

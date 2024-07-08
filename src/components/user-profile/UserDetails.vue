@@ -1,5 +1,5 @@
 <script setup>
-import { FacebookFilled, LinkedinFilled, TwitterSquareFilled } from '@ant-design/icons-vue';
+// import { FacebookFilled, LinkedinFilled, TwitterSquareFilled } from '@ant-design/icons-vue';
 import { inject } from 'vue';
 
 const host = inject('serverHost');
@@ -16,7 +16,7 @@ const designation = localStorage.getItem("userDesignation")
     </v-avatar>
     <h5 class="text-h5 pt-5 mb-1">{{ nickname }}</h5>
     <p class="text-h6 text-lightText">{{ designation }}</p>
-    <v-list class="d-flex justify-center py-0" aria-label="social links" aria-busy="true">
+    <!-- <v-list class="d-flex justify-center py-0" aria-label="social links" aria-busy="true">
       <v-list-item class="px-3" to="/">
         <TwitterSquareFilled class="text-twitter" :style="{ fontSize: '18px' }" />
       </v-list-item>
@@ -26,7 +26,7 @@ const designation = localStorage.getItem("userDesignation")
       <v-list-item class="px-3" to="/">
         <LinkedinFilled class="text-linkedin" :style="{ fontSize: '18px' }" />
       </v-list-item>
-    </v-list>
+    </v-list> -->
     <div class="my-4 mb-8 d-flex align-center ga-2">
       <div class="text-center w-100">
         <h5 class="text-h5 mb-1">86</h5>

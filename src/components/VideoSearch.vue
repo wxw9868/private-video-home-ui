@@ -36,8 +36,12 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination v-model="page" :length="length" :total-visible="5"
-                                @click="pagination()"></v-pagination>
+                            <v-pagination 
+                                v-model="page" 
+                                :length="length" 
+                                :total-visible="5"
+                                @click="pagination()"
+                            ></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>

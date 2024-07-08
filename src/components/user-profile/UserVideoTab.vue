@@ -2,44 +2,29 @@
     <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
-                <v-tabs
-                    v-model="tab"
-                    align-tabs="center"
-                    :mandatory=true 
-                >
-                    <v-tab :value="1" @click="getData('v.CreatedAt','desc')">最近更新</v-tab>
-                    <v-tab :value="2" @click="getData('l.browse','desc')">播放次数</v-tab>
-                    <v-tab :value="3" @click="getData('l.collect','desc')">收藏数量</v-tab>
-                </v-tabs>
-
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
                         <template v-slot:default="{ items }">
                             <v-container class="d-flex" fluid>
                                 <v-row justify="start" dense>
-                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
+                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
                                         <v-card 
-                                            variant="flat" 
+                                            variant="flat"
+                                            :href="path + card.raw.id"
                                             class="mx-auto" 
                                             max-width="300"
-                                            :href="path + card.raw.id" 
-                                            target="_blank" 
-                                            hover
+                                            target="_blank"     
                                         >
-                                            <v-img 
-                                                :src="host + card.raw.poster" 
+                                            <v-img :src="host + card.raw.poster"
                                                 class="h-auto align-end text-white"
-                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
-                                                height="200" 
-                                                cover
-                                            >
+                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
                                                 <v-toolbar color="transparent">
                                                     <template v-slot:append>
                                                         <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.duration }}</v-chip>
                                                     </template>
                                                 </v-toolbar>
                                             </v-img>
-                                            <div class="text-truncate text-body-1 pt-2">{{ card.raw.title }}</div>
+                                            <div class="text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.title }}</div>
                                             <div class="text-overline text-grey-darken-1">
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
                                                 <span class="subheading me-2" v-text="card.raw.browse"></span>
@@ -53,7 +38,7 @@
                             <v-pagination 
                                 v-model="page" 
                                 :length="length" 
-                                :total-visible="5" 
+                                :total-visible="5"
                                 @click="pagination()"
                             ></v-pagination>
                         </template>
@@ -81,16 +66,12 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        tab: null,
-        actress_id: 0,
         path: 'play?id=',
         itemsPerPage: 24,
         page: ref(1),
         length: 0,
         cards: [],
         loading: true,
-        pagepage: 0,
-        pagesize: 0,
     }),
     methods: {
         pagination() {
@@ -101,12 +82,16 @@ export default {
             let currentPage = parseInt(localStorage.getItem('list-currentPage'));
             this.page = currentPage || this.page;
         },
-        getData(action,sort) {
-            this.$http.get('/video/getList', { params: { actress_id: this.actress_id, page: this.pagepage, size: this.pagesize, action: action, sort: sort } })
+        getData(query) {
+            // console.log(query);
+            this.$http.get('/user/collect', { params: { query: query } })
                 .then(response => {
-                    // console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    // console.log(response.data.data)
+                    let data = response.data.data
+                    // console.log(data.length)
+                    this.cards = data
+                    this.length = data.length
+                    this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
@@ -131,8 +116,7 @@ export default {
     },
 
     mounted() {
-        this.actress_id = this.$route.query.id
-        this.getData('','');
+        this.getData(this.$route.query.query);
     },
 }
 </script>

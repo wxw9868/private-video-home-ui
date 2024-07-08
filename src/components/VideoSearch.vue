@@ -36,8 +36,12 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination v-model="page" :length="length" :total-visible="5"
-                                @click="pagination()"></v-pagination>
+                            <v-pagination 
+                                v-model="page" 
+                                :length="length" 
+                                :total-visible="5"
+                                @click="pagination()"
+                            ></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>
@@ -85,7 +89,7 @@ export default {
                 .then(response => {
                     // console.log(response)
                     // console.log(response.data.data)
-                    let data = response.data.data
+                    // let data = response.data.data
                     this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;

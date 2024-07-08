@@ -50,7 +50,12 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination v-model="page" :length="length" :total-visible="5" @click="pagination()"></v-pagination>
+                            <v-pagination 
+                                v-model="page" 
+                                :length="length" 
+                                :total-visible="5" 
+                                @click="pagination()"
+                            ></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>
@@ -100,7 +105,7 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: this.actress_id, page: this.pagepage, size: this.pagesize, action: action, sort: sort } })
                 .then(response => {
                     // console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
+                    // this.cards = response.data.data.list;
                     this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();

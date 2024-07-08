@@ -3,7 +3,7 @@
         <template v-slot:prepend>
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </template>
-        <v-app-bar-title>Video</v-app-bar-title>
+        <v-app-bar-title></v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-slot:append>
             <v-btn icon="mdi-magnify" @click="toggleSearch"></v-btn>
@@ -12,7 +12,7 @@
             <v-menu :close-on-content-click="false" offset="8, 0">
                 <template v-slot:activator="{ props }">
                     <v-btn icon="mdi-account" v-bind="props">
-                        <v-avatar size="32"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
+                        <v-avatar size="24"><v-img :src="avatar ? (host+avatar) : '@/assets/images/users/avatar-1.png'"></v-img></v-avatar>
                     </v-btn>
                 </template>
                 <v-sheet rounded="md" width="180">
@@ -57,17 +57,17 @@ export default {
         group: null,
         items: [
             {
-                title: 'Home',
+                title: '首页',
                 href: '/',
                 icon: 'mdi-home-circle',
             },
             {
-                title: 'List',
+                title: '列表',
                 href: '/list',
                 icon: 'mdi-list-box',
             },
             {
-                title: 'Actress',
+                title: '演员',
                 href: '/actress',
                 icon: 'mdi-account-group',
             },

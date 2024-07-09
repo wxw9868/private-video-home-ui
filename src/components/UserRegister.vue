@@ -1,13 +1,10 @@
 <template>
     <v-main>
-        <v-img class="mx-auto my-6" max-width="100" max-height="70"
-            :src="host+'./assets/image/favicon/logo.png'"></v-img>
+        <v-img class="mx-auto my-6" max-width="100" max-height="70" :src="host+'./assets/image/favicon/logo.png'"></v-img>
 
         <v-card class="mx-auto pa-12 pb-8" elevation="0" max-width="448" rounded="lg">
-
             <v-form v-model="form" @submit.prevent="submit">
                 <div class="text-subtitle-1 text-medium-emphasis">Username</div>
-
                 <v-text-field 
                     v-model="username.value.value" 
                     :error-messages="username.errorMessage.value"
@@ -21,7 +18,6 @@
                 ></v-text-field>
 
                 <div class="text-subtitle-1 text-medium-emphasis">Account</div>
-
                 <v-text-field 
                     v-model="email.value.value" 
                     :error-messages="email.errorMessage.value" 
@@ -37,7 +33,6 @@
                 <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                     Password
                 </div>
-
                 <v-text-field 
                     v-model="password.value.value" 
                     :error-messages="password.errorMessage.value"
@@ -56,7 +51,6 @@
                 <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                     Confirm Password
                 </div>
-
                 <v-text-field 
                     v-model="repeat_password.value.value" 
                     :error-messages="repeat_password.errorMessage.value"
@@ -72,12 +66,9 @@
                     clearable
                 ></v-text-field>
 
-
-                <v-btn :disabled="!form" :loading="loading" size="large" type="submit" class="mb-8" color="blue"
-                    variant="tonal" block>
+                <v-btn :disabled="!form" :loading="loading" size="large" type="submit" class="mb-8" color="blue" variant="tonal" block>
                     Sign up
                 </v-btn>
-
                 <v-card-text class="text-center">
                     <a class="text-blue text-decoration-none" href="/login" rel="noopener noreferrer">
                         Sign in now <v-icon icon="mdi-chevron-right"></v-icon>
@@ -124,6 +115,7 @@ const { handleSubmit } = useForm({
         },
     },
 })
+
 const username = useField('username')
 const email = useField('email')
 const password = useField('password')

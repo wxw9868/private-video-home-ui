@@ -12,29 +12,27 @@
         <p class="text-caption mb-0">{{ designation }}</p>
       </div>
     </div>
-    <perfect-scrollbar style="height: calc(100vh - 100px); max-height: 100px">
-      <v-window v-model="tab">
-        <v-window-item value="111">
-          <v-list class="py-0" aria-label="profile list" aria-busy="true">
-            <v-list-item color="primary" rounded="0" value="Edit profile" to="/user">
-              <template v-slot:prepend>
-                <span class="mdi mdi-account-edit-outline mr-4" :style="{ fontSize: '14px' }"></span>
-              </template>
+    <v-window v-model="tab">
+      <v-window-item value="111">
+        <v-list class="py-0" aria-label="profile list" aria-busy="true">
+          <v-list-item color="primary" rounded="0" value="Edit profile" to="/user">
+            <template v-slot:prepend>
+              <span class="mdi mdi-account-edit mr-4" :style="{ fontSize: '14px' }"></span>
+            </template>
 
-              <v-list-item-title class="text-h6"> Edit Profile</v-list-item-title>
-            </v-list-item>
+            <v-list-item-title class="text-h6">编辑个人资料</v-list-item-title>
+          </v-list-item>
 
-            <v-list-item @click="logout()" color="secondary" rounded="0">
-              <template v-slot:prepend>
-                <span class="mdi mdi-logout-variant mr-4" :style="{ fontSize: '14px' }"></span>
-              </template>
+          <v-list-item @click="logout()" color="secondary" rounded="0">
+            <template v-slot:prepend>
+              <span class="mdi mdi-logout mr-4" :style="{ fontSize: '14px' }"></span>
+            </template>
 
-              <v-list-item-title class="text-subtitle-2"> Logout</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-window-item>
-      </v-window>
-    </perfect-scrollbar>
+            <v-list-item-title class="text-subtitle-2">退出账号</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-window-item>
+    </v-window>
   </div>
 </template>
 <script setup>
@@ -63,7 +61,7 @@ function logout() {
         localStorage.clear();
         clearCookie('stock_session');
         clearCookie('ckplayer-player-cookie');
-        window.location.href = '/'
+        window.location.href = '/login'
       }
     }).catch(function (error) {
       if (error.response) {

@@ -15,9 +15,13 @@
                                             max-width="300"
                                             target="_blank"     
                                         >
-                                            <v-img :src="host + card.raw.poster"
+                                            <v-img 
+                                                :src="host + card.raw.poster"
                                                 class="h-auto align-end text-white"
-                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
+                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
+                                                height="200" 
+                                                cover
+                                            >
                                                 <v-toolbar color="transparent">
                                                     <template v-slot:append>
                                                         <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.duration }}</v-chip>
@@ -27,9 +31,9 @@
                                             <div class="text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.title }}</div>
                                             <div class="text-overline text-grey-darken-1">
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
-                                                <span class="subheading me-2" v-text="card.raw.browse"></span>
+                                                <span class="subheading me-2">{{ card.raw.browse }}</span>
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
-                                                <span class="subheading" v-text="card.raw.collect"></span>
+                                                <span class="subheading">{{ card.raw.collect }}</span>
                                             </div>
                                         </v-card>
                                     </v-col>
@@ -90,8 +94,7 @@ export default {
                     let data = response.data.data
                     // console.log(data.length)
                     this.cards = data
-                    this.length = data.length
-                    this.length = Math.ceil(data.total / this.itemsPerPage)
+                    this.length = Math.ceil(data.length / this.itemsPerPage)
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

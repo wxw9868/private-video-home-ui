@@ -4,15 +4,28 @@
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
                     <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" center-active :mobile=true>
-                        <v-slide-group-item v-for="(card, n) in cards" :key="n"
-                            v-slot="{ isSelected, toggle, selectedClass }">
-                            <v-card :class="['ma-4', selectedClass]" color="grey-lighten-1" height="189" width="336"
-                                @click="toggle" :href="path + card.id" target="_blank" hover>
+                        <v-slide-group-item 
+                            v-for="(card, n) in cards" 
+                            :key="n"
+                            v-slot="{ isSelected, toggle, selectedClass }"
+                        >
+                            <v-card 
+                                :class="['ma-4', selectedClass]" 
+                                color="grey-lighten-1" height="189" width="336"
+                                @click="toggle" 
+                                :href="path + card.id" 
+                                target="_blank" 
+                                hover
+                            >
                                 <v-img :src="host + card.poster" class="h-auto align-end text-white"></v-img>
                                 <div class="d-flex fill-height align-center justify-center">
                                     <v-scale-transition>
-                                        <v-icon v-if="isSelected" color="white" icon="mdi-close-circle-outline"
-                                            size="48"></v-icon>
+                                        <v-icon 
+                                            v-if="isSelected" 
+                                            color="white" 
+                                            icon="mdi-close-circle-outline"
+                                            size="48"
+                                        ></v-icon>
                                     </v-scale-transition>
                                 </div>
                             </v-card>
@@ -26,9 +39,13 @@
                             <v-row justify="start" dense>
                                 <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
                                     <v-card variant="flat" class="mx-auto" max-width="336" :href="path" hover>
-                                        <v-img :src="host + card.raw.poster" class="h-auto align-end text-white"
-                                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
-
+                                        <v-img 
+                                            :src="host + card.raw.poster" 
+                                            class="h-auto align-end text-white"
+                                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
+                                            height="200" 
+                                            cover
+                                        >
                                             <v-toolbar color="transparent">
                                                 <template v-slot:append>
                                                     <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.duration }}</v-chip>
@@ -116,7 +133,7 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
                 .then(response => {
                     // console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
+                    // this.cards = response.data.data.list;
                     this.loading = false;
                 }).catch(function (error) {
                     if (error.response) {

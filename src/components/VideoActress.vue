@@ -2,11 +2,7 @@
     <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
-                <v-tabs
-                    v-model="tab"
-                    align-tabs="center"
-                    :mandatory=true 
-                >
+                <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
                     <v-tab :value="1" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
                     <v-tab :value="2" @click="getData('a.actress','desc')">名称顺序</v-tab>
                     <v-tab :value="3" @click="getData('count','desc')">最多影片</v-tab>
@@ -18,8 +14,11 @@
                                 <v-container class="d-flex" fluid>
                                     <v-row justify="start" dense>
                                         <v-col v-for="(file, i) in items" :key="i" cols="6" sm="3" order="1">
-                                            <v-list-item :subtitle="file.raw.count + subtitle" :title="file.raw.actress"
-                                                :href="path + file.raw.id">
+                                            <v-list-item 
+                                                :title="file.raw.actress"
+                                                :subtitle="file.raw.count + subtitle"  
+                                                :href="path + file.raw.id"
+                                            >
                                                 <template v-slot:prepend>
                                                     <v-avatar>
                                                         <v-img :src="host + file.raw.avatar"></v-img>
@@ -29,11 +28,7 @@
                                         </v-col>
                                     </v-row>
                                 </v-container>
-                                <v-pagination 
-                                    v-model="page" 
-                                    :length="length" 
-                                    @click="pagination()"
-                                ></v-pagination>
+                                <v-pagination v-model="page" :length="length" @click="pagination()"></v-pagination>
                             </template>
                         </v-data-iterator>
                     </v-lazy>

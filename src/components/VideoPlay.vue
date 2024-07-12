@@ -203,7 +203,7 @@ export default {
                 "actress": "检察院"
             }
         ],
-        path: '/actress?id=',
+        path: '/video/actress?id=',
         duration: 0,
         avatar: '',
         poster: '',

@@ -51,7 +51,7 @@ export default {
     },
     data: () => ({
         tab: null,
-        path: 'list?id=',
+        path: 'video/list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
         page: ref(1),

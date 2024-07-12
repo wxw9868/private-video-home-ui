@@ -109,7 +109,7 @@ export default {
         model: null,
         itemsPerPage: 8,
         loading: true,
-        path: '/play?id=1',
+        path: '/video/play?id=1',
         search: '',
         cards: [
             {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },

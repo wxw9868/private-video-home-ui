@@ -67,7 +67,7 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        path: 'play?id=',
+        path: 'video/play?id=',
         itemsPerPage: 24,
         page: ref(1),
         length: 0,

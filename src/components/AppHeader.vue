@@ -63,12 +63,12 @@ export default {
             },
             {
                 title: '列表',
-                href: '/list',
+                href: '/video/list',
                 icon: 'mdi-list-box',
             },
             {
                 title: '演员',
-                href: '/actress',
+                href: '/video/actress',
                 icon: 'mdi-account-group',
             },
         ],

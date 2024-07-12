@@ -83,7 +83,7 @@ export default {
     data: () => ({
         tab: null,
         actress_id: 0,
-        path: 'play?id=',
+        path: 'video/play?id=',
         itemsPerPage: 24,
         page: ref(1),
         length: 0,

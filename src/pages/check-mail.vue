@@ -1,6 +1,5 @@
 <template>
-    <!-- <UserRegister /> -->
-    <RegisterPage1 />
+  <CheckMail1 />
 </template>
 
 <script setup>

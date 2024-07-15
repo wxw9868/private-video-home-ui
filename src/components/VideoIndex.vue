@@ -107,9 +107,9 @@ export default {
     },
     data: () => ({
         model: null,
-        itemsPerPage: 8,
+        itemsPerPage: 18,
         loading: true,
-        path: '/play?id=1',
+        path: '/video/play?id=1',
         search: '',
         cards: [
             {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
@@ -130,10 +130,10 @@ export default {
     },
     methods: {
         getData() {
-            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 10, action: '', sort: '' } })
+            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 30, action: '', sort: '' } })
                 .then(response => {
-                    // console.log(response.data.data.list);
-                    // this.cards = response.data.data.list;
+                    // console.log(response);
+                    this.cards = response.data.data.list;
                     this.loading = false;
                 }).catch(function (error) {
                     if (error.response) {

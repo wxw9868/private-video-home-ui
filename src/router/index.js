@@ -15,14 +15,13 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   let isAuthenticated = false
-  if (localStorage.getItem('isLogin') || to.name=='/register') isAuthenticated=true
+  if (localStorage.getItem('isLogin') || to.name=='/register' || to.name=='/forgot-pwd' || to.name=='/check-mail' || to.name=='/reset-pwd') isAuthenticated=true
   if (
     // 检查用户是否已登录
     !isAuthenticated &&
     // ❗️ 避免无限重定向
     to.name !== '/login'
   ) {
-    console.log('aaa')
     // 将用户重定向到登录页面
     return { name: '/login' }
   }

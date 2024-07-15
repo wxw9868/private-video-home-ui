@@ -1,13 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import UserDetails from './UserDetails.vue';
-import InformationTab from './InformationTab.vue';
-import UserVideoTab from './UserVideoTab.vue';
-import ChangePasswordTab from './ChangePasswordTab.vue';
-// import SettingTab from './SettingTab.vue';
-// import PaymentTab from './PaymentTab.vue';
-
-// icons
 import { UserOutlined, HeartOutlined, LockOutlined} from '@ant-design/icons-vue';
 
 const tab = ref('one');

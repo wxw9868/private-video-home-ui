@@ -3,9 +3,9 @@
         <v-layout>
             <v-main>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab :value="1" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
-                    <v-tab :value="2" @click="getData('a.actress','desc')">名称顺序</v-tab>
-                    <v-tab :value="3" @click="getData('count','desc')">最多影片</v-tab>
+                    <v-tab value="1" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
+                    <v-tab value="2" @click="getData('a.actress','desc')">名称顺序</v-tab>
+                    <v-tab value="3" @click="getData('count','desc')">最多影片</v-tab>
                 </v-tabs>
                 <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
@@ -51,7 +51,7 @@ export default {
     },
     data: () => ({
         tab: null,
-        path: 'list?id=',
+        path: '/video/list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
         page: ref(1),
@@ -68,12 +68,27 @@ export default {
             let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
             this.page = currentPage || this.page;
         },
+        loadTab(tab,action,sort) {
+            if (action !='' && sort != '') localStorage.setItem('actress-currentPage',null)
+
+            this.tab = tab || localStorage.getItem('act-tab');
+            action = action || localStorage.getItem('act-action');
+            sort = sort || localStorage.getItem('act-sort');
+
+            localStorage.setItem('act-tab',tab);
+            localStorage.setItem('act-action',action);
+            localStorage.setItem('act-sort',sort);
+            return {action,sort}
+        },
         getData(action, sort) {
-            this.$http.get('/video/getActress', { params: { action: action, sort: sort } })
+            const obj = this.loadTab(this.tab,action,sort);
+
+            this.$http.get('/video/getActress', { params: { action: obj.action, sort: obj.sort } })
                 .then(response => {
-                    // console.log(response.data.data.list);
-                    this.items = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    // console.log(response);
+                    const data = response.data.data.list;
+                    this.items = data;
+                    this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage(); 
                 }).catch(function (error) {
@@ -98,8 +113,6 @@ export default {
     },
     mounted() {
         this.getData('', '');
-        let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
-        this.page = currentPage? currentPage: this.page;
     },
 }
 </script>

@@ -12,20 +12,17 @@
                                     <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
                                 <div class="text-h5 pt-4">{{ videoTitle }}</div>
-                                <div class="pt-4">
-                                    <span class="me-2" v-for="item in videoActress" :key="item" :to="path + item.id">
-                                        {{ item.actress }}
-                                    </span>
-                                </div>
-                                <div class="pt-4">
+                                <v-chip-group >
+                                    <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
+                                </v-chip-group>
+                                <div class="pt-0">
                                     <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
-                                    <span class="subheading me-5" v-text="collect"></span>
+                                    <span class="subheading me-5" v-text="videoCollect"></span>
                                     <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
-                                    <span class="subheading me-5" v-text="browse"></span>
+                                    <span class="subheading me-5" v-text="videoBrowse"></span>
                                     <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
-                                    <span class="subheading" v-text="duration"></span>
+                                    <span class="subheading" v-text="videoDuration"></span>
                                 </div>
-
                                 <!-- <v-item-group class="pb-6">
                                     <v-item v-for="player in players" :key="player">
                                         <v-btn class="rounded-circle" height="40" width="40" variant="text">
@@ -42,13 +39,21 @@
                 <v-container>
                     <v-row>
                         <div class="pt-5 pl-3">
-                            <v-avatar size="40px" :image="avatar"></v-avatar>
+                            <v-avatar size="40px" :image="userAvatar"></v-avatar>
                         </div>
                         <v-col>
                             <v-form v-model="form" @submit.prevent="onComment">
-                                <v-textarea v-model="content" :rules="contentRules" row-height="25" rows="3"
-                                    clear-icon="mdi-close-circle" variant="outlined" auto-grow shaped
-                                    clearable></v-textarea>
+                                <v-textarea 
+                                    v-model="content" 
+                                    :rules="contentRules" 
+                                    row-height="25" 
+                                    rows="3"
+                                    clear-icon="mdi-close-circle" 
+                                    variant="outlined" 
+                                    auto-grow 
+                                    shaped
+                                    clearable
+                                ></v-textarea>
                                 <v-btn :disabled="!form" :loading="loading" type="submit">发布评论</v-btn>
                             </v-form>
                         </v-col>
@@ -95,9 +100,17 @@
                                 </div>
                                 <v-col>
                                     <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID,i)">
-                                        <v-textarea v-model="replyTexts[comment.ID]" :rules="replyRules[comment.ID]"
-                                            row-height="25" rows="3" clear-icon="mdi-close-circle" variant="outlined"
-                                            auto-grow shaped clearable></v-textarea>
+                                        <v-textarea 
+                                            v-model="replyTexts[comment.ID]" 
+                                            :rules="replyRules[comment.ID]"
+                                            row-height="25" 
+                                            rows="3" 
+                                            clear-icon="mdi-close-circle" 
+                                            variant="outlined"
+                                            auto-grow 
+                                            shaped 
+                                            clearable
+                                        ></v-textarea>
                                         <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]"
                                             type="submit">发送回复</v-btn>
                                     </v-form>
@@ -162,7 +175,10 @@
                                 </div>
                             </v-expand-transition>
                             <div v-if="comment.Childrens">
-                                <div variant="text" @click="repliesShow(comment.ID)">
+                                <div 
+                                    variant="text" 
+                                    @click="repliesShow(comment.ID)"
+                                >
                                     展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
                                     <v-icon :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
                                 </div>
@@ -176,12 +192,12 @@
 </template>
 <script>
 import { inject, reactive } from 'vue';
-// import Plyr from 'plyr';
-// import 'plyr/dist/plyr.css';
-// import DPlayer from 'dplayer';
 import Artplayer from "artplayer";
+// import DPlayer from 'dplayer';
 // import XGplayer, { Events } from 'xgplayer';
 // import 'xgplayer/dist/index.min.css';
+// import Plyr from 'plyr';
+// import 'plyr/dist/plyr.css';
 
 export default {
     setup() {
@@ -190,29 +206,20 @@ export default {
     },
     data: () => ({
         userId: localStorage.getItem("userID"),
+        userAvatar: '',
         videoId: 0,
-        videoUrl: 'src/assets/video/lc.mp4',
-        videoTitle: '中华人民共和国',
-        videoActress: [
-            {
-                "id": "1",
-                "actress": "国务院"
-            },
-            {
-                "id": "2",
-                "actress": "检察院"
-            }
-        ],
-        path: '/actress?id=',
-        duration: 0,
-        avatar: '',
-        poster: '',
-        browse: 0,
-        collect: 0,
+        videoTitle: '三国演义',
+        videoActress: [],
+        videoUrl: '@/assets/video/lc.mp4',
+        videoPoster: '',
+        videoDuration: 0,
+        videoBrowse: 0,
+        videoCollect: 0,
         icon: {
             collect: 'mdi-heart-outline',
         },
         isCollect: '',
+        path: '/video/list?id=',
         style: {
             position: 'absolute',
             top: 0,
@@ -279,26 +286,31 @@ export default {
         getData(id) {
             this.$http.get('/video/getPlay', { params: { id: id } })
                 .then(response => {
-                    // console.log(response.data);
-                    let data = response.data
+                    // console.log(response);
+                    const data = response.data
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
                     if (id > 544) {
                         this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
                     } else {
                         this.videoUrl = this.host + data.videoUrl;
-                    }                    
-                    this.poster = this.host + data.Poster;
-                    this.duration = data.Duration;
-                    this.avatar = this.host + data.Avatar;
+                    }
+                    this.videoPoster = this.host + data.videoPoster;
+                    this.videoDuration = data.Duration;
+                    this.videoCollect = data.Collect;
+                    this.videoBrowse = data.Browse+1;
                     this.isCollect = data.IsCollect;
-                    this.collect = data.Collect;
-                    this.browse = data.Browse;
-                    this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect
+                    this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
+                    this.userAvatar = this.host + data.Avatar;
+                    // this.videoActress = [
+                    //     {"id": "1", "actress": "曹操"},
+                    //     {"id": "2", "actress": "刘备"},
+                    //     {"id": "2", "actress": "孙权"},    
+                    // ];
 
+                    this.loadArtplayer();
                     // this.loadPlyr();
                     // this.loadDPlayer();
-                    this.loadArtplayer();
                     // this.loadXgplayer();
                     // let playerType = localStorage.getItem("playerType") ? localStorage.getItem("playerType") : 'plyr';
                     // this.loadPlayer(playerType);
@@ -325,8 +337,8 @@ export default {
         addBrowse(id) {
             this.browse = this.browse + 1
             this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-                .then(function (response) {
-                    // console.log(response.data);
+                .then(response => {
+                    console.log(response.data.message);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -699,77 +711,11 @@ export default {
             }
             return y + '年前'
         },
-
-        // loadPlayer(playerType) {
-        //     playerType = (playerType) ? playerType : localStorage.getItem("playerType");
-        //     localStorage.setItem("playerType", playerType);
-
-        //     const element = document.getElementById("videoContainer");
-        //     element.innerHTML = '';
-        //     let tag = '';
-        //     if (playerType == 'plyr') {
-        //         tag = document.createElement("video");
-        //     } else {
-        //         tag = document.createElement("div");
-        //     }
-        //     tag.setAttribute("id", "videoPlayer");
-        //     tag.style.position = 'absolute';
-        //     tag.style.top = 0;
-        //     tag.style.right = 0;
-        //     tag.style.bottom = 0;
-        //     tag.style.left = 0;
-        //     tag.style.width = '100%';
-        //     tag.style.height = '100%';
-
-        //     switch (playerType) {
-        //         case 'xgplayer':
-        //             this.loadXgplayer();
-        //             break;
-        //         case 'dplayer':
-        //             this.loadDPlayer();
-        //             break;
-        //         case 'artplayer':
-        //             this.loadArtplayer();
-        //             break;
-        //         case 'plyr':
-        //             this.loadPlyr();
-        //             break;
-        //         default:
-        //             this.loadPlyr();
-        //     }
-
-        //     element.appendChild(tag);
-        // },
-        loadDPlayer() {
-            const dp = new DPlayer({
-                container: document.getElementById('videoPlayer'), // 容器
-                video: {
-                    url: this.videoUrl,
-                    pic: this.poster,
-                    type: 'auto',
-                },
-                autoplay: true,
-                theme: '#FADFA3',
-                loop: true, // 循环播放
-                lang: 'zh-cn',
-                lang: navigator.language.toLowerCase(), // 语言，可选'en', 'zh-cn', 'zh-tw',
-                screenshot: true,
-                hotkey: true,
-                airplay: true,
-                chromecast: false,
-                preload: 'auto',
-                // logo: this.logo, // 在左上角展示一个logo
-                volume: 1,
-                playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
-                mutex: false, // 互斥，阻止多个播放器同时播放
-                contextmenu: [],
-            });
-        },
         loadArtplayer() {
             const art = new Artplayer({
                 container: '#videoPlayer',
                 url: this.videoUrl,
-                poster: this.poster,
+                poster: this.videoPoster,
                 volume: 1,
                 muted: false, // 是否默认静音
                 autoplay: false, // 是否自动播放
@@ -797,7 +743,31 @@ export default {
                 fastForward: true, // 是否在移动端添加长按视频快进功能
                 autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
             });
-            // console.log(art)
+        },
+        loadDPlayer() {
+            const dp = new DPlayer({
+                container: document.getElementById('videoPlayer'), // 容器
+                video: {
+                    url: this.videoUrl,
+                    pic: this.poster,
+                    type: 'auto',
+                },
+                autoplay: true,
+                theme: '#FADFA3',
+                loop: true, // 循环播放
+                lang: 'zh-cn',
+                lang: navigator.language.toLowerCase(), // 语言，可选'en', 'zh-cn', 'zh-tw',
+                screenshot: true,
+                hotkey: true,
+                airplay: true,
+                chromecast: false,
+                preload: 'auto',
+                // logo: this.logo, // 在左上角展示一个logo
+                volume: 1,
+                playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                mutex: false, // 互斥，阻止多个播放器同时播放
+                contextmenu: [],
+            });
         },
         loadXgplayer() {
             const player = new XGplayer({
@@ -866,7 +836,6 @@ export default {
         //         settings: ['captions', 'quality', 'speed', 'loop'],
         //         volume: 1,
         //     });
-
         //     player.source = {
         //         type: 'video',
         //         title: this.title,
@@ -879,9 +848,45 @@ export default {
         //         ],
         //         poster: this.poster,
         //     };
-
         //     // Expose player so it can be used from the console
         //     window.player = player;
+        // },
+        // loadPlayer(playerType) {
+        //     playerType = (playerType) ? playerType : localStorage.getItem("playerType");
+        //     localStorage.setItem("playerType", playerType);
+        //     const element = document.getElementById("videoContainer");
+        //     element.innerHTML = '';
+        //     let tag = '';
+        //     if (playerType == 'plyr') {
+        //         tag = document.createElement("video");
+        //     } else {
+        //         tag = document.createElement("div");
+        //     }
+        //     tag.setAttribute("id", "videoPlayer");
+        //     tag.style.position = 'absolute';
+        //     tag.style.top = 0;
+        //     tag.style.right = 0;
+        //     tag.style.bottom = 0;
+        //     tag.style.left = 0;
+        //     tag.style.width = '100%';
+        //     tag.style.height = '100%';
+        //     switch (playerType) {
+        //         case 'xgplayer':
+        //             this.loadXgplayer();
+        //             break;
+        //         case 'dplayer':
+        //             this.loadDPlayer();
+        //             break;
+        //         case 'artplayer':
+        //             this.loadArtplayer();
+        //             break;
+        //         case 'plyr':
+        //             this.loadPlyr();
+        //             break;
+        //         default:
+        //             this.loadPlyr();
+        //     }
+        //     element.appendChild(tag);
         // },
     },
 }

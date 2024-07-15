@@ -1,6 +1,5 @@
 <template>
-    <!-- <UserRegister /> -->
-    <RegisterPage1 />
+  <ResetPwd1 />
 </template>
 
 <script setup>

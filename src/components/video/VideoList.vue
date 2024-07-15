@@ -102,11 +102,16 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(action,sort) {
+            action = action || localStorage.getItem('action');
+            sort = sort || localStorage.getItem('sort');
             this.$http.get('/video/getList', { params: { actress_id: this.actress_id, page: this.pagepage, size: this.pagesize, action: action, sort: sort } })
                 .then(response => {
-                    // console.log(response.data.data.list);
-                    this.cards = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    // console.log(response);
+                    localStorage.setItem('action',action);
+                    localStorage.setItem('sort',sort);
+                    const data = response.data.data.list;
+                    this.cards = data;
+                    this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
@@ -129,7 +134,6 @@ export default {
                 });
         }
     },
-
     mounted() {
         this.actress_id = this.$route.query.id
         this.getData('','');

@@ -88,8 +88,7 @@ export default {
             this.$http.get('/video/getSearch', { params: { query: query } })
                 .then(response => {
                     // console.log(response)
-                    // console.log(response.data.data)
-                    let data = response.data.data
+                    const data = response.data.data
                     this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;

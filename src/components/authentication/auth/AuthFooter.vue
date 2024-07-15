@@ -14,16 +14,16 @@ const footerLink = shallowRef([
 ]);
 </script>
 <template>
-  <v-footer class="px-0 pt-2">
+  <v-footer class="px-0 pt-2" style="background-color: rgba(0, 0, 0, 0);">
     <v-row justify="center" no-gutters>
       <v-col cols="12" md="6" class="text-md-left text-center">
-        <p class="text-subtitle-2 text-lightText mb-md-0 mb-4">
+        <!-- <p class="text-subtitle-2 text-lightText mb-md-0 mb-4">
           This site is protected by
           <a href="/" class="text-primary">Privacy Policy</a>
-        </p>
+        </p> -->
       </v-col>
       <v-col class="d-flex flex-md-row flex-column justify-md-end align-center" cols="12" md="6">
-        <a
+        <!-- <a
           v-for="(item, i) in footerLink"
           :key="i"
           class="mx-md-3 mx-2 mb-md-0 mb-2 text-subtitle-2 text-lightText"
@@ -31,7 +31,7 @@ const footerLink = shallowRef([
           target="_blank"
         >
           {{ item.title }}
-        </a>
+        </a> -->
       </v-col>
     </v-row>
   </v-footer>

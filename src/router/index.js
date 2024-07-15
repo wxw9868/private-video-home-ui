@@ -15,7 +15,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   let isAuthenticated = false
-  if (localStorage.getItem('isLogin') || to.name=='/register' || to.name=='/forgot-pwd') isAuthenticated=true
+  if (localStorage.getItem('isLogin') || to.name=='/register' || to.name=='/forgot-pwd' || to.name=='/check-mail' || to.name=='/reset-pwd') isAuthenticated=true
   if (
     // 检查用户是否已登录
     !isAuthenticated &&

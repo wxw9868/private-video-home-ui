@@ -69,11 +69,16 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(action, sort) {
+            action = action || localStorage.getItem('action');
+            sort = sort || localStorage.getItem('sort');
             this.$http.get('/video/getActress', { params: { action: action, sort: sort } })
                 .then(response => {
-                    // console.log(response.data.data.list);
-                    this.items = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.list.length / this.itemsPerPage);
+                    // console.log(response);
+                    localStorage.setItem('action',action);
+                    localStorage.setItem('sort',sort);
+                    const data = response.data.data.list;
+                    this.items = data;
+                    this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage(); 
                 }).catch(function (error) {
@@ -98,8 +103,6 @@ export default {
     },
     mounted() {
         this.getData('', '');
-        let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
-        this.page = currentPage? currentPage: this.page;
     },
 }
 </script>

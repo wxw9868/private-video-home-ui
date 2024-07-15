@@ -2,32 +2,32 @@
 import Logo from '@/layouts/logo/LogoMain.vue';
 import AuthLogin from '../authForms/AuthLogin.vue';
 
-import { createApp } from 'vue';
-import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3';
+// import { createApp } from 'vue';
+// import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3';
 
-const component = {
-  setup() {
-    const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+// const component = {
+//   setup() {
+//     const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-    const recaptcha = async () => {
-      // (optional) Wait until recaptcha has been loaded.
-      await recaptchaLoaded();
+//     const recaptcha = async () => {
+//       // (optional) Wait until recaptcha has been loaded.
+//       await recaptchaLoaded();
 
-      // Execute reCAPTCHA with action "login".
-      // Removed the assignment of token since it's not being used
-      await executeRecaptcha('login');
+//       // Execute reCAPTCHA with action "login".
+//       // Removed the assignment of token since it's not being used
+//       await executeRecaptcha('login');
 
-      // Do stuff with the received token.
-    };
+//       // Do stuff with the received token.
+//     };
 
-    return {
-      recaptcha
-    };
-  },
-  template: '<button @click="recaptcha">Execute recaptcha</button>'
-};
+//     return {
+//       recaptcha
+//     };
+//   },
+//   template: '<button @click="recaptcha">Execute recaptcha</button>'
+// };
 
-createApp(component).use(VueReCaptcha, { siteKey: '6LeCprcaAAAAAOD0aEK7WpfHc__CyRmk3rD-otNt' });
+// createApp(component).use(VueReCaptcha, { siteKey: '6LeCprcaAAAAAOD0aEK7WpfHc__CyRmk3rD-otNt' });
 </script>
 
 <template>
@@ -61,6 +61,11 @@ createApp(component).use(VueReCaptcha, { siteKey: '6LeCprcaAAAAAOD0aEK7WpfHc__Cy
       </v-container>
     </v-col>
     <!---Login Part-->
+    <v-col cols="12">
+      <v-container class="pt-0 pb-6">
+        <AuthFooter />
+      </v-container>
+    </v-col>
   </v-row>
 </template>
 <style lang="scss">

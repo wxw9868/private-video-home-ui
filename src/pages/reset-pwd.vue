@@ -1,5 +1,5 @@
 <template>
-  <ForgotPwd1 />
+  <ResetPwd1 />
 </template>
 
 <script setup>

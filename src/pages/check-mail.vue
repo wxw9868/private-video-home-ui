@@ -1,5 +1,5 @@
 <template>
-  <ForgotPwd1 />
+  <CheckMail1 />
 </template>
 
 <script setup>

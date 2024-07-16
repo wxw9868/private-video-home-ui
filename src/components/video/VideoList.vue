@@ -22,9 +22,8 @@
                                             variant="flat" 
                                             class="mx-auto" 
                                             max-width="300"
-                                            :href="path + card.raw.id" 
-                                            target="_blank" 
-                                            hover
+                                            :to="path + card.raw.id" 
+                                            target="_blank"
                                         >
                                             <v-img 
                                                 :src="host + card.raw.poster" 

@@ -3,9 +3,9 @@
         <v-layout>
             <v-main>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab value="1" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
-                    <v-tab value="2" @click="getData('a.actress','desc')">名称顺序</v-tab>
-                    <v-tab value="3" @click="getData('count','desc')">最多影片</v-tab>
+                    <v-tab value="one" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
+                    <v-tab value="two" @click="getData('a.actress','desc')">名称顺序</v-tab>
+                    <v-tab value="three" @click="getData('count','desc')">最多影片</v-tab>
                 </v-tabs>
                 <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
@@ -50,7 +50,7 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        tab: null,
+        tab: '',
         path: '/video/list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
@@ -69,15 +69,15 @@ export default {
             this.page = currentPage || this.page;
         },
         loadTab(tab,action,sort) {
-            if (action !='' && sort != '') localStorage.setItem('actress-currentPage',null)
+            if (action !='' && sort != '') localStorage.setItem('actress-currentPage',1)
 
-            this.tab = tab || localStorage.getItem('act-tab');
-            action = action || localStorage.getItem('act-action');
-            sort = sort || localStorage.getItem('act-sort');
+            this.tab = tab || localStorage.getItem('actress-tab');
+            action = action || localStorage.getItem('actress-action');
+            sort = sort || localStorage.getItem('actress-sort');
 
-            localStorage.setItem('act-tab',tab);
-            localStorage.setItem('act-action',action);
-            localStorage.setItem('act-sort',sort);
+            localStorage.setItem('actress-tab',this.tab);
+            localStorage.setItem('actress-action',action);
+            localStorage.setItem('actress-sort',sort);
             return {action,sort}
         },
         getData(action, sort) {

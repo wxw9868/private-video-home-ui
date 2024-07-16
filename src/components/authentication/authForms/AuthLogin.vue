@@ -10,8 +10,8 @@ const http = instance.appContext.config.globalProperties.$http;
 
 const valid = ref(false);
 const show1 = ref(false);
-const email = ref('');//wxw9868@163.com'
-const password = ref('');//123456
+const email = ref('');
+const password = ref('');
 const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
 const passwordRules = ref([
   (v: string) => !!v || 'Password is required',
@@ -100,12 +100,12 @@ function validate(values: any, { setErrors }: any) {
 
 <template>
   <div class="d-flex justify-space-between align-center">
-    <h3 class="text-h3 text-center mb-0">Login</h3>
-    <router-link to="/register" class="text-primary text-decoration-none">立即注册</router-link>
+    <h3 class="text-h3 text-center mb-0">{{ $t('Login') }}</h3>
+    <router-link to="/register" class="text-primary text-decoration-none">{{ $t('NoAccount') }}</router-link>
   </div>
   <Form v-model="valid" @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
     <div class="mb-6">
-      <v-label>Email Address</v-label>
+      <v-label>{{ $t('EmailAddress') }}</v-label>
       <v-text-field
         aria-label="email address"
         v-model="email"
@@ -118,7 +118,7 @@ function validate(values: any, { setErrors }: any) {
       ></v-text-field>
     </div>
     <div>
-      <v-label>Password</v-label>
+      <v-label>{{ $t('Password') }}</v-label>
       <v-text-field
         aria-label="password"
         v-model="password"
@@ -150,11 +150,11 @@ function validate(values: any, { setErrors }: any) {
         hide-details
       ></v-checkbox>
       <div class="ml-auto">
-        <router-link to="/forgot-pwd" class="text-darkText link-hover">忘记密码?</router-link>
+        <router-link to="/forgot-pwd" class="text-darkText link-hover">{{ $t('ForgotPassword') }}?</router-link>
       </div>
     </div>
     <v-btn color="primary" :loading="isSubmitting" block class="mt-5" variant="flat" size="large" :disabled="valid" type="submit">
-      登陆
+      {{ $t('Login') }}
     </v-btn>
     <div v-if="errors.apiError" class="mt-2">
       <v-alert color="error">{{ errors.apiError }}</v-alert>

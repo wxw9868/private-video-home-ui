@@ -3,7 +3,7 @@
         <v-layout>
             <v-main>
                 <v-sheet class="mx-auto" :elevation="0">
-                    <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" center-active :mobile=true>
+                    <v-slide-group v-model="model" class="pa-4" center-active :mobile=true>
                         <v-slide-group-item 
                             v-for="(card, n) in cards" 
                             :key="n"
@@ -11,34 +11,29 @@
                         >
                             <v-card 
                                 :class="['ma-4', selectedClass]" 
-                                color="grey-lighten-1" height="189" width="336"
-                                @click="toggle" 
-                                :href="path + card.id" 
-                                target="_blank" 
-                                hover
+                                color="grey-lighten-1" 
+                                height="189" 
+                                width="336"
+                                @click="toggle"
+                                :to="path+card.id"
                             >
-                                <v-img :src="host + card.poster" class="h-auto align-end text-white"></v-img>
-                                <div class="d-flex fill-height align-center justify-center">
-                                    <v-scale-transition>
-                                        <v-icon 
-                                            v-if="isSelected" 
-                                            color="white" 
-                                            icon="mdi-close-circle-outline"
-                                            size="48"
-                                        ></v-icon>
-                                    </v-scale-transition>
-                                </div>
+                                <v-img :src="host + card.poster" class="h-auto"></v-img>
                             </v-card>
                         </v-slide-group-item>
                     </v-slide-group>
                 </v-sheet>
 
-                <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :search="search" :loading="loading">
+                <v-data-iterator :items="lists" :items-per-page="itemsPerPage" :search="search" :loading="loading">
                     <template v-slot:default="{ items }">
                         <v-container class="d-flex" fluid>
                             <v-row justify="start" dense>
                                 <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
-                                    <v-card variant="flat" class="mx-auto" max-width="336" :href="path" hover>
+                                    <v-card 
+                                        variant="text" 
+                                        class="mx-auto" 
+                                        max-width="336" 
+                                        :to="path+card.raw.id"
+                                    >
                                         <v-img 
                                             :src="host + card.raw.poster" 
                                             class="h-auto align-end text-white"
@@ -106,12 +101,16 @@ export default {
         return { host }
     },
     data: () => ({
-        model: null,
+        model: 5,
         itemsPerPage: 18,
         loading: true,
-        path: '/video/play?id=1',
         search: '',
-        cards: [
+        cards: [],
+        lists: [],
+        path: '/video/play?id=',
+    }),
+    mounted() {
+        this.lists = [
             {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
             {id: 2, title: 'Favorite road trips', poster: './assets/image/card/card2.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
             {id: 3, title: 'Best airlines', poster: './assets/image/card/card3.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
@@ -122,18 +121,17 @@ export default {
             {id: 8, title: 'Pre-fab homes', poster: './assets/image/card/card8.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 12 },
             {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
             {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
-        ],
-    }),
-    mounted() {
+        ];
+        this.cards = this.lists.slice(0, 9);
         this.getData();
         this.loading = false;
     },
     methods: {
         getData() {
-            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 30, action: '', sort: '' } })
+            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 30, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);
-                    this.cards = response.data.data.list;
+                    // this.lists = response.data.data.list;
                     this.loading = false;
                 }).catch(function (error) {
                     if (error.response) {

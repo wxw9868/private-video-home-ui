@@ -1,30 +1,30 @@
 <template>
   <v-card class="bg-surface" variant="text">
     <v-card-text>
-      <h5 class="text-subtitle-1 mb-0">Personal Information</h5>
+      <h5 class="text-subtitle-1 mb-0">{{ $t('PersonalInformation') }}</h5>
     </v-card-text>
     <v-divider></v-divider>
     <v-form v-model="form" @submit.prevent="submit">
       <v-card-item>
         <v-row>
           <v-col cols="12" md="6">
-            <v-label class="mb-2">Nick name</v-label>
+            <v-label class="mb-2">{{ $t('Nickname') }}</v-label>
             <v-text-field v-model="nickname.value.value" :error-messages="nickname.errorMessage.value"
               :readonly="loading" aria-label="nickname" variant="outlined" placeholder="Nick name"></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-label class="mb-2">User name</v-label>
+            <v-label class="mb-2">{{ $t('Username') }}</v-label>
             <v-text-field v-model="username.value.value" :error-messages="username.errorMessage.value"
               :readonly="loading" aria-label="username" variant="outlined" placeholder="Ben"></v-text-field>
           </v-col>
           <v-col cols="12" lg="6" md="12">
-            <v-label class="mb-2">Email Address</v-label>
+            <v-label class="mb-2">{{ $t('EmailAddress') }}</v-label>
             <v-text-field v-model="email.value.value" :error-messages="email.errorMessage.value" :readonly="loading"
               aria-label="email address" variant="outlined" type="email"
               placeholder="stebin.ben@gmail.com"></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-label class="mb-2">Phone Number</v-label>
+            <v-label class="mb-2">{{ $t('PhoneNumber') }}</v-label>
             <v-row>
               <v-col cols="7" lg="9" md="7" sm="8">
                 <v-text-field v-model="mobile.value.value" :error-messages="mobile.errorMessage.value"
@@ -34,17 +34,17 @@
             </v-row>
           </v-col>
           <v-col cols="12" md="6">
-            <v-label class="mb-2">Designation</v-label>
+            <v-label class="mb-2">{{ $t('Designation') }}</v-label>
             <v-text-field v-model="designation.value.value" :error-messages="designation.errorMessage.value"
               :readonly="loading" aria-label="designation" variant="outlined" placeholder="Designation"></v-text-field>
           </v-col>
           <v-col cols="12">
-            <v-label class="mb-2">Address</v-label>
+            <v-label class="mb-2">{{ $t('Address') }}</v-label>
             <v-textarea v-model="address.value.value" :error-messages="address.errorMessage.value" :readonly="loading"
               variant="outlined" rows="3" aria-label="address" placeholder="Address"></v-textarea>
           </v-col>
           <v-col cols="12">
-            <v-label class="mb-2">Note</v-label>
+            <v-label class="mb-2">{{ $t('Note') }}</v-label>
             <v-textarea v-model="note.value.value" :error-messages="note.errorMessage.value" :readonly="loading"
               aria-label="note" variant="outlined" placeholder="Note"></v-textarea>
           </v-col>
@@ -54,9 +54,9 @@
         <v-divider></v-divider>
         <v-row class="pa-5">
           <v-col cols="12" class="text-right">
-            <v-btn variant="outlined" color="secondary" @click="handleReset">Cancel</v-btn>
+            <v-btn variant="outlined" color="secondary" @click="handleReset">{{ $t('Cancel') }}</v-btn>
             <v-btn :disabled="!form" :loading="loading" type="submit" variant="flat" color="primary"
-              class="ml-2">Save</v-btn>
+              class="ml-2">{{ $t('Save') }}</v-btn>
           </v-col>
         </v-row>
       </v-card-item>

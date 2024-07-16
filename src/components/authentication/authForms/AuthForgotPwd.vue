@@ -2,6 +2,7 @@
 import { ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const instance = getCurrentInstance();
 const http = instance.appContext.config.globalProperties.$http;
 
@@ -9,7 +10,7 @@ const valid = ref(false);
 const email = ref('');
 const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
 
-const router = useRouter();
+
 
 function validate() {
   if (!valid) return
@@ -19,7 +20,7 @@ function validate() {
   http.post('/user/sendUrl', formData, { headers: { 'content-type': 'application/json' }})
     .then(response => {
       // 登录成功的处理逻辑
-      console.log(response);
+      // console.log(response);
       if (response) {
         router.push('/check-mail');
       }
@@ -47,7 +48,7 @@ function validate() {
 
 <template>
   <v-form v-model="valid" @submit.prevent="validate" class="mt-7 loginForm">
-    <v-label>Email address</v-label>
+    <v-label>{{ $t('EmailAddress') }}</v-label>
     <v-text-field
       v-model="email"
       :rules="emailRules"
@@ -59,7 +60,7 @@ function validate() {
       color="primary"
     ></v-text-field>
 
-    <h6 class="text-caption">Do not forgot to check SPAM box.</h6>
-    <v-btn color="primary" block class="mt-2" variant="flat" size="large" :disabled="!valid" type="submit">发送密码重置电子邮件</v-btn>
+    <h6 class="text-caption">{{ $t('SendPwdResetEmailTips') }}</h6>
+    <v-btn color="primary" block class="mt-2" variant="flat" size="large" :disabled="!valid" type="submit">{{ $t('SendPwdResetEmail') }}</v-btn>
   </v-form>
 </template>

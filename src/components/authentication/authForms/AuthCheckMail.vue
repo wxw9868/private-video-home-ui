@@ -16,9 +16,9 @@ function validate() {
 </script>
 
 <template>
-  <h3 class="text-h3">Hi, Check Your Mail</h3>
-  <p class="text-lightText text-h6">We have sent a password recover instructions to your email.</p>
+  <h3 class="text-h3">{{ $t('CheckMailTitle') }}</h3>
+  <p class="text-lightText text-h6">{{ $t('CheckMailText') }}.</p>
   <v-form ref="logform" lazy-validation v-model="valid" action="/login" @submit.prevent="validate" class="mt-7 loginForm">
-    <v-btn color="primary" block class="mt-2" variant="flat" size="large" :disabled="valid" type="submit">Sign in </v-btn>
+    <v-btn color="primary" block class="mt-2" variant="flat" size="large" :disabled="valid" type="submit">{{ $t('Login') }}</v-btn>
   </v-form>
 </template>

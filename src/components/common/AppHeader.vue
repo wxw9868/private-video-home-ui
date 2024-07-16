@@ -7,6 +7,14 @@
         <v-spacer></v-spacer>
         <template v-slot:append>
             <v-btn variant="text" icon="mdi-magnify" @click="toggleSearch"></v-btn>
+            <v-menu :close-on-content-click="false" location="bottom" offset="6, 80">
+                <template v-slot:activator="{ props }">
+                    <v-btn icon="mdi-translate-variant" v-bind="props"></v-btn>
+                </template>
+                <v-sheet rounded="md" width="180">
+                    <LanguageDD />
+                </v-sheet>
+            </v-menu>
             <v-btn variant="text" :icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
                 @click="toggleTheme"></v-btn>
             <v-menu :close-on-content-click="false" offset="8, 0">
@@ -22,15 +30,22 @@
         </template>
         <v-expand-x-transition>
             <form action="/search" method="get">
-                <v-text-field v-show="isSearchVisible" hide-details type="search" name="query"
-                    :style="{ width: searchWidth }" density="comfortable" placeholder="Search"
-                    variant="solo"></v-text-field>
+                <v-text-field 
+                    v-show="isSearchVisible" 
+                    hide-details 
+                    type="search" 
+                    name="query"
+                    :style="{ width: searchWidth }" 
+                    density="comfortable" 
+                    placeholder="Search"
+                    variant="outlined"
+                ></v-text-field>
             </form>
         </v-expand-x-transition>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'left' : undefined" temporary>
         <v-list v-for="item in items" :key="item" density="compact" nav>
-            <v-list-item :prepend-icon="item.icon" :to="item.href">{{ item.title }}</v-list-item>
+            <v-list-item :prepend-icon="item.icon" :to="item.href">{{ $t(item.title) }}</v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -57,17 +72,17 @@ export default {
         group: null,
         items: [
             {
-                title: '首页',
+                title: 'Home',
                 href: '/',
                 icon: 'mdi-home-circle',
             },
             {
-                title: '列表',
+                title: 'List',
                 href: '/video/list',
                 icon: 'mdi-list-box',
             },
             {
-                title: '演员',
+                title: 'Actress',
                 href: '/video/actress',
                 icon: 'mdi-account-group',
             },

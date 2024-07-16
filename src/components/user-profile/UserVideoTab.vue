@@ -70,7 +70,7 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        path: 'play?id=',
+        path: '/video/play?id=',
         itemsPerPage: 24,
         page: ref(1),
         length: 0,
@@ -90,9 +90,8 @@ export default {
             // console.log(query);
             this.$http.get('/user/collect', { params: { query: query } })
                 .then(response => {
-                    // console.log(response.data.data)
+                    // console.log(response)
                     let data = response.data.data
-                    // console.log(data.length)
                     this.cards = data
                     this.length = Math.ceil(data.length / this.itemsPerPage)
                     this.loading = false;
@@ -117,7 +116,6 @@ export default {
                 });
         }
     },
-
     mounted() {
         this.getData(this.$route.query.query);
     },

@@ -20,7 +20,7 @@
               <span class="mdi mdi-account-edit mr-4" :style="{ fontSize: '14px' }"></span>
             </template>
 
-            <v-list-item-title class="text-h6">编辑个人资料</v-list-item-title>
+            <v-list-item-title class="text-h6">{{ $t('EditProfile') }}</v-list-item-title>
           </v-list-item>
 
           <v-list-item @click="logout()" color="secondary" rounded="0">
@@ -28,7 +28,7 @@
               <span class="mdi mdi-logout mr-4" :style="{ fontSize: '14px' }"></span>
             </template>
 
-            <v-list-item-title class="text-subtitle-2">退出账号</v-list-item-title>
+            <v-list-item-title class="text-subtitle-2">{{ $t('Logout') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-window-item>

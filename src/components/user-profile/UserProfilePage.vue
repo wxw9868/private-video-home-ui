@@ -12,9 +12,9 @@ const tab = ref('one');
         <v-card-item>
           <UserDetails />
           <v-tabs v-model="tab" color="primary" variant="flat" class="tabBtn" density="compact" direction="vertical" hide-slider>
-            <v-tab value="one" variant="flat" hide-slider><UserOutlined class="v-icon--start" />个人信息</v-tab>
-            <v-tab value="two" variant="flat" hide-slider><HeartOutlined class="v-icon--start" />影片收藏</v-tab>
-            <v-tab value="three" variant="flat" hide-slider><LockOutlined class="v-icon--start" />修改密码</v-tab>
+            <v-tab value="one" variant="flat" hide-slider><UserOutlined class="v-icon--start" />{{ $t('PersonalInformation') }}</v-tab>
+            <v-tab value="two" variant="flat" hide-slider><HeartOutlined class="v-icon--start" />{{ $t('VideoCollection') }}</v-tab>
+            <v-tab value="three" variant="flat" hide-slider><LockOutlined class="v-icon--start" />{{ $t('ChangePassword') }}</v-tab>
             <!-- <v-tab value="two" variant="flat" hide-slider><CreditCardOutlined class="v-icon--start" /> Payment </v-tab> -->
             <!-- <v-tab value="four" variant="flat" hide-slider><SettingOutlined class="v-icon--start" /> Settings </v-tab> -->
           </v-tabs>

@@ -24,8 +24,8 @@ import AuthFooter from './AuthFooter.vue';
                 <v-card elevation="24">
                   <v-card-text class="pa-sm-10 pa-4">
                     <div class="d-flex justify-space-between align-center">
-                      <h3 class="text-h3 text-center mb-0">Forgot Password</h3>
-                      <router-link to="/login" class="text-primary text-decoration-none">Back to Login</router-link>
+                      <h3 class="text-h3 text-center mb-0">{{ $t('ForgotPassword') }}</h3>
+                      <router-link to="/login" class="text-primary text-decoration-none">{{ $t('BackLogin') }}</router-link>
                     </div>
 
                     <!---Forgot pwd Form-->

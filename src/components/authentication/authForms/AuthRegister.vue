@@ -61,12 +61,12 @@ function validate(values: any, { setErrors }: any) {
 
 <template>
   <div class="d-flex justify-space-between align-center">
-    <h3 class="text-h3 text-center mb-0">Register</h3>
-    <router-link to="/login" class="text-primary text-decoration-none">已有账号?</router-link>
+    <h3 class="text-h3 text-center mb-0">{{ $t('Register') }}</h3>
+    <router-link to="/login" class="text-primary text-decoration-none">{{ $t('YesAccount') }}</router-link>
   </div>
   <Form v-model="valid" @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
     <div class="mb-6">
-      <v-label>Username</v-label>
+      <v-label>{{ $t('Username') }}</v-label>
       <v-text-field 
         v-model="username"
         :rules="usernameRules"
@@ -79,7 +79,7 @@ function validate(values: any, { setErrors }: any) {
       ></v-text-field>
     </div>
     <div class="mb-6">
-      <v-label>Email Address</v-label>
+      <v-label>{{ $t('EmailAddress') }}</v-label>
       <v-text-field
         v-model="email"
         :rules="emailRules"
@@ -92,7 +92,7 @@ function validate(values: any, { setErrors }: any) {
       ></v-text-field>
     </div>
     <div class="mb-6">
-      <v-label>Password</v-label>
+      <v-label>{{ $t('Password') }}</v-label>
       <v-text-field
         v-model="password"
         :rules="passwordRules"
@@ -113,7 +113,7 @@ function validate(values: any, { setErrors }: any) {
       </v-text-field>
     </div>
     <div class="mb-6">
-      <v-label>Confirm Password</v-label>
+      <v-label>{{ $t('ConfirmPassword') }}</v-label>
       <v-text-field
         v-model="repeat_password"
         :rules="passwordRules"
@@ -142,7 +142,7 @@ function validate(values: any, { setErrors }: any) {
         <router-link to="/register" class="text-primary link-hover font-weight-medium">Privacy Policy</router-link>
       </h6>
     </div>
-    <v-btn color="primary" :loading="isSubmitting" block class="mt-4" variant="flat" size="large" :disabled="valid" type="submit">注册</v-btn>
+    <v-btn color="primary" :loading="isSubmitting" block class="mt-4" variant="flat" size="large" :disabled="valid" type="submit">{{ $t('Register') }}</v-btn>
     <div v-if="errors.apiError" class="mt-2">
       <v-alert color="error">{{ errors.apiError }}</v-alert>
     </div>

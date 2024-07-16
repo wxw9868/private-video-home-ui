@@ -1,6 +1,5 @@
 <template>
-  <!-- <UserLogin /> -->
-  <LoginPage1 />
+  <LoginPage />
 </template>
 
 <script setup>

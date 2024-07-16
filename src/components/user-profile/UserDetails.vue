@@ -20,12 +20,12 @@
     <div class="my-4 mb-8 d-flex align-center ga-2">
       <div class="text-center w-100">
         <h5 class="text-h5 mb-1">{{collectNum}}</h5>
-        <span class="text-h6 text-lightText">影片收藏 </span>
+        <span class="text-h6 text-lightText">{{ $t('VideoCollection') }} </span>
       </div>
       <v-divider vertical></v-divider>
       <div class="text-center w-100">
         <h5 class="text-h5 mb-1">{{browseNum}}</h5>
-        <span class="text-h6 text-lightText">影片浏览 </span>
+        <span class="text-h6 text-lightText">{{ $t('VideoBrowsing') }} </span>
       </div>
       <v-divider vertical></v-divider>
       <div class="text-center w-100">

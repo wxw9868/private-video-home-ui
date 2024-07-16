@@ -64,7 +64,7 @@ function validate() {
 <template>
   <v-form lazy-validation v-model="valid" @submit.prevent="validate" class="mt-7 loginForm">
     <div class="mb-6">
-      <v-label>Password</v-label>
+      <v-label>{{ $t('Password') }}</v-label>
       <v-text-field
         v-model="password"
         :rules="passwordRules"
@@ -85,7 +85,7 @@ function validate() {
       </v-text-field>
     </div>
     <div class="mb-6">
-      <v-label>Confirm Password</v-label>
+      <v-label>{{ $t('ConfirmPassword') }}</v-label>
       <v-text-field
         v-model="conpassword"
         :rules="confirmpasswordRules"
@@ -97,7 +97,7 @@ function validate() {
         class="mt-2"
       ></v-text-field>
     </div>
-    <v-btn color="primary" block class="mt-5" variant="flat" size="large" :disabled="!valid" type="submit">Reset Password </v-btn>
+    <v-btn color="primary" block class="mt-5" variant="flat" size="large" :disabled="!valid" type="submit">{{ $t('ResetPassword') }} </v-btn>
   </v-form>
   <div class="text-center ma-2">
     <v-snackbar

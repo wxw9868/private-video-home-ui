@@ -1,6 +1,6 @@
 <template>
     <!-- <UserRegister /> -->
-    <RegisterPage1 />
+    <RegisterPage />
 </template>
 
 <script setup>

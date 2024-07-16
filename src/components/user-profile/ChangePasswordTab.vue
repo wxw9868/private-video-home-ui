@@ -4,7 +4,7 @@
       <v-card variant="flat">
         <v-card variant="text">
           <div class="pa-5">
-            <h5 class="text-subtitle-1 mb-0">Change Password</h5>
+            <h5 class="text-subtitle-1 mb-0">{{ $t('ChangePassword') }}</h5>
           </div>
           <v-divider></v-divider>
           <v-form v-model="form" @submit.prevent="submit">
@@ -13,7 +13,7 @@
                 <v-col cols="12">
                   <v-row>
                     <v-col cols="12">
-                      <v-label class="mb-2">Old Password</v-label>
+                      <v-label class="mb-2">{{ $t('OldPassword') }}</v-label>
                       <v-text-field 
                         v-model="old_password.value.value" 
                         :error-messages="old_password.errorMessage.value"
@@ -29,7 +29,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-label class="mb-2">New Password</v-label>
+                      <v-label class="mb-2">{{ $t('NewPassword') }}</v-label>
                       <v-text-field 
                         v-model="password.value.value" 
                         :error-messages="password.errorMessage.value"
@@ -45,7 +45,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-label class="mb-2">Confirm Password</v-label>
+                      <v-label class="mb-2">{{ $t('ConfirmPassword') }}</v-label>
                       <v-text-field 
                         v-model="repeat_password.value.value" 
                         :error-messages="repeat_password.errorMessage.value"
@@ -64,8 +64,8 @@
                 </v-col>
               </v-row>
               <div class="text-right mt-4">
-                <v-btn @click="handleReset" color="secondary" variant="outlined" class="mr-2">Cancel</v-btn>
-                <v-btn :disabled="!form" :loading="loading" type="submit" color="primary" variant="flat">Save</v-btn>
+                <v-btn @click="handleReset" color="secondary" variant="outlined" class="mr-2">{{ $t('Cancel') }}</v-btn>
+                <v-btn :disabled="!form" :loading="loading" type="submit" color="primary" variant="flat">{{ $t('Save') }}</v-btn>
               </div>
             </v-card-text>
           </v-form>

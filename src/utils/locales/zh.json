@@ -1,46 +1,38 @@
 {
+  "Video": "我的视频",
   "Home": "首页",
   "List": "列表",
   "Actress": "演员",
-
   "EditProfile": "编辑个人资料",
-  "Logout": "退出账号",
-
   "PersonalInformation": "个人信息",
   "VideoCollection": "影片收藏",
   "VideoBrowsing": "影片浏览",
+  "Nickname": "昵称",
+  "PhoneNumber": "手机号",
+  "Designation": "职业",
+  "Address": "地址",
+  "Note": "简介",
+  "Password": "密码",
+  "OldPassword": "旧密码",
+  "NewPassword": "新密码",
+  "ConfirmPassword": "确认密码",
   "ChangePassword": "修改密码",
-  
-  "Nickname":"昵称",
-  "PhoneNumber":"手机号",
-  "Designation":"职业",
-  "Address":"地址",
-  "Note":"简介",
-
-  "OldPassword":"旧密码",
-  "NewPassword":"新密码",
-  "ConfirmPassword":"确认密码",
-
+  "ForgotPassword": "忘记密码?",
+  "ResetPassword": "重置密码",
+  "ChoosePassword": "请设置您的新密码",
   "Cancel": "取消",
   "Save": "更新",
-
-  "Login":"登陆",
-  "Register":"注册",
-  "NoAccount":"立即注册",
-  "ForgotPassword":"忘记密码?",
-  "KeepMe":"记住登录状态",
-  "YesAccount":"已有账号?",
-  "Username":"用户名",
-  "EmailAddress":"邮箱",
-  "Password":"密码",
-
-  "SendPwdResetEmailTips":"请不要忘记检查垃圾邮件箱。",
-  "SendPwdResetEmail":"发送密码重置电子邮件",
-  "BackLogin":"返回登陆",
-
-  "CheckMailTitle":"您好，请查看您的邮件",
-  "CheckMailText":"我们已将密码恢复说​​明发送至您的电子邮箱",
-  
-  "ResetPassword":"重置密码",
-  "ChoosePassword":"请设置您的新密码"
+  "Logout": "退出账号",
+  "Login": "登陆",
+  "Register": "注册",
+  "NoAccount": "立即注册",
+  "BackLogin": "返回登陆",
+  "KeepMe": "记住登录状态",
+  "YesAccount": "已有账号?",
+  "Username": "用户名",
+  "EmailAddress": "邮箱",
+  "SendPwdResetEmailTips": "请不要忘记检查垃圾邮件箱。",
+  "SendPwdResetEmail": "发送密码重置电子邮件",
+  "CheckMailTitle": "您好，请查看您的邮件",
+  "CheckMailText": "我们已将密码恢复说​​明发送至您的电子邮箱"
 }

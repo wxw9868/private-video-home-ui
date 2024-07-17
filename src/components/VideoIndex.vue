@@ -133,8 +133,8 @@ export default {
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 30, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);
-                    this.lists = response.data.data.list;
-                    this.cards = this.lists.slice(0, 9);
+                    // this.lists = response.data.data.list;
+                    // this.cards = this.lists.slice(0, 9);
                     this.loading = false;
                 }).catch(function (error) {
                     if (error.response) {

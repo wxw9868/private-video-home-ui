@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { UserOutlined, HeartOutlined, LockOutlined} from '@ant-design/icons-vue';
+import { UserOutlined, HeartOutlined, EyeOutlined, LockOutlined} from '@ant-design/icons-vue';
 
 const tab = ref('one');
 </script>
@@ -14,7 +14,8 @@ const tab = ref('one');
           <v-tabs v-model="tab" color="primary" variant="flat" class="tabBtn" density="compact" direction="vertical" hide-slider>
             <v-tab value="one" variant="flat" hide-slider><UserOutlined class="v-icon--start" />{{ $t('PersonalInformation') }}</v-tab>
             <v-tab value="two" variant="flat" hide-slider><HeartOutlined class="v-icon--start" />{{ $t('VideoCollection') }}</v-tab>
-            <v-tab value="three" variant="flat" hide-slider><LockOutlined class="v-icon--start" />{{ $t('ChangePassword') }}</v-tab>
+            <v-tab value="three" variant="flat" hide-slider><EyeOutlined class="v-icon--start" />{{ $t('VideoBrowsing') }}</v-tab>
+            <v-tab value="four" variant="flat" hide-slider><LockOutlined class="v-icon--start" />{{ $t('ChangePassword') }}</v-tab>
             <!-- <v-tab value="two" variant="flat" hide-slider><CreditCardOutlined class="v-icon--start" /> Payment </v-tab> -->
             <!-- <v-tab value="four" variant="flat" hide-slider><SettingOutlined class="v-icon--start" /> Settings </v-tab> -->
           </v-tabs>
@@ -28,30 +29,17 @@ const tab = ref('one');
         </v-window-item>
 
         <v-window-item value="two">
-          <UserVideoTab />
+          <UserCollectionTab />
         </v-window-item>
 
         <v-window-item value="three">
-          <ChangePasswordTab />
+          <UserBrowsingTab />
         </v-window-item>
 
-        <!-- <v-window-item value="four">
-          <SettingTab />
-        </v-window-item> -->
-
-        <!-- <v-window-item value="two">
-          <PaymentTab />
-        </v-window-item> -->
-
+        <v-window-item value="four">
+          <ChangePasswordTab />
+        </v-window-item>
       </v-window>
     </v-col>
   </v-row>
 </template>
-
-<style>
-.editBtn {
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-}
-</style>

@@ -1,46 +1,38 @@
 {
+  "Video": "My Video",
   "Home": "Home",
   "List": "List",
   "Actress": "Actress",
-
   "EditProfile": "Edit Profile",
-  "Logout": "Logout",
-
   "PersonalInformation": "Personal information",
   "VideoCollection": "Video Collection",
   "VideoBrowsing": "Video browsing",
+  "Nickname": "Nick name",
+  "PhoneNumber": "Phone Number",
+  "Designation": "Designation",
+  "Address": "Address",
+  "Note": "Note",
+  "Password": "Password",
+  "OldPassword": "Old Password",
+  "NewPassword": "New Password",
+  "ConfirmPassword": "Confirm Password",
   "ChangePassword": "Change password",
-
-  "Nickname":"Nick name",
-  "PhoneNumber":"Phone Number",
-  "Designation":"Designation",
-  "Address":"Address",
-  "Note":"Note",
-
-  "OldPassword":"Old Password",
-  "NewPassword":"New Password",
-  "ConfirmPassword":"Confirm Password",
-
+  "ForgotPassword": "Forgot Password",
+  "ResetPassword": "Reset Password",
+  "ChoosePassword": "Please choose your new password",
   "Cancel": "Cancel",
   "Save": "Save",
-
-  "Login":"Sign in",
-  "Register":"Sign up",
-  "NoAccount":"Don't Have an account?",
-  "ForgotPassword":"Forgot Password",
-  "KeepMe":"Keep me sign in",
-  "YesAccount":"Already have an account?",
-  "Username":"Username",
-  "EmailAddress":"Email Address",
-  "Password":"Password",
-
-  "SendPwdResetEmailTips":"Do not forgot to check SPAM box.",
-  "SendPwdResetEmail":"Send Password Reset Email",
-  "BackLogin":"Back to Login",
-  
-  "CheckMailTitle":"Hi, Check Your Mail",
-  "CheckMailText":"We have sent a password recover instructions to your email",
-  
-  "ResetPassword":"Reset Password",
-  "ChoosePassword":"Please choose your new password"
+  "Logout": "Logout",
+  "Login": "Sign in",
+  "Register": "Sign up",
+  "NoAccount": "Don't Have an account?",
+  "BackLogin": "Back to Login",
+  "KeepMe": "Keep me sign in",
+  "YesAccount": "Already have an account?",
+  "Username": "Username",
+  "EmailAddress": "Email Address",
+  "SendPwdResetEmailTips": "Do not forgot to check SPAM box.",
+  "SendPwdResetEmail": "Send Password Reset Email",
+  "CheckMailTitle": "Hi, Check Your Mail",
+  "CheckMailText": "We have sent a password recover instructions to your email"
 }

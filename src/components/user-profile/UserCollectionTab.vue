@@ -59,8 +59,7 @@
 }
 </style>
 <script>
-import { inject } from 'vue';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {

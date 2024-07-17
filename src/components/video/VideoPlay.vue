@@ -11,7 +11,7 @@
                                     <!-- <div id="videoPlayer"></div> -->
                                     <!-- <video id="videoPlayer" :style="style"></video> -->
                                 </v-responsive>
-                                <div class="text-h5 pt-4">{{ videoTitle }}</div>
+                                <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
                                 <v-chip-group >
                                     <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
                                 </v-chip-group>
@@ -208,7 +208,7 @@ export default {
         userId: localStorage.getItem("userID"),
         userAvatar: '',
         videoId: 0,
-        videoTitle: '三国演义',
+        videoTitle: '',
         videoActress: [],
         videoUrl: '@/assets/video/lc.mp4',
         videoPoster: '',
@@ -302,6 +302,7 @@ export default {
                     this.isCollect = data.IsCollect;
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
+                    // this.videoTitle = '三国演义';
                     // this.videoActress = [
                     //     {"id": "1", "actress": "曹操"},
                     //     {"id": "2", "actress": "刘备"},
@@ -381,7 +382,7 @@ export default {
             this.$http.post('/video/collect', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
                     // console.log(response);
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -389,7 +390,6 @@ export default {
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
-
                     } else if (error.request) {
                         // 请求已经成功发起，但没有收到响应
                         // `error.request` 在浏览器中是 XMLHttpRequest 的实例，

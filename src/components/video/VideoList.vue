@@ -7,9 +7,9 @@
                     align-tabs="center"
                     :mandatory=true
                 >
-                    <v-tab value="one" @click="getData('v.CreatedAt','desc')">最近更新</v-tab>
-                    <v-tab value="two" @click="getData('l.browse','desc')">播放次数</v-tab>
-                    <v-tab value="three" @click="getData('l.collect','desc')">收藏数量</v-tab>
+                    <v-tab value="one" @click="getData('v.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
+                    <v-tab value="two" @click="getData('l.browse','desc')">{{ $t('MostViewed') }}</v-tab>
+                    <v-tab value="three" @click="getData('l.collect','desc')">{{ $t('MostFavourited') }}</v-tab>
                 </v-tabs>
 
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
@@ -38,7 +38,7 @@
                                                     </template>
                                                 </v-toolbar>
                                             </v-img>
-                                            <div class="text-truncate text-body-1 pt-2">{{ card.raw.title }}</div>
+                                            <div class="text-uppercase text-truncate text-body-1 pt-2">{{ card.raw.title }}</div>
                                             <div class="text-overline text-grey-darken-1">
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
                                                 <span class="subheading me-2" v-text="card.raw.browse"></span>
@@ -69,8 +69,7 @@
 }
 </style>
 <script>
-import { inject } from 'vue';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {

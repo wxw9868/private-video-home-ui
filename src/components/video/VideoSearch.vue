@@ -25,7 +25,7 @@
                                                     </template>
                                                 </v-toolbar>
                                             </v-img>
-                                            <div class="text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
+                                            <div class="text-uppercase text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
                                             <div class="text-overline text-grey-darken-1">
                                                 <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
                                                 <span class="subheading me-2" v-text="card.raw.document.browse"></span>
@@ -56,8 +56,7 @@
 }
 </style>
 <script>
-import { inject } from 'vue';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {
@@ -113,7 +112,6 @@ export default {
                 });
         }
     },
-
     mounted() {
         this.getData(this.$route.query.query);
     },

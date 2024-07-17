@@ -3,9 +3,9 @@
         <v-layout>
             <v-main>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab value="one" @click="getData('va.CreatedAt','desc')">最近更新</v-tab>
-                    <v-tab value="two" @click="getData('a.actress','desc')">名称顺序</v-tab>
-                    <v-tab value="three" @click="getData('count','desc')">最多影片</v-tab>
+                    <v-tab value="one" @click="getData('va.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
+                    <v-tab value="two" @click="getData('a.actress','desc')">{{ $t('Alphabetically') }}</v-tab>
+                    <v-tab value="three" @click="getData('count','desc')">{{ $t('MostVideos') }}</v-tab>
                 </v-tabs>
                 <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import { inject } from 'vue';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {

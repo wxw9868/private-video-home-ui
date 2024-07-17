@@ -16,8 +16,6 @@ const tab = ref('one');
             <v-tab value="two" variant="flat" hide-slider><HeartOutlined class="v-icon--start" />{{ $t('VideoCollection') }}</v-tab>
             <v-tab value="three" variant="flat" hide-slider><EyeOutlined class="v-icon--start" />{{ $t('VideoBrowsing') }}</v-tab>
             <v-tab value="four" variant="flat" hide-slider><LockOutlined class="v-icon--start" />{{ $t('ChangePassword') }}</v-tab>
-            <!-- <v-tab value="two" variant="flat" hide-slider><CreditCardOutlined class="v-icon--start" /> Payment </v-tab> -->
-            <!-- <v-tab value="four" variant="flat" hide-slider><SettingOutlined class="v-icon--start" /> Settings </v-tab> -->
           </v-tabs>
         </v-card-item>
       </v-card>

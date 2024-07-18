@@ -9,6 +9,8 @@
                                 <v-card variant="flat" class="mx-auto">
                                     <v-responsive :aspect-ratio="16 / 9">
                                         <div id="videoPlayer" :style="style"></div>
+                                        <!-- <div id="videoPlayer"></div> -->
+                                        <!-- <video id="videoPlayer" :style="style"></video> -->
                                     </v-responsive>
                                     <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
                                     <v-chip-group >
@@ -22,6 +24,14 @@
                                         <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
                                         <span class="subheading" v-text="videoDuration"></span>
                                     </div>
+                                    <!-- <v-item-group class="pb-6">
+                                        <v-item v-for="player in players" :key="player">
+                                            <v-btn class="rounded-circle" height="40" width="40" variant="text">
+                                                <v-img :src="host + player.src" class="rounded-circle" height="40" width="40"
+                                                    cover></v-img>
+                                            </v-btn>
+                                        </v-item>
+                                    </v-item-group> -->
                                 </v-card>
                             </v-skeleton-loader>
                         </v-col>
@@ -186,6 +196,11 @@
 <script>
 import { inject, reactive } from 'vue';
 import Artplayer from "artplayer";
+// import DPlayer from 'dplayer';
+// import XGplayer, { Events } from 'xgplayer';
+// import 'xgplayer/dist/index.min.css';
+// import Plyr from 'plyr';
+// import 'plyr/dist/plyr.css';
 
 export default {
     setup() {
@@ -298,6 +313,11 @@ export default {
                     ];
 
                     this.loadArtplayer();
+                    // this.loadPlyr();
+                    // this.loadDPlayer();
+                    // this.loadXgplayer();
+                    // let playerType = localStorage.getItem("playerType") ? localStorage.getItem("playerType") : 'plyr';
+                    // this.loadPlayer(playerType);
                 }).catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
@@ -620,6 +640,8 @@ export default {
                     console.log(error);
                 });
         },
+        openReportDialog() { },
+
         loadReply(comments) {
             comments.forEach((comment, index) => {
                 this.replyForms[comment.ID] = false
@@ -725,6 +747,150 @@ export default {
                 autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
             });
         },
+        loadDPlayer() {
+            const dp = new DPlayer({
+                container: document.getElementById('videoPlayer'), // 容器
+                video: {
+                    url: this.videoUrl,
+                    pic: this.poster,
+                    type: 'auto',
+                },
+                autoplay: true,
+                theme: '#FADFA3',
+                loop: true, // 循环播放
+                lang: 'zh-cn',
+                lang: navigator.language.toLowerCase(), // 语言，可选'en', 'zh-cn', 'zh-tw',
+                screenshot: true,
+                hotkey: true,
+                airplay: true,
+                chromecast: false,
+                preload: 'auto',
+                // logo: this.logo, // 在左上角展示一个logo
+                volume: 1,
+                playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                mutex: false, // 互斥，阻止多个播放器同时播放
+                contextmenu: [],
+            });
+        },
+        loadXgplayer() {
+            const player = new XGplayer({
+                id: 'videoPlayer',
+                url: this.videoUrl,
+                poster: this.poster,
+                volume: 1, // 默认音量, 取值范围0 ~ 1
+                width: 'auto',
+                hight: 'auto',
+                playsinline: true, // 是否启用内联播放模式，该配置项只在移动端生效
+                autoplay: true, // 是否自动播放
+                autoplayMuted: true, // 是否自动静音自动播放
+                loop: true, // 是否循环播放
+                lang: 'zh-cn', // 播放器初始显示语言
+                startTime: localStorage.getItem(this.videoUrl), // 初始起播时间，仅点播
+                fluid: false, // 是否启用流式布局
+                fitVideoSize: 'auto', // 初始起播时间，仅点播
+                videoFillMode: 'auto', // video画面填充模式
+                seekedStatus: 'auto', // seek操作结束之后播放器的状态，如果取值为auto，则维持原播放状态, 默认是seek之后直接播放
+                marginControls: false, // 是否开启画面和控制栏分离模式
+                mini: false, //开启小窗插件
+                pip: true, // 是否使用画中画插件
+                rotate: false,// 是否使用旋转插件
+                screenShot: false, //显示截图按钮
+                videoAttributes: {
+                    crossOrigin: 'anonymous'
+                },
+                playbackRate: false, // 倍速插件显示列表，当改配置为false的时候，相当于禁用倍速切换插件，也可以传入一组配置项    
+                // playbackRate: [0.5, 0.75, 1, 1.5, 2],
+                // defaultPlaybackRate: 1.0,
+            });
+            player.on(Events.TIME_UPDATE, (data) => {
+                localStorage.setItem(this.videoUrl, data.currentTime);
+            });
+            player.on(Events.MINI_STATE_CHANGE, (isMini) => {
+                if (isMini) {
+                    console.log('enter miniScreen')
+                } else {
+                    console.log('exit miniScreen')
+                }
+            })
+        },
+        // loadPlyr() {
+        //     const player = new Plyr('#videoPlayer', {
+        //         captions: {
+        //             active: true,
+        //         },
+        //         controls: [
+        //             'play-large', // The large play button in the center
+        //             // 'restart', // Restart playback
+        //             'rewind', // Rewind by the seek time (default 10 seconds)
+        //             'play', // Play/pause playback
+        //             'fast-forward', // Fast forward by the seek time (default 10 seconds)
+        //             'progress', // The progress bar and scrubber for playback and buffering
+        //             'current-time', // The current time of playback
+        //             'duration', // The full duration of the media
+        //             // 'mute', // Toggle mute
+        //             // 'volume', // Volume control
+        //             'captions', // Toggle captions
+        //             'settings', // Settings menu
+        //             'pip', // Picture-in-picture (currently Safari only)
+        //             'airplay', // Airplay (currently Safari only)
+        //             // 'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+        //             'fullscreen', // Toggle fullscreen
+        //         ],
+        //         settings: ['captions', 'quality', 'speed', 'loop'],
+        //         volume: 1,
+        //     });
+        //     player.source = {
+        //         type: 'video',
+        //         title: this.title,
+        //         sources: [
+        //             {
+        //                 src: this.videoUrl,
+        //                 type: 'video/mp4',
+        //                 size: 1080,
+        //             },
+        //         ],
+        //         poster: this.poster,
+        //     };
+        //     // Expose player so it can be used from the console
+        //     window.player = player;
+        // },
+        // loadPlayer(playerType) {
+        //     playerType = (playerType) ? playerType : localStorage.getItem("playerType");
+        //     localStorage.setItem("playerType", playerType);
+        //     const element = document.getElementById("videoContainer");
+        //     element.innerHTML = '';
+        //     let tag = '';
+        //     if (playerType == 'plyr') {
+        //         tag = document.createElement("video");
+        //     } else {
+        //         tag = document.createElement("div");
+        //     }
+        //     tag.setAttribute("id", "videoPlayer");
+        //     tag.style.position = 'absolute';
+        //     tag.style.top = 0;
+        //     tag.style.right = 0;
+        //     tag.style.bottom = 0;
+        //     tag.style.left = 0;
+        //     tag.style.width = '100%';
+        //     tag.style.height = '100%';
+        //     switch (playerType) {
+        //         case 'xgplayer':
+        //             this.loadXgplayer();
+        //             break;
+        //         case 'dplayer':
+        //             this.loadDPlayer();
+        //             break;
+        //         case 'artplayer':
+        //             this.loadArtplayer();
+        //             break;
+        //         case 'plyr':
+        //             this.loadPlyr();
+        //             break;
+        //         default:
+        //             this.loadPlyr();
+        //     }
+        //     element.appendChild(tag);
+        // },
     },
 }
 </script>

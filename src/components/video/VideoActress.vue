@@ -14,17 +14,19 @@
                                 <v-container class="d-flex" fluid>
                                     <v-row justify="start" dense>
                                         <v-col v-for="(file, i) in items" :key="i" cols="6" sm="3" order="1">
-                                            <v-list-item 
-                                                :title="file.raw.actress"
-                                                :subtitle="file.raw.count + subtitle"  
-                                                :href="path + file.raw.id"
-                                            >
-                                                <template v-slot:prepend>
-                                                    <v-avatar>
-                                                        <v-img :src="host + file.raw.avatar"></v-img>
-                                                    </v-avatar>
-                                                </template>
-                                            </v-list-item>
+                                            <v-skeleton-loader type="list-item-avatar-two-line" :loading="loading">
+                                                <v-list-item 
+                                                    :title="file.raw.actress"
+                                                    :subtitle="file.raw.count + subtitle"  
+                                                    :href="path + file.raw.id"
+                                                >
+                                                    <template v-slot:prepend>
+                                                        <v-avatar>
+                                                            <v-img :src="host + file.raw.avatar"></v-img>
+                                                        </v-avatar>
+                                                    </template>
+                                                </v-list-item>
+                                            </v-skeleton-loader>
                                         </v-col>
                                     </v-row>
                                 </v-container>

@@ -8,31 +8,33 @@
                             <v-container class="d-flex" fluid>
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
-                                        <v-card 
-                                            variant="flat"
-                                            :href="path + card.raw.document.id"
-                                            class="mx-auto" 
-                                            max-width="300"
-                                            target="_blank" 
-                                            hover
-                                        >
-                                            <v-img :src="host + card.raw.document.poster"
-                                                class="h-auto align-end text-white"
-                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
-                                                <v-toolbar color="transparent">
-                                                    <template v-slot:append>
-                                                        <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.document.duration }}</v-chip>
-                                                    </template>
-                                                </v-toolbar>
-                                            </v-img>
-                                            <div class="text-uppercase text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
-                                            <div class="text-overline text-grey-darken-1">
-                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
-                                                <span class="subheading me-2" v-text="card.raw.document.browse"></span>
-                                                <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
-                                                <span class="subheading" v-text="card.raw.document.collect"></span>
-                                            </div>
-                                        </v-card>
+                                        <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
+                                            <v-card 
+                                                variant="flat"
+                                                :href="path + card.raw.document.id"
+                                                class="mx-auto" 
+                                                max-width="300"
+                                                target="_blank" 
+                                                hover
+                                            >
+                                                <v-img :src="host + card.raw.document.poster"
+                                                    class="h-auto align-end text-white"
+                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
+                                                    <v-toolbar color="transparent">
+                                                        <template v-slot:append>
+                                                            <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.document.duration }}</v-chip>
+                                                        </template>
+                                                    </v-toolbar>
+                                                </v-img>
+                                                <div class="text-uppercase text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
+                                                <div class="text-overline text-grey-darken-1">
+                                                    <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
+                                                    <span class="subheading me-2" v-text="card.raw.document.browse"></span>
+                                                    <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
+                                                    <span class="subheading" v-text="card.raw.document.collect"></span>
+                                                </div>
+                                            </v-card>
+                                        </v-skeleton-loader>
                                     </v-col>
                                 </v-row>
                             </v-container>

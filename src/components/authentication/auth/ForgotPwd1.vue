@@ -5,7 +5,7 @@ import AuthFooter from './AuthFooter.vue';
 </script>
 
 <template>
-  <v-row class="bg-containerBg position-relative" no-gutters>
+  <v-row class="position-relative" no-gutters>
     <div class="blur-logo">
       
     </div>
@@ -40,11 +40,11 @@ import AuthFooter from './AuthFooter.vue';
       </v-container>
     </v-col>
     <!---Forgot pwd Part-->
-    <!-- <v-col cols="12">
+    <v-col cols="12">
       <v-container class="pt-0 pb-6">
         <AuthFooter />
       </v-container>
-    </v-col> -->
+    </v-col>
   </v-row>
 </template>
 <style lang="scss">

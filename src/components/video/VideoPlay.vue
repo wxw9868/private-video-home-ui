@@ -5,33 +5,35 @@
                 <v-container>
                     <v-row>
                         <v-col>
-                            <v-card variant="flat" class="mx-auto">
-                                <v-responsive :aspect-ratio="16 / 9">
-                                    <div id="videoPlayer" :style="style"></div>
-                                    <!-- <div id="videoPlayer"></div> -->
-                                    <!-- <video id="videoPlayer" :style="style"></video> -->
-                                </v-responsive>
-                                <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
-                                <v-chip-group >
-                                    <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
-                                </v-chip-group>
-                                <div class="pt-0">
-                                    <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
-                                    <span class="subheading me-5" v-text="videoCollect"></span>
-                                    <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
-                                    <span class="subheading me-5" v-text="videoBrowse"></span>
-                                    <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
-                                    <span class="subheading" v-text="videoDuration"></span>
-                                </div>
-                                <!-- <v-item-group class="pb-6">
-                                    <v-item v-for="player in players" :key="player">
-                                        <v-btn class="rounded-circle" height="40" width="40" variant="text">
-                                            <v-img :src="host + player.src" class="rounded-circle" height="40" width="40"
-                                                cover></v-img>
-                                        </v-btn>
-                                    </v-item>
-                                </v-item-group> -->
-                            </v-card>
+                            <v-skeleton-loader type="card" :loading="loading" class="mx-auto">
+                                <v-card variant="flat" class="mx-auto">
+                                    <v-responsive :aspect-ratio="16 / 9">
+                                        <div id="videoPlayer" :style="style"></div>
+                                        <!-- <div id="videoPlayer"></div> -->
+                                        <!-- <video id="videoPlayer" :style="style"></video> -->
+                                    </v-responsive>
+                                    <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
+                                    <v-chip-group >
+                                        <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
+                                    </v-chip-group>
+                                    <div class="pt-0">
+                                        <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
+                                        <span class="subheading me-5" v-text="videoCollect"></span>
+                                        <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
+                                        <span class="subheading me-5" v-text="videoBrowse"></span>
+                                        <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-clock" size="medium"></v-btn>
+                                        <span class="subheading" v-text="videoDuration"></span>
+                                    </div>
+                                    <!-- <v-item-group class="pb-6">
+                                        <v-item v-for="player in players" :key="player">
+                                            <v-btn class="rounded-circle" height="40" width="40" variant="text">
+                                                <v-img :src="host + player.src" class="rounded-circle" height="40" width="40"
+                                                    cover></v-img>
+                                            </v-btn>
+                                        </v-item>
+                                    </v-item-group> -->
+                                </v-card>
+                            </v-skeleton-loader>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -60,131 +62,132 @@
 
                         <v-divider></v-divider>
                     </v-row>
-
-                    <v-row v-for="(comment, i) in comments" :key="i">
-                        <div class="pt-3 pl-3">
-                            <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
-                        </div>
-                        <v-col>
-                            <v-row style="font-size: 13px;">
-                                <v-col class="me-auto" cols="auto">
-                                    <span class="me-2">{{ comment.Nickname }}</span>
-                                    <small class="me-2">北京</small>
-                                </v-col>
-                                <v-col cols="auto" style="font-size: 15px;">
-                                    <small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</small>
-                                </v-col>
-                            </v-row>
-                            <p class="my-2" style="font-size: 15px;">{{ comment.Content }}</p>
-                            <div class="d-flex justify-start" style="font-size: 13px;">
-                                <v-btn variant="text" :color="replyIsZans[comment.ID] ? 'blue' : ''"
-                                    @click="commentZan(comment.ID)">
-                                    <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                    <span>{{ replyZans[comment.ID] }}</span>
-                                </v-btn>
-                                <v-btn variant="text" :color="replyIsCais[comment.ID] ? 'red' : ''"
-                                    @click="commentCai(comment.ID)">
-                                    <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                    <span>{{ replyCais[comment.ID] }}</span>
-                                </v-btn>
-                                <v-btn variant="text" color="green" @click="replyShow(comment.ID)">
-                                    <v-icon left small>mdi-comment-outline</v-icon>
-                                </v-btn>
-                                <v-btn variant="text" color="orange" @click="openReportDialog">
-                                    <v-icon left small>mdi-flag-outline</v-icon>
-                                </v-btn>
+                    <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
+                        <v-row v-for="(comment, i) in comments" :key="i">
+                            <div class="pt-3 pl-3">
+                                <v-avatar size="40px" :image="host + comment.Avatar"></v-avatar>
                             </div>
-                            <v-row v-show="replyTextareaShow === comment.ID">
-                                <div class="pt-3 pl-3">
-                                    <v-avatar size="40px" :image="avatar"></v-avatar>
+                            <v-col>
+                                <v-row style="font-size: 13px;">
+                                    <v-col class="me-auto" cols="auto">
+                                        <span class="me-2">{{ comment.Nickname }}</span>
+                                        <small class="me-2">北京</small>
+                                    </v-col>
+                                    <v-col cols="auto" style="font-size: 15px;">
+                                        <small class="justify-end align-end">{{ doTime(comment.CreatedAt) }}</small>
+                                    </v-col>
+                                </v-row>
+                                <p class="my-2" style="font-size: 15px;">{{ comment.Content }}</p>
+                                <div class="d-flex justify-start" style="font-size: 13px;">
+                                    <v-btn variant="text" :color="replyIsZans[comment.ID] ? 'blue' : ''"
+                                        @click="commentZan(comment.ID)">
+                                        <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
+                                        <span>{{ replyZans[comment.ID] }}</span>
+                                    </v-btn>
+                                    <v-btn variant="text" :color="replyIsCais[comment.ID] ? 'red' : ''"
+                                        @click="commentCai(comment.ID)">
+                                        <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
+                                        <span>{{ replyCais[comment.ID] }}</span>
+                                    </v-btn>
+                                    <v-btn variant="text" color="green" @click="replyShow(comment.ID)">
+                                        <v-icon left small>mdi-comment-outline</v-icon>
+                                    </v-btn>
+                                    <v-btn variant="text" color="orange" @click="openReportDialog">
+                                        <v-icon left small>mdi-flag-outline</v-icon>
+                                    </v-btn>
                                 </div>
-                                <v-col>
-                                    <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID,i)">
-                                        <v-textarea 
-                                            v-model="replyTexts[comment.ID]" 
-                                            :rules="replyRules[comment.ID]"
-                                            row-height="25" 
-                                            rows="3" 
-                                            clear-icon="mdi-close-circle" 
-                                            variant="outlined"
-                                            auto-grow 
-                                            shaped 
-                                            clearable
-                                        ></v-textarea>
-                                        <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]"
-                                            type="submit">发送回复</v-btn>
-                                    </v-form>
-                                </v-col>
-                            </v-row>
+                                <v-row v-show="replyTextareaShow === comment.ID">
+                                    <div class="pt-3 pl-3">
+                                        <v-avatar size="40px" :image="avatar"></v-avatar>
+                                    </div>
+                                    <v-col>
+                                        <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID,i)">
+                                            <v-textarea 
+                                                v-model="replyTexts[comment.ID]" 
+                                                :rules="replyRules[comment.ID]"
+                                                row-height="25" 
+                                                rows="3" 
+                                                clear-icon="mdi-close-circle" 
+                                                variant="outlined"
+                                                auto-grow 
+                                                shaped 
+                                                clearable
+                                            ></v-textarea>
+                                            <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]"
+                                                type="submit">发送回复</v-btn>
+                                        </v-form>
+                                    </v-col>
+                                </v-row>
 
-                            <v-expand-transition>
-                                <div v-show="replyListShow == comment.ID">
-                                    <v-row v-for="(replies, i) in comment.Childrens" :key="i">
-                                        <div class="pt-3 pl-3">
-                                            <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
-                                        </div>
-                                        <v-col>
-                                            <v-row style="font-size: 13px;">
-                                                <v-col class="me-auto" cols="auto">
-                                                    <span class="me-2">{{ replies.Nickname }}</span>
-                                                    <small class="me-2">北京</small>
-                                                </v-col>
-                                                <v-col cols="auto" style="font-size: 15px;">
-                                                    <small class="justify-end align-end">{{ doTime(replies.CreatedAt)
-                                                        }}</small>
-                                                </v-col>
-                                            </v-row>
-                                            <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
-                                            <div class="d-flex justify-start" style="font-size: 13px;">
-                                                <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
-                                                    @click="commentZan(replies.ID)">
-                                                    <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
-                                                    <span>{{ replyZans[replies.ID] }}</span>
-                                                </v-btn>
-                                                <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
-                                                    @click="commentCai(replies.ID)">
-                                                    <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
-                                                    <span>{{ replyCais[replies.ID] }}</span>
-                                                </v-btn>
-                                                <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
-                                                    <v-icon left small>mdi-comment-outline</v-icon>
-                                                </v-btn>
-                                                <v-btn variant="text" color="orange" @click="openReportDialog">
-                                                    <v-icon left small>mdi-flag-outline</v-icon>
-                                                </v-btn>
+                                <v-expand-transition>
+                                    <div v-show="replyListShow == comment.ID">
+                                        <v-row v-for="(replies, i) in comment.Childrens" :key="i">
+                                            <div class="pt-3 pl-3">
+                                                <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
                                             </div>
-                                            <v-row v-show="replyTextareaShow === replies.ID">
-                                                <div class="pt-3 pl-3">
-                                                    <v-avatar size="40px" :image="avatar"></v-avatar>
+                                            <v-col>
+                                                <v-row style="font-size: 13px;">
+                                                    <v-col class="me-auto" cols="auto">
+                                                        <span class="me-2">{{ replies.Nickname }}</span>
+                                                        <small class="me-2">北京</small>
+                                                    </v-col>
+                                                    <v-col cols="auto" style="font-size: 15px;">
+                                                        <small class="justify-end align-end">{{ doTime(replies.CreatedAt)
+                                                            }}</small>
+                                                    </v-col>
+                                                </v-row>
+                                                <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
+                                                <div class="d-flex justify-start" style="font-size: 13px;">
+                                                    <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
+                                                        @click="commentZan(replies.ID)">
+                                                        <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
+                                                        <span>{{ replyZans[replies.ID] }}</span>
+                                                    </v-btn>
+                                                    <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
+                                                        @click="commentCai(replies.ID)">
+                                                        <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
+                                                        <span>{{ replyCais[replies.ID] }}</span>
+                                                    </v-btn>
+                                                    <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
+                                                        <v-icon left small>mdi-comment-outline</v-icon>
+                                                    </v-btn>
+                                                    <v-btn variant="text" color="orange" @click="openReportDialog">
+                                                        <v-icon left small>mdi-flag-outline</v-icon>
+                                                    </v-btn>
                                                 </div>
-                                                <v-col v-show="replyTextareaShow === replies.ID">
-                                                    <v-form v-model="replyForms[replies.ID]"
-                                                        @submit.prevent="onReply(replies.ID)">
-                                                        <v-textarea v-model="replyTexts[replies.ID]"
-                                                            :rules="replyRules[replies.ID]" row-height="25" rows="3"
-                                                            clear-icon="mdi-close-circle" variant="outlined" auto-grow
-                                                            shaped clearable></v-textarea>
-                                                        <v-btn :disabled="!replyForms[replies.ID]"
-                                                            :loading="replyloadings[replies.ID]"
-                                                            type="submit">发送回复</v-btn>
-                                                    </v-form>
-                                                </v-col>
-                                            </v-row>
-                                        </v-col>
-                                    </v-row>
+                                                <v-row v-show="replyTextareaShow === replies.ID">
+                                                    <div class="pt-3 pl-3">
+                                                        <v-avatar size="40px" :image="avatar"></v-avatar>
+                                                    </div>
+                                                    <v-col v-show="replyTextareaShow === replies.ID">
+                                                        <v-form v-model="replyForms[replies.ID]"
+                                                            @submit.prevent="onReply(replies.ID)">
+                                                            <v-textarea v-model="replyTexts[replies.ID]"
+                                                                :rules="replyRules[replies.ID]" row-height="25" rows="3"
+                                                                clear-icon="mdi-close-circle" variant="outlined" auto-grow
+                                                                shaped clearable></v-textarea>
+                                                            <v-btn :disabled="!replyForms[replies.ID]"
+                                                                :loading="replyloadings[replies.ID]"
+                                                                type="submit">发送回复</v-btn>
+                                                        </v-form>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-col>
+                                        </v-row>
+                                    </div>
+                                </v-expand-transition>
+                                <div v-if="comment.Childrens">
+                                    <div 
+                                        variant="text" 
+                                        @click="repliesShow(comment.ID)"
+                                    >
+                                        展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
+                                        <v-icon :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+                                    </div>
                                 </div>
-                            </v-expand-transition>
-                            <div v-if="comment.Childrens">
-                                <div 
-                                    variant="text" 
-                                    @click="repliesShow(comment.ID)"
-                                >
-                                    展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
-                                    <v-icon :icon="(this.replyListShow === comment.ID) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
-                                </div>
-                            </div>
-                        </v-col>
-                    </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-lazy>
                 </v-container>
             </v-main>
         </v-layout>
@@ -288,26 +291,26 @@ export default {
                 .then(response => {
                     // console.log(response);
                     const data = response.data
-                    this.videoTitle = data.videoTitle;
-                    this.videoActress = data.videoActress;
-                    if (id > 544) {
-                        this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
-                    } else {
-                        this.videoUrl = this.host + data.videoUrl;
-                    }
-                    this.videoPoster = this.host + data.videoPoster;
+                    // this.videoTitle = data.videoTitle;
+                    // this.videoActress = data.videoActress;
+                    // if (id > 544) {
+                    //     this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
+                    // } else {
+                    //     this.videoUrl = this.host + data.videoUrl;
+                    // }
+                    // this.videoPoster = this.host + data.videoPoster;
                     this.videoDuration = data.Duration;
                     this.videoCollect = data.Collect;
                     this.videoBrowse = data.Browse+1;
                     this.isCollect = data.IsCollect;
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
-                    // this.videoTitle = '三国演义';
-                    // this.videoActress = [
-                    //     {"id": "1", "actress": "曹操"},
-                    //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},    
-                    // ];
+                    this.videoTitle = '三国演义';
+                    this.videoActress = [
+                        {"id": "1", "actress": "曹操"},
+                        {"id": "2", "actress": "刘备"},
+                        {"id": "2", "actress": "孙权"},    
+                    ];
 
                     this.loadArtplayer();
                     // this.loadPlyr();

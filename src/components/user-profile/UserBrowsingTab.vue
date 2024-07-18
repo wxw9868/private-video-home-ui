@@ -8,27 +8,29 @@
                             <v-container class="d-flex" fluid>
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="4" sm="3" order="1">
-                                        <v-card 
-                                            variant="flat"
-                                            :href="path + card.raw.id"
-                                            class="mx-auto" 
-                                            max-width="300"
-                                            target="_blank"     
-                                        >
-                                            <v-img 
-                                                :src="host + card.raw.poster"
-                                                class="h-auto align-end text-white"
-                                                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
-                                                height="200" 
-                                                cover
+                                        <v-skeleton-loader type="image" :loading="loading" class="mx-auto" max-width="300">
+                                            <v-card 
+                                                variant="flat"
+                                                class="mx-auto" 
+                                                max-width="300"
+                                                :to="path + card.raw.id"
+                                                target="_blank"     
                                             >
-                                                <v-toolbar color="transparent">
-                                                    <template v-slot:append>
-                                                        <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.duration }}</v-chip>
-                                                    </template>
-                                                </v-toolbar>
-                                            </v-img>
-                                        </v-card>
+                                                <v-img 
+                                                    :src="host + card.raw.poster"
+                                                    class="h-auto align-end text-white"
+                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
+                                                    height="200" 
+                                                    cover
+                                                >
+                                                    <v-toolbar color="transparent">
+                                                        <template v-slot:append>
+                                                            <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.duration }}</v-chip>
+                                                        </template>
+                                                    </v-toolbar>
+                                                </v-img>
+                                            </v-card>
+                                        </v-skeleton-loader>
                                     </v-col>
                                 </v-row>
                             </v-container>

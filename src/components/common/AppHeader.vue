@@ -56,8 +56,14 @@ import { inject } from 'vue';
 const host = inject('serverHost');
 const theme = useTheme()
 
+loadTheme()
+function loadTheme() {
+    theme.global.name.value = localStorage.getItem("theme")
+}
+
 function toggleTheme() {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    localStorage.setItem("theme", theme.global.name.value)
 }
 </script>
 <script>

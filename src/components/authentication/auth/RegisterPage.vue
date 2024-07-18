@@ -5,7 +5,7 @@ import AuthFooter from './AuthFooter.vue';
 </script>
 
 <template>
-  <v-row class="bg-containerBg position-relative" no-gutters>
+  <v-row class="position-relative" no-gutters>
     <div class="blur-logo">
       
     </div>

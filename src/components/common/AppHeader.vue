@@ -29,7 +29,7 @@
             </v-menu>
         </template>
         <v-expand-x-transition>
-            <form action="/search" method="get">
+            <form action="/video/search" method="get">
                 <v-text-field 
                     v-show="isSearchVisible" 
                     hide-details 
@@ -56,10 +56,10 @@ import { inject } from 'vue';
 const host = inject('serverHost');
 const theme = useTheme()
 
-loadTheme()
-function loadTheme() {
-    theme.global.name.value = localStorage.getItem("theme")
-}
+// loadTheme()
+// function loadTheme() {
+//     theme.global.name.value = localStorage.getItem("theme")
+// }
 
 function toggleTheme() {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'

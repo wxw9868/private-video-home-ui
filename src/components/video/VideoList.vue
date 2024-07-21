@@ -18,7 +18,7 @@
                             <v-container class="d-flex" fluid>
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
-                                        <v-skeleton-loader type="card" :loading="!loading" class="mx-auto" max-width="300">
+                                        <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
                                             <v-card 
                                                 variant="flat" 
                                                 class="mx-auto" 

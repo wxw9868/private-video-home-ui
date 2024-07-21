@@ -276,26 +276,26 @@ export default {
                 .then(response => {
                     // console.log(response);
                     const data = response.data
-                    // this.videoTitle = data.videoTitle;
-                    // this.videoActress = data.videoActress;
-                    // if (id > 544) {
-                    //     this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
-                    // } else {
-                    //     this.videoUrl = this.host + data.videoUrl;
-                    // }
-                    // this.videoPoster = this.host + data.videoPoster;
+                    this.videoTitle = data.videoTitle;
+                    this.videoActress = data.videoActress;
+                    if (id > 544) {
+                        this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
+                    } else {
+                        this.videoUrl = this.host + data.videoUrl;
+                    }
+                    this.videoPoster = this.host + data.videoPoster;
                     this.videoDuration = data.Duration;
                     this.videoCollect = data.Collect;
                     this.videoBrowse = data.Browse+1;
                     this.isCollect = data.IsCollect;
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
-                    this.videoTitle = '三国演义';
-                    this.videoActress = [
-                        {"id": "1", "actress": "曹操"},
-                        {"id": "2", "actress": "刘备"},
-                        {"id": "2", "actress": "孙权"},    
-                    ];
+                    // this.videoTitle = '三国演义';
+                    // this.videoActress = [
+                    //     {"id": "1", "actress": "曹操"},
+                    //     {"id": "2", "actress": "刘备"},
+                    //     {"id": "2", "actress": "孙权"},    
+                    // ];
 
                     this.loadArtplayer();
                 }).catch(function (error) {

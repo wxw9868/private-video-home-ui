@@ -70,7 +70,7 @@ export default {
           // console.log(response);
           if (response) {
             this.desserts = response.data.data;
-            this.loading = false
+            this.loading = false;
           }
         })
         .catch(function (error) {

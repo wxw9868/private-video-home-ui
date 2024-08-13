@@ -20,12 +20,14 @@ export default {
     return {
       page: 1,
       page_size: 100,
+      loading: true,
       headers: [
         {
           title: 'ID',
           align: 'start',
           sortable: false,
           key: 'id',
+          width: 10,
         },
         { title: '股票名称', key: 'stockName' },
         { title: '盈亏', key: 'profitAndLoss' },
@@ -48,6 +50,7 @@ export default {
           console.log(response);
           if (response) {
             this.desserts = response.data.data;
+            this.loading = false;
           }
         })
         .catch(function (error) {

@@ -186,6 +186,7 @@
 <script>
 import { inject, reactive } from 'vue';
 import Artplayer from "artplayer";
+import artplayerPluginDanmuku from 'artplayer-plugin-danmuku';
 
 export default {
     setup() {
@@ -198,7 +199,7 @@ export default {
         videoId: 0,
         videoTitle: '',
         videoActress: [],
-        videoUrl: '@/assets/video/lc.mp4',
+        videoUrl: '/src/assets/video/lc.mp4',
         videoPoster: '',
         videoDuration: 0,
         videoBrowse: 0,
@@ -278,11 +279,11 @@ export default {
                     const data = response.data
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
-                    if (id > 544) {
-                        this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
-                    } else {
-                        this.videoUrl = this.host + data.videoUrl;
-                    }
+                    // if (id > 544) {
+                    //     this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
+                    // } else {
+                    //     this.videoUrl = this.host + data.videoUrl;
+                    // }
                     this.videoPoster = this.host + data.videoPoster;
                     this.videoDuration = data.Duration;
                     this.videoCollect = data.Collect;
@@ -290,12 +291,12 @@ export default {
                     this.isCollect = data.IsCollect;
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
-                    // this.videoTitle = '三国演义';
-                    // this.videoActress = [
-                    //     {"id": "1", "actress": "曹操"},
-                    //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},    
-                    // ];
+                    this.videoTitle = '三国演义';
+                    this.videoActress = [
+                        {"id": "1", "actress": "曹操"},
+                        {"id": "2", "actress": "刘备"},
+                        {"id": "2", "actress": "孙权"},    
+                    ];
 
                     this.loadArtplayer();
                 }).catch(function (error) {
@@ -723,6 +724,63 @@ export default {
                 lock: true, // 是否在移动端显示一个 锁定按钮 ，用于隐藏底部 控制栏
                 fastForward: true, // 是否在移动端添加长按视频快进功能
                 autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
+                plugins: [
+                    artplayerPluginDanmuku({
+                        danmuku: '/src/assets1/danmuku.xml',
+
+                        // danmuku: [
+                        //     {
+                        //         text: '使用数组',
+                        //         time: 1
+                        //     },
+                        //     {
+                        //         text: '弹幕文本', // 弹幕文本
+                        //         time: 10, // 弹幕时间, 默认为当前播放器时间
+                        //         mode: 0, // 弹幕模式: 0: 滚动(默认)，1: 顶部，2: 底部
+                        //         color: '#FFFFFF', // 弹幕颜色，默认为白色
+                        //         border: false, // 弹幕是否有描边, 默认为 false
+                        //         style: {}, // 弹幕自定义样式, 默认为空对象
+                        //     },
+                        // ],
+
+                        // 以下为非必填
+                        speed: 5, // 弹幕持续时间，范围在[1 ~ 10]
+                        margin: [10, '25%'], // 弹幕上下边距，支持像素数字和百分比
+                        opacity: 1, // 弹幕透明度，范围在[0 ~ 1]
+                        color: '#FFFFFF', // 默认弹幕颜色，可以被单独弹幕项覆盖
+                        mode: 0, // 默认弹幕模式: 0: 滚动，1: 顶部，2: 底部
+                        modes: [0, 1, 2], // 弹幕可见的模式
+                        fontSize: 25, // 弹幕字体大小，支持像素数字和百分比
+                        antiOverlap: true, // 弹幕是否防重叠
+                        synchronousPlayback: false, // 是否同步播放速度
+                        mount: undefined, // 弹幕发射器挂载点, 默认为播放器控制栏中部
+                        heatmap: true, // 是否开启热力图
+                        width: 512, // 当播放器宽度小于此值时，弹幕发射器置于播放器底部
+                        points: [], // 热力图数据
+                        filter: (danmu) => danmu.text.length <= 200, // 弹幕载入前的过滤器
+                        beforeVisible: () => true, // 弹幕显示前的过滤器，返回 true 则可以发送
+                        visible: true, // 弹幕层是否可见
+                        emitter: true, // 是否开启弹幕发射器
+                        maxLength: 200, // 弹幕输入框最大长度, 范围在[1 ~ 1000]
+                        lockTime: 5, // 输入框锁定时间，范围在[1 ~ 60]
+                        theme: 'dark', // 弹幕主题，支持 dark 和 light，只在自定义挂载时生效
+                        OPACITY: {}, // 不透明度配置项
+                        FONT_SIZE: {}, // 弹幕字号配置项
+                        MARGIN: {}, // 显示区域配置项
+                        SPEED: {}, // 弹幕速度配置项
+                        COLOR: [], // 颜色列表配置项
+
+                        // 手动发送弹幕前的过滤器，返回 true 则可以发送，可以做存库处理
+                        beforeEmit(danmu) {
+                            return new Promise((resolve) => {
+                                console.log(danmu);
+                                setTimeout(() => {
+                                    resolve(true);
+                                }, 1000);
+                            });
+                        },
+                    }),
+                ],
             });
         },
     },

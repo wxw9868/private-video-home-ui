@@ -82,7 +82,7 @@
                                     <v-btn variant="text" color="green" @click="replyShow(comment.ID)">
                                         <v-icon left small>mdi-comment-outline</v-icon>
                                     </v-btn>
-                                    <v-btn variant="text" color="orange" @click="openReportDialog">
+                                    <v-btn variant="text" color="orange">
                                         <v-icon left small>mdi-flag-outline</v-icon>
                                     </v-btn>
                                 </div>
@@ -141,7 +141,7 @@
                                                     <v-btn variant="text" color="green" @click="replyShow(replies.ID)">
                                                         <v-icon left small>mdi-comment-outline</v-icon>
                                                     </v-btn>
-                                                    <v-btn variant="text" color="orange" @click="openReportDialog">
+                                                    <v-btn variant="text" color="orange">
                                                         <v-icon left small>mdi-flag-outline</v-icon>
                                                     </v-btn>
                                                 </div>
@@ -218,24 +218,24 @@ export default {
             width: '100%',
             height: '100%'
         },
-        players: [
-            {
-                player: 'plyr',
-                src: '/assets/image/player/player.png',
-            },
-            {
-                player: 'dplayer',
-                src: '/assets/image/player/dplayer.png',
-            },
-            {
-                player: 'artplayer',
-                src: '/assets/image/player/artplayer.png',
-            },
-            {
-                player: 'xgplayer',
-                src: '/assets/image/player/xgplayer.jpg',
-            },
-        ],
+        // players: [
+        //     {
+        //         player: 'plyr',
+        //         src: '/assets/image/player/player.png',
+        //     },
+        //     {
+        //         player: 'dplayer',
+        //         src: '/assets/image/player/dplayer.png',
+        //     },
+        //     {
+        //         player: 'artplayer',
+        //         src: '/assets/image/player/artplayer.png',
+        //     },
+        //     {
+        //         player: 'xgplayer',
+        //         src: '/assets/image/player/xgplayer.jpg',
+        //     },
+        // ],
         form: false,
         loading: false,
         content: '',
@@ -263,12 +263,14 @@ export default {
         replyZans: reactive({}),
         replyCais: reactive({}),
         onCommentHtml: null,
+        danmuku: [],
     }),
     mounted() {
         let id = this.$route.query.id;
         this.videoId = id;
-        this.getData(id);
+        this.getDanmuList(id);
         this.addBrowse(id);
+        this.getData(id);
         this.getCommentList(id);
     },
     methods: {
@@ -298,8 +300,9 @@ export default {
                         {"id": "2", "actress": "孙权"},    
                     ];
 
-                    this.loadArtplayer();
-                }).catch(function (error) {
+                    this.loadArtplayer(id,this.$http);
+                })
+                .catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
                         console.log(error.response.data);
@@ -693,7 +696,36 @@ export default {
             }
             return y + '年前'
         },
-        loadArtplayer() {
+        getDanmuList(id) {
+            this.$http.get('/danmu/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+                .then(response => {
+                    // console.log(response);
+                    // console.log(response.data.data);
+                    let list = response.data.data
+                    if (list) {
+                        this.danmuku = list;
+                    }
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // 请求已经成功发起，但没有收到响应
+                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                        // 而在node.js中是 http.ClientRequest 的实例
+                        console.log(error.request);
+                    } else {
+                        // 发送请求时出了点问题
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    console.log(error);
+                });
+        },
+        loadArtplayer(id,http) {
             const art = new Artplayer({
                 container: '#videoPlayer',
                 url: this.videoUrl,
@@ -726,23 +758,7 @@ export default {
                 autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
                 plugins: [
                     artplayerPluginDanmuku({
-                        danmuku: '/src/assets1/danmuku.xml',
-
-                        // danmuku: [
-                        //     {
-                        //         text: '使用数组',
-                        //         time: 1
-                        //     },
-                        //     {
-                        //         text: '弹幕文本', // 弹幕文本
-                        //         time: 10, // 弹幕时间, 默认为当前播放器时间
-                        //         mode: 0, // 弹幕模式: 0: 滚动(默认)，1: 顶部，2: 底部
-                        //         color: '#FFFFFF', // 弹幕颜色，默认为白色
-                        //         border: false, // 弹幕是否有描边, 默认为 false
-                        //         style: {}, // 弹幕自定义样式, 默认为空对象
-                        //     },
-                        // ],
-
+                        danmuku: this.danmuku,
                         // 以下为非必填
                         speed: 5, // 弹幕持续时间，范围在[1 ~ 10]
                         margin: [10, '25%'], // 弹幕上下边距，支持像素数字和百分比
@@ -753,7 +769,7 @@ export default {
                         fontSize: 25, // 弹幕字体大小，支持像素数字和百分比
                         antiOverlap: true, // 弹幕是否防重叠
                         synchronousPlayback: false, // 是否同步播放速度
-                        mount: undefined, // 弹幕发射器挂载点, 默认为播放器控制栏中部
+                        // mount: undefined, // 弹幕发射器挂载点, 默认为播放器控制栏中部
                         heatmap: true, // 是否开启热力图
                         width: 512, // 当播放器宽度小于此值时，弹幕发射器置于播放器底部
                         points: [], // 热力图数据
@@ -772,8 +788,35 @@ export default {
 
                         // 手动发送弹幕前的过滤器，返回 true 则可以发送，可以做存库处理
                         beforeEmit(danmu) {
+                            // console.log(danmu);
+                            let formData = {};
+                            formData = danmu;
+                            formData['video_id'] = parseInt(id);
+                            console.log(formData);
+                            http.post('/danmu/save', formData, { headers: { 'content-type': 'application/json' } })
+                                .then(response => {
+                                    // console.log(response)
+                                    console.log(response.data)
+                                })
+                                .catch(function (error) {
+                                    if (error.response) {
+                                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                                        console.log(error.response.data);
+                                        console.log(error.response.status);
+                                        console.log(error.response.headers);
+                                    } else if (error.request) {
+                                        // 请求已经成功发起，但没有收到响应
+                                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                                        // 而在node.js中是 http.ClientRequest 的实例
+                                        console.log(error.request);
+                                    } else {
+                                        // 发送请求时出了点问题
+                                        console.log('Error', error.message);
+                                    }
+                                    console.log(error.config);
+                                    console.log(error);
+                                });
                             return new Promise((resolve) => {
-                                console.log(danmu);
                                 setTimeout(() => {
                                     resolve(true);
                                 }, 1000);

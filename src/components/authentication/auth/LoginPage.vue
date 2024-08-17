@@ -33,7 +33,7 @@ import AuthLogin from '../authForms/AuthLogin.vue';
 <template>
   <v-row class="position-relative" no-gutters>
     <div class="blur-logo">
-      
+
     </div>
     <v-col cols="12">
       <div class="pt-6 pl-6">

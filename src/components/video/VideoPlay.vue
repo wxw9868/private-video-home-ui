@@ -35,14 +35,14 @@
                         </div>
                         <v-col>
                             <v-form v-model="form" @submit.prevent="onComment">
-                                <v-textarea 
-                                    v-model="content" 
-                                    :rules="contentRules" 
-                                    row-height="25" 
+                                <v-textarea
+                                    v-model="content"
+                                    :rules="contentRules"
+                                    row-height="25"
                                     rows="3"
-                                    clear-icon="mdi-close-circle" 
-                                    variant="outlined" 
-                                    auto-grow 
+                                    clear-icon="mdi-close-circle"
+                                    variant="outlined"
+                                    auto-grow
                                     shaped
                                     clearable
                                 ></v-textarea>
@@ -92,15 +92,15 @@
                                     </div>
                                     <v-col>
                                         <v-form v-model="replyForms[comment.ID]" @submit.prevent="onReply(comment.ID,i)">
-                                            <v-textarea 
-                                                v-model="replyTexts[comment.ID]" 
+                                            <v-textarea
+                                                v-model="replyTexts[comment.ID]"
                                                 :rules="replyRules[comment.ID]"
-                                                row-height="25" 
-                                                rows="3" 
-                                                clear-icon="mdi-close-circle" 
+                                                row-height="25"
+                                                rows="3"
+                                                clear-icon="mdi-close-circle"
                                                 variant="outlined"
-                                                auto-grow 
-                                                shaped 
+                                                auto-grow
+                                                shaped
                                                 clearable
                                             ></v-textarea>
                                             <v-btn :disabled="!replyForms[comment.ID]" :loading="replyloadings[comment.ID]"
@@ -167,8 +167,8 @@
                                     </div>
                                 </v-expand-transition>
                                 <div v-if="comment.Childrens">
-                                    <div 
-                                        variant="text" 
+                                    <div
+                                        variant="text"
                                         @click="repliesShow(comment.ID)"
                                     >
                                         展开 {{ comment.Childrens ? comment.Childrens.length : 0 }} 条回复
@@ -274,8 +274,9 @@ export default {
         getData(id) {
             this.$http.get('/video/getPlay', { params: { id: id } })
                 .then(response => {
-                    // console.log(response);
+                    console.log(response);
                     const data = response.data
+                    this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
                     if (id > 544) {
@@ -294,10 +295,10 @@ export default {
                     // this.videoActress = [
                     //     {"id": "1", "actress": "曹操"},
                     //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},    
+                    //     {"id": "2", "actress": "孙权"},
                     // ];
 
-                    this.loadArtplayer();
+                    this.loadArtplayer(data.videoID);
                 }).catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
@@ -692,8 +693,9 @@ export default {
             }
             return y + '年前'
         },
-        loadArtplayer() {
+        loadArtplayer(videoId) {
             const art = new Artplayer({
+                id: String(videoId),
                 container: '#videoPlayer',
                 url: this.videoUrl,
                 poster: this.videoPoster,
@@ -723,6 +725,29 @@ export default {
                 lock: true, // 是否在移动端显示一个 锁定按钮 ，用于隐藏底部 控制栏
                 fastForward: true, // 是否在移动端添加长按视频快进功能
                 autoOrientation: true, // 是否在移动端的网页全屏时，根据视频尺寸和视口尺寸，旋转播放器
+                controls: [
+                    {
+                        name: 'skip-next',
+                        index: 20,
+                        position: 'left',
+                        html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="36" width="36"><path d="M16,18H18V6H16M6,18L14.5,12L6,6V18Z"/></svg>',
+                        tooltip: '下一集',
+                        style: {
+                            color: 'white',
+                            height: 46,
+                            width: 46,
+                        },
+                        click: function (...args) {
+                            // console.log(document.location)
+                            let id = parseInt(args[0].art.option.id)+1
+                            window.location.href = document.location.origin+document.location.pathname+'?id='+id
+                            console.info('click', args);
+                        },
+                        mounted: function (...args) {
+                            console.info('mounted', args);
+                        },
+                    },
+                ],
             });
         },
     },

@@ -92,6 +92,16 @@ export default {
                 href: '/video/actress',
                 icon: 'mdi-account-group',
             },
+            {
+                title: 'Liquidation',
+                href: '/stock/liquidation',
+                icon: 'mdi-table',
+            },
+            {
+                title: 'TradingRecords',
+                href: '/stock/trading-records',
+                icon: 'mdi-table',
+            },
         ],
         avatar: null,
     }),

@@ -5,16 +5,16 @@
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-sheet class="mx-auto" :elevation="0">
                         <v-slide-group v-model="model" class="pa-4" center-active :mobile=true>
-                            <v-slide-group-item 
-                                v-for="(card, n) in cards" 
+                            <v-slide-group-item
+                                v-for="(card, n) in cards"
                                 :key="n"
                                 v-slot="{ isSelected, toggle, selectedClass }"
                             >
                                 <v-skeleton-loader type="image" :loading="loading" class="ma-1" height="189" width="336">
-                                    <v-card 
-                                        :class="['ma-1', selectedClass]" 
-                                        color="grey-lighten-1" 
-                                        height="189" 
+                                    <v-card
+                                        :class="['ma-1', selectedClass]"
+                                        color="grey-lighten-1"
+                                        height="189"
                                         width="336"
                                         @click="toggle"
                                         :to="path+card.id"
@@ -35,18 +35,18 @@
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
                                         <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
-                                            <v-card 
-                                                variant="text" 
-                                                class="mx-auto" 
-                                                max-width="300" 
+                                            <v-card
+                                                variant="text"
+                                                class="mx-auto"
+                                                max-width="300"
                                                 :to="path+card.raw.id"
                                                 target="_blank"
                                             >
-                                                <v-img 
-                                                    :src="host + card.raw.poster" 
+                                                <v-img
+                                                    :src="host + card.raw.poster"
                                                     class="h-auto align-end text-white"
-                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
-                                                    height="200" 
+                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                                                    height="200"
                                                     cover
                                                 >
                                                     <v-toolbar color="transparent">
@@ -61,7 +61,7 @@
                                                     <span class="subheading me-2" v-text="card.raw.browse"></span>
                                                     <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
                                                     <span class="subheading" v-text="card.raw.collect"></span>
-                                                </div>  
+                                                </div>
                                             </v-card>
                                         </v-skeleton-loader>
                                     </v-col>
@@ -115,18 +115,18 @@ export default {
     },
     methods: {
         getData() {
-            // this.lists = [
-            //     {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 2, title: 'Favorite road trips', poster: './assets/image/card/card2.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 3, title: 'Best airlines', poster: './assets/image/card/card3.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 4, title: 'Top 10 Australian beaches', poster: './assets/image/card/card4.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 5, title: 'Pre-fab homes', poster: './assets/image/card/card5.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 6, title: 'Favorite road trips', poster: './assets/image/card/card6.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 7, title: 'Top 10 Australian beaches', poster: './assets/image/card/card7.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
-            //     {id: 8, title: 'Pre-fab homes', poster: './assets/image/card/card8.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 12 },
-            //     {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
-            //     {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
-            // ];
+            this.lists = [
+                {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 2, title: 'Favorite road trips', poster: './assets/image/card/card2.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 3, title: 'Best airlines', poster: './assets/image/card/card3.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 4, title: 'Top 10 Australian beaches', poster: './assets/image/card/card4.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 5, title: 'Pre-fab homes', poster: './assets/image/card/card5.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 6, title: 'Favorite road trips', poster: './assets/image/card/card6.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 7, title: 'Top 10 Australian beaches', poster: './assets/image/card/card7.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
+                {id: 8, title: 'Pre-fab homes', poster: './assets/image/card/card8.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 12 },
+                {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
+                {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
+            ];
             // this.cards = this.lists.slice(0, 9);
             // this.loading = false;
             // return

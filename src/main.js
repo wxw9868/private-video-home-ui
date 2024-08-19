@@ -62,8 +62,8 @@ app.use(Vue3Marquee);
 app.use(Antd);
 app.use(i18n);
 
-app.provide('serverHost', 'http://192.168.0.9:8080/')
-// app.provide('serverHost', 'http://127.0.0.1:8080/')
+// app.provide('serverHost', 'http://192.168.0.9:8080/')
+app.provide('serverHost', 'http://127.0.0.1:8080/')
 
 axios.defaults.baseURL = "/api"
 axios.defaults.withCredentials = true;

@@ -824,6 +824,42 @@ export default {
                         },
                     }),
                 ],
+                controls: [
+                    {
+                        name: 'your-button',
+                        index: 1,
+                        // position: 'right',
+                        html: 'Your Button',
+                        tooltip: 'Your Button',
+                        style: {
+                            color: 'red',
+                        },
+                        click: function (...args) {
+                            console.info('click', args);
+                        },
+                        mounted: function (...args) {
+                            console.info('mounted', args);
+                        },
+                    },
+                    {
+                        name: 'subtitle',
+                        position: 'right',
+                        html: 'Subtitle',
+                        selector: [
+                            {
+                                default: true,
+                                html: '<span style="color:red">subtitle 01</span>',
+                            },
+                            {
+                                html: '<span style="color:yellow">subtitle 02</span>',
+                            },
+                        ],
+                        onSelect: function (item, $dom) {
+                            console.info(item, $dom);
+                            return 'Your ' + item.html;
+                        },
+                    },
+                ],
             });
         },
     },

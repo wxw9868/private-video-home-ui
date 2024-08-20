@@ -3,13 +3,14 @@
         <v-layout :full-height=true>
             <v-main>
                 <v-container>
-                    <v-row>
-                        <v-col>
+                    <v-row no-gutters>
+                        <v-col class="pa-1" cols="12" sm="8">
                             <v-skeleton-loader type="card" :loading="loading" class="mx-auto">
                                 <v-card variant="flat" class="mx-auto">
                                     <v-responsive :aspect-ratio="16 / 9">
                                         <div class="videoPlayer" :style="style"></div>
                                     </v-responsive>
+                                    <div class="artplayer-danmu pt-1"></div>
                                     <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
                                     <v-chip-group >
                                         <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
@@ -25,27 +26,26 @@
                                 </v-card>
                             </v-skeleton-loader>
                         </v-col>
-<!--                        <v-col cols="4">-->
-<!--                            <v-card variant="tonal" align="center" justify="center">-->
-<!--                                <div class="pl-1 pt-4 pb-4">-->
-<!--                                    <span class="text-h5 me-3">{{ videoTitle }}</span>-->
-<!--                                    <span class="text-grey text-body-1">84集全</span>-->
-<!--                                </div>-->
-
-<!--                                <div class="pb-4">-->
-<!--                                    <v-virtual-scroll :items="items" height="338.5">-->
-<!--                                        <v-btn-->
-<!--                                            v-for="item in 84" :key="item"-->
-<!--                                            class="ma-1"-->
-<!--                                            variant="tonal"-->
-<!--                                            border-->
-<!--                                        >-->
-<!--                                            {{ item }}-->
-<!--                                        </v-btn>-->
-<!--                                    </v-virtual-scroll>-->
-<!--                                </div>-->
-<!--                            </v-card>-->
-<!--                        </v-col>-->
+                        <v-col class="pa-1" cols="12" sm="4">
+                            <v-card variant="tonal" align="center" justify="center">
+                                <div class="pl-1 pt-4 pb-4">
+                                    <span class="text-h5 me-3">{{ videoTitle }}</span>
+                                    <span class="text-grey text-body-1">84集全</span>
+                                </div>
+                                <div class="pb-4">
+                                    <v-virtual-scroll :items="items" height="338.5">
+                                        <v-btn
+                                            v-for="item in episodes" :key="item"
+                                            class="ma-1"
+                                            variant="tonal"
+                                            border
+                                        >
+                                            {{ item }}
+                                        </v-btn>
+                                    </v-virtual-scroll>
+                                </div>
+                            </v-card>
+                        </v-col>
                     </v-row>
                 </v-container>
 
@@ -148,12 +148,16 @@
                                                 </v-row>
                                                 <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
                                                 <div class="d-flex justify-start" style="font-size: 13px;">
-                                                    <v-btn variant="text" :color="replyIsZans[replies.ID] ? 'blue' : ''"
+                                                    <v-btn 
+                                                        variant="text" 
+                                                        :color="replyIsZans[replies.ID] ? 'blue' : ''"
                                                         @click="commentZan(replies.ID)">
                                                         <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
                                                         <span>{{ replyZans[replies.ID] }}</span>
                                                     </v-btn>
-                                                    <v-btn variant="text" :color="replyIsCais[replies.ID] ? 'red' : ''"
+                                                    <v-btn 
+                                                        variant="text" 
+                                                        :color="replyIsCais[replies.ID] ? 'red' : ''"
                                                         @click="commentCai(replies.ID)">
                                                         <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
                                                         <span>{{ replyCais[replies.ID] }}</span>
@@ -170,15 +174,23 @@
                                                         <v-avatar size="40px" :image="userAvatar"></v-avatar>
                                                     </div>
                                                     <v-col v-show="replyTextareaShow === replies.ID">
-                                                        <v-form v-model="replyForms[replies.ID]"
+                                                        <v-form 
+                                                            v-model="replyForms[replies.ID]"
                                                             @submit.prevent="onReply(replies.ID)">
-                                                            <v-textarea v-model="replyTexts[replies.ID]"
-                                                                :rules="replyRules[replies.ID]" row-height="25" rows="3"
-                                                                clear-icon="mdi-close-circle" variant="outlined" auto-grow
-                                                                shaped clearable></v-textarea>
-                                                            <v-btn :disabled="!replyForms[replies.ID]"
+                                                            <v-textarea 
+                                                                v-model="replyTexts[replies.ID]"
+                                                                :rules="replyRules[replies.ID]" 
+                                                                row-height="25" rows="3"
+                                                                clear-icon="mdi-close-circle" variant="outlined" 
+                                                                auto-grow
+                                                                shaped 
+                                                                clearable
+                                                            ></v-textarea>
+                                                            <v-btn 
+                                                                :disabled="!replyForms[replies.ID]"
                                                                 :loading="replyloadings[replies.ID]"
-                                                                type="submit">发送回复</v-btn>
+                                                                type="submit"
+                                                            >发送回复</v-btn>
                                                         </v-form>
                                                     </v-col>
                                                 </v-row>
@@ -207,14 +219,17 @@
 import { inject, reactive } from 'vue';
 import Artplayer from "artplayer";
 import artplayerPluginDanmuku from 'artplayer-plugin-danmuku';
+import { useTheme } from 'vuetify'
 
 export default {
     setup() {
+        const theme = useTheme();
         const host = inject('serverHost');
-        return { host }
+        return { host, theme }
     },
     data: () => ({
         items: Array.from({ length: 1 }, (k, v) => v + 1),
+        episodes: 84,
         userId: localStorage.getItem("userID"),
         userAvatar: '',
         videoId: 0,
@@ -298,14 +313,14 @@ export default {
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
 
-                    // this.videoTitle = '三国演义';
-                    // this.videoActress = [
-                    //     {"id": "1", "actress": "曹操"},
-                    //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},
-                    // ];
-                    // this.videoUrl = '/src/assets/video/lc.mp4';
-                    // this.videoPoster = '';
+                    this.videoTitle = '三国演义';
+                    this.videoActress = [
+                        {"id": "1", "actress": "曹操"},
+                        {"id": "2", "actress": "刘备"},
+                        {"id": "2", "actress": "孙权"},
+                    ];
+                    this.videoUrl = '/src/assets/video/lc.mp4';
+                    this.videoPoster = '';
 
                     this.loadArtplayer(id,this.$http);
                 })
@@ -633,7 +648,6 @@ export default {
         },
         loadReply(comments) {
             comments.forEach((comment, index) => {
-                console.log(comment.ID)
                 this.replyForms[comment.ID] = false
                 this.replyloadings[comment.ID] = false
                 this.replyTexts[comment.ID] = ''
@@ -734,6 +748,7 @@ export default {
                 });
         },
         loadArtplayer(id,http) {
+            var $danmu = document.querySelector('.artplayer-danmu');
             const art = new Artplayer({
                 id: String(this.videoId),
                 container: '.videoPlayer',
@@ -789,69 +804,53 @@ export default {
                     },
                 ],
                 plugins: [
-                    // artplayerPluginDanmuku({
-                    //     danmuku: this.danmuku,
-                    //     // 以下为非必填
-                    //     speed: 5, // 弹幕持续时间，范围在[1 ~ 10]
-                    //     margin: [10, '25%'], // 弹幕上下边距，支持像素数字和百分比
-                    //     opacity: 1, // 弹幕透明度，范围在[0 ~ 1]
-                    //     color: '#FFFFFF', // 默认弹幕颜色，可以被单独弹幕项覆盖
-                    //     mode: 0, // 默认弹幕模式: 0: 滚动，1: 顶部，2: 底部
-                    //     modes: [0, 1, 2], // 弹幕可见的模式
-                    //     fontSize: 25, // 弹幕字体大小，支持像素数字和百分比
-                    //     antiOverlap: true, // 弹幕是否防重叠
-                    //     synchronousPlayback: false, // 是否同步播放速度
-                    //     heatmap: false, // 是否开启热力图
-                    //     width: 600, // 当播放器宽度小于此值时，弹幕发射器置于播放器底部
-                    //     points: [], // 热力图数据
-                    //     filter: (danmu) => danmu.text.length <= 200, // 弹幕载入前的过滤器
-                    //     beforeVisible: () => true, // 弹幕显示前的过滤器，返回 true 则可以发送
-                    //     visible: true, // 弹幕层是否可见
-                    //     emitter: true, // 是否开启弹幕发射器
-                    //     maxLength: 200, // 弹幕输入框最大长度, 范围在[1 ~ 1000]
-                    //     lockTime: 1, // 输入框锁定时间，范围在[1 ~ 60]
-                    //     theme: 'dark', // 弹幕主题，支持 dark 和 light，只在自定义挂载时生效
-                    //     OPACITY: {}, // 不透明度配置项
-                    //     FONT_SIZE: {}, // 弹幕字号配置项
-                    //     MARGIN: {}, // 显示区域配置项
-                    //     SPEED: {}, // 弹幕速度配置项
-                    //     COLOR: [], // 颜色列表配置项
-                    //
-                    //     // 手动发送弹幕前的过滤器，返回 true 则可以发送，可以做存库处理
-                    //     beforeEmit(danmu) {
-                    //         let formData = {};
-                    //         formData = danmu;
-                    //         formData['video_id'] = parseInt(id);
-                    //         http.post('/danmu/save', formData, { headers: { 'content-type': 'application/json' } })
-                    //             .then(response => {
-                    //                 console.log(response.data)
-                    //             })
-                    //             .catch(function (error) {
-                    //                 if (error.response) {
-                    //                     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                    //                     console.log(error.response.data);
-                    //                     console.log(error.response.status);
-                    //                     console.log(error.response.headers);
-                    //                 } else if (error.request) {
-                    //                     // 请求已经成功发起，但没有收到响应
-                    //                     // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                    //                     // 而在node.js中是 http.ClientRequest 的实例
-                    //                     console.log(error.request);
-                    //                 } else {
-                    //                     // 发送请求时出了点问题
-                    //                     console.log('Error', error.message);
-                    //                 }
-                    //                 console.log(error.config);
-                    //                 console.log(error);
-                    //             });
-                    //
-                    //         return new Promise((resolve) => {
-                    //             setTimeout(() => {
-                    //                 resolve(true);
-                    //             }, 1000);
-                    //         });
-                    //     },
-                    // }),
+                    artplayerPluginDanmuku({
+                        danmuku: this.danmuku,
+                        speed: 5, // 弹幕持续时间，范围在[1 ~ 10]
+                        width: 600, // 当播放器宽度小于此值时，弹幕发射器置于播放器底部
+                        heatmap: false, // 是否开启热力图
+                        visible: true, // 弹幕层是否可见
+                        emitter: true, // 是否开启弹幕发射器
+                        maxLength: 200, // 弹幕输入框最大长度, 范围在[1 ~ 1000]
+                        lockTime: 1, // 输入框锁定时间，范围在[1 ~ 60]
+                        mount: $danmu, // 弹幕发射器挂载点, 默认为播放器控制栏中部  
+                        theme: this.theme.global.name.value, // light dark
+                        
+                        // 手动发送弹幕前的过滤器，返回 true 则可以发送，可以做存库处理
+                        beforeEmit(danmu) {
+                            let formData = {};
+                            formData = danmu;
+                            formData['video_id'] = parseInt(id);
+                            http.post('/danmu/save', formData, { headers: { 'content-type': 'application/json' } })
+                                .then(response => {
+                                    console.log(response.data)
+                                })
+                                .catch(function (error) {
+                                    if (error.response) {
+                                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                                        console.log(error.response.data);
+                                        console.log(error.response.status);
+                                        console.log(error.response.headers);
+                                    } else if (error.request) {
+                                        // 请求已经成功发起，但没有收到响应
+                                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                                        // 而在node.js中是 http.ClientRequest 的实例
+                                        console.log(error.request);
+                                    } else {
+                                        // 发送请求时出了点问题
+                                        console.log('Error', error.message);
+                                    }
+                                    console.log(error.config);
+                                    console.log(error);
+                                });
+                    
+                            return new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve(true);
+                                }, 1000);
+                            });
+                        },
+                    }),
                 ],
             });
         },

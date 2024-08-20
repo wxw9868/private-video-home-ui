@@ -15,9 +15,9 @@
                                     <v-row justify="start" dense>
                                         <v-col v-for="(file, i) in items" :key="i" cols="6" sm="3" order="1">
                                             <v-skeleton-loader type="list-item-avatar-two-line" :loading="loading">
-                                                <v-list-item 
+                                                <v-list-item
                                                     :title="file.raw.actress"
-                                                    :subtitle="file.raw.count + subtitle"  
+                                                    :subtitle="file.raw.count + subtitle"
                                                     :href="path + file.raw.id"
                                                 >
                                                     <template v-slot:prepend>
@@ -84,14 +84,14 @@ export default {
         getData(action, sort) {
             const obj = this.loadTab(this.tab,action,sort);
 
-            this.$http.get('/video/getActress', { params: { action: obj.action, sort: obj.sort } })
+            this.$http.get('/actress/list', { params: { action: obj.action, sort: obj.sort } })
                 .then(response => {
                     // console.log(response);
                     const data = response.data.data.list;
                     this.items = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
-                    this.loadPage(); 
+                    this.loadPage();
                 }).catch(function (error) {
                     if (error.response) {
                         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围

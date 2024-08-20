@@ -148,15 +148,15 @@
                                                 </v-row>
                                                 <p class="my-2" style="font-size: 15px;">{{ replies.Content }}</p>
                                                 <div class="d-flex justify-start" style="font-size: 13px;">
-                                                    <v-btn 
-                                                        variant="text" 
+                                                    <v-btn
+                                                        variant="text"
                                                         :color="replyIsZans[replies.ID] ? 'blue' : ''"
                                                         @click="commentZan(replies.ID)">
                                                         <v-icon class="me-1" left small>mdi-thumb-up</v-icon>
                                                         <span>{{ replyZans[replies.ID] }}</span>
                                                     </v-btn>
-                                                    <v-btn 
-                                                        variant="text" 
+                                                    <v-btn
+                                                        variant="text"
                                                         :color="replyIsCais[replies.ID] ? 'red' : ''"
                                                         @click="commentCai(replies.ID)">
                                                         <v-icon class="me-1" left small>mdi-thumb-down</v-icon>
@@ -174,19 +174,19 @@
                                                         <v-avatar size="40px" :image="userAvatar"></v-avatar>
                                                     </div>
                                                     <v-col v-show="replyTextareaShow === replies.ID">
-                                                        <v-form 
+                                                        <v-form
                                                             v-model="replyForms[replies.ID]"
                                                             @submit.prevent="onReply(replies.ID)">
-                                                            <v-textarea 
+                                                            <v-textarea
                                                                 v-model="replyTexts[replies.ID]"
-                                                                :rules="replyRules[replies.ID]" 
+                                                                :rules="replyRules[replies.ID]"
                                                                 row-height="25" rows="3"
-                                                                clear-icon="mdi-close-circle" variant="outlined" 
+                                                                clear-icon="mdi-close-circle" variant="outlined"
                                                                 auto-grow
-                                                                shaped 
+                                                                shaped
                                                                 clearable
                                                             ></v-textarea>
-                                                            <v-btn 
+                                                            <v-btn
                                                                 :disabled="!replyForms[replies.ID]"
                                                                 :loading="replyloadings[replies.ID]"
                                                                 type="submit"
@@ -313,14 +313,14 @@ export default {
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
 
-                    this.videoTitle = '三国演义';
-                    this.videoActress = [
-                        {"id": "1", "actress": "曹操"},
-                        {"id": "2", "actress": "刘备"},
-                        {"id": "2", "actress": "孙权"},
-                    ];
-                    this.videoUrl = '/src/assets/video/lc.mp4';
-                    this.videoPoster = '';
+                    // this.videoTitle = '三国演义';
+                    // this.videoActress = [
+                    //     {"id": "1", "actress": "曹操"},
+                    //     {"id": "2", "actress": "刘备"},
+                    //     {"id": "2", "actress": "孙权"},
+                    // ];
+                    // this.videoUrl = '/src/assets/video/lc.mp4';
+                    // this.videoPoster = '';
 
                     this.loadArtplayer(id,this.$http);
                 })
@@ -754,28 +754,28 @@ export default {
                 container: '.videoPlayer',
                 url: this.videoUrl,
                 poster: this.videoPoster,
-                volume: 1,
+                volume: 1, // 默认音量
                 muted: false, // 是否默认静音
                 autoplay: false, // 是否自动播放
-                autoSize: true,
-                autoMini: true,
-                pip: true, // 是否在底部控制栏里显示 画中画 的开关按钮
-                screenshot: true, // 是否在底部控制栏里显示 视频截图 功能
+                autoSize: true, // 默认会填充整个 container 容器尺寸
+                autoMini: true, // 当播放器滚动到浏览器视口以外时，自动进入 迷你播放 模式
+                loop: true, // 是否循环播放
+                // pip: true, // 是否在底部控制栏里显示 画中画 的开关按钮
+                // screenshot: true, // 是否在底部控制栏里显示 视频截图 功能
+                // setting: true,
+                // flip: true,
+                // playbackRate: true,
+                // aspectRatio: true,
+                // subtitleOffset: true,
                 fullscreen: true, // 是否在底部控制栏里显示播放器 窗口全屏 按钮
                 fullscreenWeb: true, // 是否在底部控制栏里显示播放器 网页全屏 按钮
-                loop: true, // 是否循环播放
-                flip: true,
-                setting: true,
-                playbackRate: true,
-                aspectRatio: true,
-                subtitleOffset: true,
                 miniProgressBar: true, // 迷你进度条，只在播放器失去焦点后且正在播放时出现
                 mutex: false, // 假如页面里同时存在多个播放器，是否只能让一个播放器播放
                 backdrop: true,
                 autoPlayback: true, // 是否使用自动 回放功能
-                airplay: true,
-                theme: '#23ade5',
-                lang: navigator.language.toLowerCase(),
+                airplay: true, // 是否显示 airplay 按钮，当前只有部分浏览器支持该功能
+                theme: '#23ade5', // 主题颜色，目前用于 进度条 和 高亮元素 上
+                lang: navigator.language.toLowerCase(), // 显示语言，目前支持：en, zh-cn
                 playsInline: true, // 在移动端是否使用 playsInline 模式
                 lock: true, // 是否在移动端显示一个 锁定按钮 ，用于隐藏底部 控制栏
                 fastForward: true, // 是否在移动端添加长按视频快进功能
@@ -785,15 +785,12 @@ export default {
                         name: 'skip-next',
                         index: 20,
                         position: 'left',
-                        html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="36" width="36"><path d="M16,18H18V6H16M6,18L14.5,12L6,6V18Z"/></svg>',
+                        html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="32" width="32"><path d="M16,18H18V6H16M6,18L14.5,12L6,6V18Z"/></svg>',
                         tooltip: '下一集',
                         style: {
                             color: 'white',
-                            height: 46,
-                            width: 46,
                         },
                         click: function (...args) {
-                            // console.log(document.location)
                             let id = parseInt(args[0].art.option.id)+1
                             window.location.href = document.location.origin+document.location.pathname+'?id='+id
                             // console.info('click', args);
@@ -813,9 +810,9 @@ export default {
                         emitter: true, // 是否开启弹幕发射器
                         maxLength: 200, // 弹幕输入框最大长度, 范围在[1 ~ 1000]
                         lockTime: 1, // 输入框锁定时间，范围在[1 ~ 60]
-                        mount: $danmu, // 弹幕发射器挂载点, 默认为播放器控制栏中部  
+                        mount: $danmu, // 弹幕发射器挂载点, 默认为播放器控制栏中部
                         theme: this.theme.global.name.value, // light dark
-                        
+
                         // 手动发送弹幕前的过滤器，返回 true 则可以发送，可以做存库处理
                         beforeEmit(danmu) {
                             let formData = {};
@@ -843,7 +840,7 @@ export default {
                                     console.log(error.config);
                                     console.log(error);
                                 });
-                    
+
                             return new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve(true);

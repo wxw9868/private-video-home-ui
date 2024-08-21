@@ -118,9 +118,9 @@ export default {
 
             this.$http.get('/video/getList', { params: { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize } })
                 .then(response => {
-                    // console.log(response);
+                    console.log(response.data);
                     const data = response.data.data.list;
-                    this.cards = data;
+                    // this.cards = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();

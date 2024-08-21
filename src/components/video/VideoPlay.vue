@@ -293,9 +293,9 @@ export default {
     },
     methods: {
         getData(id) {
-            this.$http.get('/video/getPlay', { params: { id: id } })
+            this.get('/video/getPlay', { id: id })
                 .then(response => {
-                    // console.log(response.data);
+                    console.log(response.data);
                     const data = response.data
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
@@ -313,61 +313,30 @@ export default {
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
 
-                    // this.videoTitle = '三国演义';
-                    // this.videoActress = [
-                    //     {"id": "1", "actress": "曹操"},
-                    //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},
-                    // ];
-                    // this.videoUrl = '/src/assets/video/lc.mp4';
-                    // this.videoPoster = '';
+                    this.videoTitle = '三国演义';
+                    this.videoActress = [
+                        {"id": "1", "actress": "曹操"},
+                        {"id": "2", "actress": "刘备"},
+                        {"id": "2", "actress": "孙权"},
+                    ];
+                    this.videoUrl = '/src/assets/video/lc.mp4';
+                    this.videoPoster = '';
 
                     this.loadArtplayer(id,this.$http);
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         // 统计浏览量
         addBrowse(id) {
             this.browse = this.browse + 1
-            this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            this.get('/video/browse', { video_id: parseInt(id) })
                 .then(response => {
-                    console.log(response.data.message);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         // 统计收藏量
@@ -390,58 +359,22 @@ export default {
 
             this.$http.post('/video/collect', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
-                    // console.log(response);
-                    // console.log(response.data);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         // 获取评论数据
         getCommentList(id) {
             this.$http.get('/comment/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
                 .then(response => {
-                    // console.log(response);
                     // console.log(response.data.data);
-                    let list = response.data.data
-                    if (list) {
-                        this.comments = list;
-                        // console.log(this.comments);
-                        this.loadReply(this.comments)
-                    }
+                    this.comments = response.data.data
+                    this.loadReply(this.comments)
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         // 评论
@@ -456,9 +389,8 @@ export default {
 
             this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
                 .then(response => {
-                    // console.log(response);
+                    // console.log(response.data);
                     let comment = response.data.data
-                    // console.log(comment)
                     this.comments.unshift({
                         "ID": comment.commentID,
                         "CreatedAt": "",
@@ -487,22 +419,7 @@ export default {
                     this.loadReply([comment])
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
 
             this.content = '';
@@ -520,9 +437,8 @@ export default {
 
             this.$http.post('/comment/reply', formData, { headers: { 'content-type': 'application/json' } })
                 .then(response => {
-                    // console.log(response);
+                    // console.log(response.data);
                     let comment = response.data.data
-                    // console.log(comment);
                     if (!this.comments[i].Childrens) this.comments[i].Childrens = []
                     this.comments[i].Childrens.unshift({
                         "ID": comment.commentID,
@@ -552,22 +468,7 @@ export default {
                     this.loadReply([comment])
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
 
             this.replyTexts[id] = '';
@@ -586,27 +487,10 @@ export default {
 
             this.$http.post('/comment/zan', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
-                    // console.log(response);
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         // 踩
@@ -623,27 +507,10 @@ export default {
 
             this.$http.post('/comment/cai', formData, { headers: { 'content-type': 'application/json' } })
                 .then(function (response) {
-                    // console.log(response);
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         loadReply(comments) {
@@ -729,22 +596,7 @@ export default {
                     }
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
         },
         loadArtplayer(id,http) {
@@ -823,22 +675,7 @@ export default {
                                     console.log(response.data)
                                 })
                                 .catch(function (error) {
-                                    if (error.response) {
-                                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                                        console.log(error.response.data);
-                                        console.log(error.response.status);
-                                        console.log(error.response.headers);
-                                    } else if (error.request) {
-                                        // 请求已经成功发起，但没有收到响应
-                                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                                        // 而在node.js中是 http.ClientRequest 的实例
-                                        console.log(error.request);
-                                    } else {
-                                        // 发送请求时出了点问题
-                                        console.log('Error', error.message);
-                                    }
-                                    console.log(error.config);
-                                    console.log(error);
+                                    this.err(error)
                                 });
 
                             return new Promise((resolve) => {
@@ -850,6 +687,32 @@ export default {
                     }),
                 ],
             });
+        },
+        get(url, params) {
+            // this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            const response = this.$http.get(url, { params: params })
+            return response
+        },
+        post() {
+
+        },
+        err(error) {
+            if (error.response) {
+                // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // 请求已经成功发起，但没有收到响应
+                // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                // 而在node.js中是 http.ClientRequest 的实例
+                console.log(error.request);
+            } else {
+                // 发送请求时出了点问题
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+            console.log(error);
         },
     },
 }

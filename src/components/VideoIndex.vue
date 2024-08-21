@@ -8,7 +8,7 @@
                             <v-slide-group-item
                                 v-for="(card, n) in cards"
                                 :key="n"
-                                v-slot="{ isSelected, toggle, selectedClass }"
+                                v-slot="{ toggle, selectedClass }"
                             >
                                 <v-skeleton-loader type="image" :loading="loading" class="ma-1" height="189" width="336">
                                     <v-card
@@ -127,14 +127,14 @@ export default {
                 {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
                 {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
             ];
-            // this.cards = this.lists.slice(0, 9);
+            this.cards = this.lists.slice(0, 9);
             // this.loading = false;
             // return
             this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 30, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);
-                    this.lists = response.data.data.list;
-                    this.cards = this.lists.slice(0, 9);
+                    // this.lists = response.data.data.list;
+                    // this.cards = this.lists.slice(0, 9);
                     this.loading = false;
                 }).catch(function (error) {
                     if (error.response) {

@@ -86,9 +86,9 @@ export default {
 
             this.$http.get('/actress/list', { params: { action: obj.action, sort: obj.sort } })
                 .then(response => {
-                    // console.log(response);
+                    console.log(response.data);
                     const data = response.data.data.list;
-                    this.items = data;
+                    // this.items = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();

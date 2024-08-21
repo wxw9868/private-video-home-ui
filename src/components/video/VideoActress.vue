@@ -83,34 +83,40 @@ export default {
         },
         getData(action, sort) {
             const obj = this.loadTab(this.tab,action,sort);
-
-            this.$http.get('/actress/list', { params: { action: obj.action, sort: obj.sort } })
+            this.get('/actress/list',  { action: obj.action, sort: obj.sort })
                 .then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     const data = response.data.data.list;
-                    // this.items = data;
+                    this.items = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
-        }
+        },
+        get(url, params) {
+            const response = this.$http.get(url, { params: params }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            return response
+        },
+        err(error) {
+            if (error.response) {
+                // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // 请求已经成功发起，但没有收到响应
+                // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+                // 而在node.js中是 http.ClientRequest 的实例
+                console.log(error.request);
+            } else {
+                // 发送请求时出了点问题
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+            console.log(error);
+        },
     },
     mounted() {
         this.getData('', '');

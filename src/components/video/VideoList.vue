@@ -15,22 +15,22 @@
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
                         <template v-slot:default="{ items }">
-                            <v-container class="d-flex" fluid>
+                            <v-container class="d-flex" >
                                 <v-row justify="start" dense>
-                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
+                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
                                         <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
-                                            <v-card 
-                                                variant="flat" 
-                                                class="mx-auto" 
+                                            <v-card
+                                                variant="flat"
+                                                class="mx-auto"
                                                 max-width="300"
-                                                :to="path + card.raw.id" 
+                                                :to="path + card.raw.id"
                                                 target="_blank"
                                             >
-                                                <v-img 
-                                                    :src="host + card.raw.poster" 
+                                                <v-img
+                                                    :src="host + card.raw.poster"
                                                     class="h-auto align-end text-white"
-                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" 
-                                                    height="200" 
+                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                                                    height="200"
                                                     cover
                                                 >
                                                     <v-toolbar color="transparent">
@@ -51,10 +51,10 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination 
-                                v-model="page" 
-                                :length="length" 
-                                :total-visible="5" 
+                            <v-pagination
+                                v-model="page"
+                                :length="length"
+                                :total-visible="5"
                                 @click="pagination()"
                             ></v-pagination>
                         </template>
@@ -115,34 +115,40 @@ export default {
         },
         getData(action,sort) {
             const obj = this.loadTab(this.tab,action,sort);
-
-            this.$http.get('/video/getList', { params: { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize } })
+            this.get('/video/getList', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     const data = response.data.data.list;
-                    // this.cards = data;
+                    this.cards = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
-        }
+        },
+        get(url, params) {
+          const response = this.$http.get(url, { params: params }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+          return response
+        },
+        err(error) {
+          if (error.response) {
+            // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // 请求已经成功发起，但没有收到响应
+            // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+            // 而在node.js中是 http.ClientRequest 的实例
+            console.log(error.request);
+          } else {
+            // 发送请求时出了点问题
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+          console.log(error);
+        },
     },
     mounted() {
         this.actress_id = this.$route.query.id

@@ -9,12 +9,12 @@
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
                                         <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
-                                            <v-card 
+                                            <v-card
                                                 variant="flat"
                                                 :href="path + card.raw.document.id"
-                                                class="mx-auto" 
+                                                class="mx-auto"
                                                 max-width="300"
-                                                target="_blank" 
+                                                target="_blank"
                                                 hover
                                             >
                                                 <v-img :src="host + card.raw.document.poster"
@@ -38,9 +38,9 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination 
-                                v-model="page" 
-                                :length="length" 
+                            <v-pagination
+                                v-model="page"
+                                :length="length"
                                 :total-visible="5"
                                 @click="pagination()"
                             ></v-pagination>
@@ -86,33 +86,40 @@ export default {
         },
         getData(query) {
             // console.log(query);
-            this.$http.get('/video/getSearch', { params: { query: query } })
+            this.get('/video/getSearch', { query: query } )
                 .then(response => {
-                    // console.log(response)
+                    console.log(response)
                     const data = response.data.data
                     this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    this.err(error)
                 });
-        }
+        },
+        get(url, params) {
+            const response = this.$http.get(url, { params: params }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            return response
+        },
+        err(error) {
+            if (error.response) {
+              // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // 请求已经成功发起，但没有收到响应
+              // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+              // 而在node.js中是 http.ClientRequest 的实例
+              console.log(error.request);
+            } else {
+              // 发送请求时出了点问题
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+            console.log(error);
+        },
     },
     mounted() {
         this.getData(this.$route.query.query);

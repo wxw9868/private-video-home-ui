@@ -295,7 +295,7 @@ export default {
         getData(id) {
             this.get('/video/getPlay', { id: id })
                 .then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     const data = response.data
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
@@ -313,14 +313,14 @@ export default {
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
 
-                    this.videoTitle = '三国演义';
-                    this.videoActress = [
-                        {"id": "1", "actress": "曹操"},
-                        {"id": "2", "actress": "刘备"},
-                        {"id": "2", "actress": "孙权"},
-                    ];
-                    this.videoUrl = '/src/assets/video/lc.mp4';
-                    this.videoPoster = '';
+                    // this.videoTitle = '三国演义';
+                    // this.videoActress = [
+                    //     {"id": "1", "actress": "曹操"},
+                    //     {"id": "2", "actress": "刘备"},
+                    //     {"id": "2", "actress": "孙权"},
+                    // ];
+                    // this.videoUrl = '/src/assets/video/lc.mp4';
+                    // this.videoPoster = '';
 
                     this.loadArtplayer(id,this.$http);
                 })
@@ -341,7 +341,6 @@ export default {
         },
         // 统计收藏量
         statisticsCollect() {
-            console.log(this.videoId)
             let num = 0
             if (this.icon.collect == 'mdi-heart-outline') {
                 this.icon.collect = 'mdi-heart'
@@ -356,8 +355,7 @@ export default {
             const formData = {};
             formData['video_id'] = parseInt(this.videoId)
             formData['collect'] = num
-
-            this.$http.post('/video/collect', formData, { headers: { 'content-type': 'application/json' } })
+            this.post('/video/collect', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -367,7 +365,7 @@ export default {
         },
         // 获取评论数据
         getCommentList(id) {
-            this.$http.get('/comment/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            this.get('/comment/list', { video_id: parseInt(id) })
                 .then(response => {
                     // console.log(response.data.data);
                     this.comments = response.data.data
@@ -386,8 +384,7 @@ export default {
             const formData = {};
             formData['content'] = this.content
             formData['video_id'] = parseInt(this.videoId)
-
-            this.$http.post('/comment/comment', formData, { headers: { 'content-type': 'application/json' } })
+            this.post('/comment/comment', formData)
                 .then(response => {
                     // console.log(response.data);
                     let comment = response.data.data
@@ -434,8 +431,7 @@ export default {
             formData['content'] = this.replyTexts[id]
             formData['parent_id'] = parseInt(id)
             formData['video_id'] = parseInt(this.videoId)
-
-            this.$http.post('/comment/reply', formData, { headers: { 'content-type': 'application/json' } })
+            this.post('/comment/reply', formData)
                 .then(response => {
                     // console.log(response.data);
                     let comment = response.data.data
@@ -484,8 +480,7 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['zan'] = num
-
-            this.$http.post('/comment/zan', formData, { headers: { 'content-type': 'application/json' } })
+            this.post('/comment/zan', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -504,8 +499,7 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['cai'] = num
-
-            this.$http.post('/comment/cai', formData, { headers: { 'content-type': 'application/json' } })
+            this.post('/comment/cai', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -586,14 +580,10 @@ export default {
             return y + '年前'
         },
         getDanmuList(id) {
-            this.$http.get('/danmu/list', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            this.get('/danmu/list',  { video_id: parseInt(id) })
                 .then(response => {
-                    // console.log(response);
                     // console.log(response.data.data);
-                    let list = response.data.data
-                    if (list) {
-                        this.danmuku = list;
-                    }
+                    this.danmuku  = response.data.data
                 })
                 .catch(function (error) {
                     this.err(error)
@@ -670,7 +660,7 @@ export default {
                             let formData = {};
                             formData = danmu;
                             formData['video_id'] = parseInt(id);
-                            http.post('/danmu/save', formData, { headers: { 'content-type': 'application/json' } })
+                            http.post('/danmu/save', formData)
                                 .then(response => {
                                     console.log(response.data)
                                 })
@@ -689,12 +679,13 @@ export default {
             });
         },
         get(url, params) {
-            // this.$http.get('/video/browse', { params: { video_id: parseInt(id) } }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-            const response = this.$http.get(url, { params: params })
+            const response = this.$http.get(url, { params: params }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
             return response
         },
-        post() {
-
+        post(url, formData) {
+          console.log("pppp")
+            const response = this.$http.post(url, formData, { headers: { 'content-type': 'application/json' } })
+            return response
         },
         err(error) {
             if (error.response) {

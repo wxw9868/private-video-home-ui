@@ -30,11 +30,11 @@ function validate(values: any, { setErrors }: any) {
   formData['email'] = email.value
   formData['password'] = password.value
   formData['repeat_password'] = repeat_password.value
-  http.post('/user/doRegister', formData, { headers: { 'content-type': 'application/json' } })
+  http.post('/user/register', formData, { headers: { 'content-type': 'application/json' } })
     .then(function (response) {
       // console.log(response);
       if (response) {
-        //3秒钟之后跳转到指定的页面 
+        //3秒钟之后跳转到指定的页面
         setTimeout(window.location.href = '/login', 5);
       }
     })
@@ -67,14 +67,14 @@ function validate(values: any, { setErrors }: any) {
   <Form v-model="valid" @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
     <div class="mb-6">
       <v-label>{{ $t('Username') }}</v-label>
-      <v-text-field 
+      <v-text-field
         v-model="username"
         :rules="usernameRules"
-        hide-details="auto" 
-        variant="outlined" 
-        class="mt-2" 
+        hide-details="auto"
+        variant="outlined"
+        class="mt-2"
         required
-        color="primary" 
+        color="primary"
         placeholder="Username"
       ></v-text-field>
     </div>
@@ -83,7 +83,7 @@ function validate(values: any, { setErrors }: any) {
       <v-text-field
         v-model="email"
         :rules="emailRules"
-        placeholder="Email address" 
+        placeholder="Email address"
         class="mt-2"
         required
         hide-details="auto"
@@ -117,7 +117,7 @@ function validate(values: any, { setErrors }: any) {
       <v-text-field
         v-model="repeat_password"
         :rules="passwordRules"
-        placeholder="Enter your confirm password" 
+        placeholder="Enter your confirm password"
         required
         variant="outlined"
         color="primary"
@@ -147,7 +147,7 @@ function validate(values: any, { setErrors }: any) {
       <v-alert color="error">{{ errors.apiError }}</v-alert>
     </div>
   </Form>
-  
+
   <div class="text-center ma-2">
     <v-snackbar
       v-model="snackbar"

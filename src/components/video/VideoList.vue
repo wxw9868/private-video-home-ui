@@ -115,7 +115,7 @@ export default {
         },
         getData(action,sort) {
             const obj = this.loadTab(this.tab,action,sort);
-            this.get('/video/getList', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
+            this.get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
                     // console.log(response.data);
                     const data = response.data.data.list;

@@ -130,7 +130,7 @@ export default {
             this.cards = this.lists.slice(0, 9);
             // this.loading = false;
             // return
-            this.$http.get('/video/getList', { params: { actress_id: 0, page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
+            this.$http.get('/video/list', { params: { actress_id: 0, page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);
                     this.lists = response.data.data.list;

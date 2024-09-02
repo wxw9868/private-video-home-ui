@@ -53,7 +53,7 @@ function getCookie() {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function validate(values: any, { setErrors }: any) {
   if (!valid) return
-  
+
   // 点击登录按钮的时候，判断是否勾选了自动登录（记住密码），对cookie做相应操作
   if (checkbox.value) {
     // 传入账号名，密码，和保存天数14个参数
@@ -66,14 +66,14 @@ function validate(values: any, { setErrors }: any) {
   const formData = {};
   formData['email'] = email.value
   formData['password'] = password.value
-  http.post('/user/doLogin', formData, { headers: { 'content-type': 'application/json' }})
+  http.post('/user/login', formData, { headers: { 'content-type': 'application/json' }})
     .then(response => {
       // console.log('Login successful', response.data);
       if (response) {
-        localStorage.setItem("isLogin", "true"); 
+        localStorage.setItem("isLogin", "true");
         snackbar.value = true
         text.value = response.data.message
-        //5秒钟之后跳转到指定的页面 
+        //5秒钟之后跳转到指定的页面
         setTimeout(window.location.href = '/', 8);
       }
     })
@@ -94,7 +94,7 @@ function validate(values: any, { setErrors }: any) {
       }
       console.log(error.config);
       console.log(error);
-    });     
+    });
 }
 </script>
 

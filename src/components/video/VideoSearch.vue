@@ -86,9 +86,9 @@ export default {
         },
         getData(query) {
             // console.log(query);
-            this.get('/video/getSearch', { query: query } )
+            this.get('/video/search', { query: query } )
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     const data = response.data.data
                     this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)

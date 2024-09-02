@@ -121,7 +121,7 @@ const submit = handleSubmit(values => {
   loading = false
 
   const formData = JSON.stringify(values, null, 2)
-  http.post('/user/update', formData, { headers: { 'content-type': 'application/json' } })
+  http.post('/user/save', formData, { headers: { 'content-type': 'application/json' } })
     .then(response => {
       // console.log(response);
     })

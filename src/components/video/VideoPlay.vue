@@ -293,7 +293,7 @@ export default {
     },
     methods: {
         getData(id) {
-            this.get('/video/getPlay', { id: id })
+            this.get('/video/play', { id: id })
                 .then(response => {
                     // console.log(response.data);
                     const data = response.data

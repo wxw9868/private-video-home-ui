@@ -2,6 +2,18 @@
     <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
+                <v-col>
+                    <v-text-field
+                        type="search"
+                        density="comfortable"
+                        placeholder="Search"
+                        variant="outlined"
+                        v-model="query"
+                        v-on:keyup.enter="searchActress()"
+                    >
+                        <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
+                    </v-text-field>
+                </v-col>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
                     <v-tab value="one" @click="getData('va.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
                     <v-tab value="two" @click="getData('a.actress','desc')">{{ $t('Alphabetically') }}</v-tab>
@@ -40,6 +52,15 @@
     </v-card>
 </template>
 
+<style>
+.text-field-with-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+}
+</style>
+
 <script>
 import { ref, inject } from 'vue';
 import { useGoTo } from 'vuetify';
@@ -59,6 +80,7 @@ export default {
         items: [],
         loading: true,
         length: 0,
+        query: '',
     }),
     methods: {
         pagination() {
@@ -81,14 +103,22 @@ export default {
             localStorage.setItem('actress-sort',sort);
             return {action,sort}
         },
-        getData(action, sort) {
+        searchActress() {
+            console.log(this.query)
+            this.getData('', '', this.query);
+        },
+        getData(action, sort, query) {
             const obj = this.loadTab(this.tab,action,sort);
-            this.get('/actress/list',  { action: obj.action, sort: obj.sort })
+            this.get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
-                    // console.log(response.data);
-                    const data = response.data.data.list;
-                    this.items = data;
-                    this.length = Math.ceil(data.length / this.itemsPerPage);
+                    console.log(response.data);
+                    if (response.data.data.list){
+                      const data = response.data.data.list;
+                      this.items = data;
+                      this.length = Math.ceil(data.length / this.itemsPerPage);
+                    } else {
+                      this.items = [];
+                    }
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

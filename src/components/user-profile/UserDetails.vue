@@ -25,7 +25,7 @@
   </div>
 </template>
 <script setup>
-import { post, err } from '@/utils/request';
+import { get, post, err } from '@/utils/request';
 import { ref, inject } from 'vue'
 
 const host = inject('serverHost');
@@ -38,7 +38,7 @@ const browseNum = ref(0)
 
 getUserInfo()
 function getUserInfo() {
-  http.get('/user/info')
+  get('/user/info')
     .then(response => {
       let data = response.data.data;
       // console.log(data)

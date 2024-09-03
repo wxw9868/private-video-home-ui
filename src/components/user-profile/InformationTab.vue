@@ -119,9 +119,9 @@ const submit = handleSubmit(values => {
   loading = false
 
   const formData = JSON.stringify(values, null, 2)
-  post('/user/save', formData, { headers: { 'content-type': 'application/json' } })
+  post('/user/save', formData)
     .then(response => {
-      // console.log(response);
+      console.log(response);
     })
     .catch(function (error) {
       err(error)

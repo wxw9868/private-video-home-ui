@@ -14,50 +14,50 @@
                   <v-row>
                     <v-col cols="12">
                       <v-label class="mb-2">{{ $t('OldPassword') }}</v-label>
-                      <v-text-field 
-                        v-model="old_password.value.value" 
+                      <v-text-field
+                        v-model="old_password.value.value"
                         :error-messages="old_password.errorMessage.value"
-                        :readonly="loading" 
+                        :readonly="loading"
                         :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
-                        :type="show1 ? 'text' : 'password'" 
+                        :type="show1 ? 'text' : 'password'"
                         color="primary"
-                        density="compact" 
+                        density="compact"
                         placeholder="Enter Old Password"
-                        prepend-inner-icon="mdi-lock-outline" 
-                        variant="outlined" 
+                        prepend-inner-icon="mdi-lock-outline"
+                        variant="outlined"
                         @click:append-inner="show1 = !show1"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-label class="mb-2">{{ $t('NewPassword') }}</v-label>
-                      <v-text-field 
-                        v-model="password.value.value" 
+                      <v-text-field
+                        v-model="password.value.value"
                         :error-messages="password.errorMessage.value"
-                        :readonly="loading" 
+                        :readonly="loading"
                         :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
-                        :type="show2 ? 'text' : 'password'" 
+                        :type="show2 ? 'text' : 'password'"
                         color="primary"
-                        density="compact" 
+                        density="compact"
                         placeholder="Enter New Password"
-                        prepend-inner-icon="mdi-lock-outline" 
-                        variant="outlined" 
+                        prepend-inner-icon="mdi-lock-outline"
+                        variant="outlined"
                         @click:append-inner="show2 = !show2"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-label class="mb-2">{{ $t('ConfirmPassword') }}</v-label>
-                      <v-text-field 
-                        v-model="repeat_password.value.value" 
+                      <v-text-field
+                        v-model="repeat_password.value.value"
                         :error-messages="repeat_password.errorMessage.value"
-                        :readonly="loading" 
-                        :append-inner-icon="show3 ? 'mdi-eye-off' : 'mdi-eye'" 
+                        :readonly="loading"
+                        :append-inner-icon="show3 ? 'mdi-eye-off' : 'mdi-eye'"
                         :type="show3 ? 'text' : 'password'"
                         color="primary"
-                        density="compact" 
-                        placeholder="Enter Confirm Password" 
+                        density="compact"
+                        placeholder="Enter Confirm Password"
                         prepend-inner-icon="mdi-lock-outline"
-                        variant="outlined" 
-                        @click:append-inner="show3 = !show3" 
+                        variant="outlined"
+                        @click:append-inner="show3 = !show3"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -75,11 +75,9 @@
   </v-row>
 </template>
 <script setup>
+import { post,err } from '@/utils/request';
 import { useField, useForm } from 'vee-validate'
-import { ref, getCurrentInstance} from 'vue';
-
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
+import { ref} from 'vue';
 
 let form = ref(false)
 let loading = ref(false)
@@ -115,29 +113,14 @@ const submit = handleSubmit(values => {
     loading = true
     setTimeout(() => (loading = false), 200)
     loading = false
-    
+
     const formData = JSON.stringify(values, null, 2)
-    http.post('/user/changePassword', formData, { headers: { 'content-type': 'application/json' } })
+    post('/user/changePassword', formData, { headers: { 'content-type': 'application/json' } })
         .then(response => {
             console.log(response);
         })
         .catch(function (error) {
-            if (error.response) {
-                // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // 请求已经成功发起，但没有收到响应
-                // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                // 而在node.js中是 http.ClientRequest 的实例
-                console.log(error.request);
-            } else {
-                // 发送请求时出了点问题
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-            console.log(error);
+           err(error)
         });
 })
 </script>

@@ -25,10 +25,8 @@
   </div>
 </template>
 <script setup>
-import { ref, getCurrentInstance, inject } from 'vue'
-
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
+import { post, err } from '@/utils/request';
+import { ref, inject } from 'vue'
 
 const host = inject('serverHost');
 const avatar = ref(localStorage.getItem("userAvatar")? host+localStorage.getItem("userAvatar"):'@/assets/images/profile/user-profile-1.png');
@@ -50,23 +48,7 @@ function getUserInfo() {
         browseNum.value = data.BrowseNum
       }
     }).catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
+      err(error)
     });
 }
 
@@ -75,29 +57,14 @@ const avatarFile = ref(null)
 function uploadAvatar() {
   const formData = new FormData();
   formData.append('avatar', avatarFile.value.files[0]);
-  http.post('/user/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  post('/user/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     .then(response => {
       // console.log(response);
       avatar.value = host + response.data.data
       localStorage.setItem("userAvatar",response.data.data)
     })
     .catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
+      err(error)
     });
 }
 </script>

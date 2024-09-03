@@ -67,7 +67,6 @@ app.provide('serverHost', 'http://192.168.0.9:8080/')
 
 axios.defaults.baseURL = "/api"
 axios.defaults.withCredentials = true;
-axios.defaults.headers.post["Content-Type"] = 'application/json'
 app.config.globalProperties.$http = axios
 
 registerPlugins(app)

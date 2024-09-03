@@ -216,6 +216,7 @@
     </v-card>
 </template>
 <script>
+import { get,post,err } from '@/utils/request';
 import { inject, reactive } from 'vue';
 import Artplayer from "artplayer";
 import artplayerPluginDanmuku from 'artplayer-plugin-danmuku';
@@ -293,7 +294,7 @@ export default {
     },
     methods: {
         getData(id) {
-            this.get('/video/play', { id: id })
+            get('/video/play', { id: id })
                 .then(response => {
                     // console.log(response.data);
                     const data = response.data
@@ -325,18 +326,18 @@ export default {
                     this.loadArtplayer(id,this.$http);
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         // 统计浏览量
         addBrowse(id) {
             this.browse = this.browse + 1
-            this.get('/video/browse', { video_id: parseInt(id) })
+            get('/video/browse', { video_id: parseInt(id) })
                 .then(response => {
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         // 统计收藏量
@@ -355,24 +356,24 @@ export default {
             const formData = {};
             formData['video_id'] = parseInt(this.videoId)
             formData['collect'] = num
-            this.post('/video/collect', formData)
+            post('/video/collect', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         // 获取评论数据
         getCommentList(id) {
-            this.get('/comment/list', { video_id: parseInt(id) })
+            get('/comment/list', { video_id: parseInt(id) })
                 .then(response => {
                     // console.log(response.data.data);
                     this.comments = response.data.data
                     this.loadReply(this.comments)
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         // 评论
@@ -384,7 +385,7 @@ export default {
             const formData = {};
             formData['content'] = this.content
             formData['video_id'] = parseInt(this.videoId)
-            this.post('/comment/comment', formData)
+            post('/comment/comment', formData)
                 .then(response => {
                     // console.log(response.data);
                     let comment = response.data.data
@@ -416,7 +417,7 @@ export default {
                     this.loadReply([comment])
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
 
             this.content = '';
@@ -431,7 +432,7 @@ export default {
             formData['content'] = this.replyTexts[id]
             formData['parent_id'] = parseInt(id)
             formData['video_id'] = parseInt(this.videoId)
-            this.post('/comment/reply', formData)
+            post('/comment/reply', formData)
                 .then(response => {
                     // console.log(response.data);
                     let comment = response.data.data
@@ -464,7 +465,7 @@ export default {
                     this.loadReply([comment])
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
 
             this.replyTexts[id] = '';
@@ -480,12 +481,12 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['zan'] = num
-            this.post('/comment/zan', formData)
+            post('/comment/zan', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         // 踩
@@ -499,12 +500,12 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['cai'] = num
-            this.post('/comment/cai', formData)
+            post('/comment/cai', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         loadReply(comments) {
@@ -580,13 +581,13 @@ export default {
             return y + '年前'
         },
         getDanmuList(id) {
-            this.get('/danmu/list',  { video_id: parseInt(id) })
+            get('/danmu/list',  { video_id: parseInt(id) })
                 .then(response => {
                     // console.log(response.data.data);
                     this.danmuku  = response.data.data
                 })
                 .catch(function (error) {
-                    this.err(error)
+                    err(error)
                 });
         },
         loadArtplayer(id,http) {
@@ -660,12 +661,12 @@ export default {
                             let formData = {};
                             formData = danmu;
                             formData['video_id'] = parseInt(id);
-                            http.post('/danmu/save', formData)
+                            post('/danmu/save', formData)
                                 .then(response => {
                                     console.log(response.data)
                                 })
                                 .catch(function (error) {
-                                    this.err(error)
+                                    err(error)
                                 });
 
                             return new Promise((resolve) => {
@@ -677,33 +678,6 @@ export default {
                     }),
                 ],
             });
-        },
-        get(url, params) {
-            const response = this.$http.get(url, { params: params }, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-            return response
-        },
-        post(url, formData) {
-          console.log("pppp")
-            const response = this.$http.post(url, formData, { headers: { 'content-type': 'application/json' } })
-            return response
-        },
-        err(error) {
-            if (error.response) {
-                // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // 请求已经成功发起，但没有收到响应
-                // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                // 而在node.js中是 http.ClientRequest 的实例
-                console.log(error.request);
-            } else {
-                // 发送请求时出了点问题
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-            console.log(error);
         },
     },
 }

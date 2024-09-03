@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
+import { post, err } from '../../../utils/request.js';
+import { ref } from 'vue';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 import { Form } from 'vee-validate';
-
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
 
 const valid = ref(false);
 const show1 = ref(false);
@@ -30,7 +28,7 @@ function validate(values: any, { setErrors }: any) {
   formData['email'] = email.value
   formData['password'] = password.value
   formData['repeat_password'] = repeat_password.value
-  http.post('/user/register', formData, { headers: { 'content-type': 'application/json' } })
+  post('/user/register', formData)
     .then(function (response) {
       // console.log(response);
       if (response) {
@@ -39,22 +37,7 @@ function validate(values: any, { setErrors }: any) {
       }
     })
     .catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
+      err(error)
     });
 }
 </script>

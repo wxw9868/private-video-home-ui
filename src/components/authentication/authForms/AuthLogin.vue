@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
+import { getCurrentInstance, ref } from 'vue';
+import { err, post } from '../../../utils/request.js';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 // import { useAuthStore } from '@/stores/auth';
@@ -53,7 +54,7 @@ function getCookie() {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function validate(values: any, { setErrors }: any) {
   if (!valid) return
-  
+
   // 点击登录按钮的时候，判断是否勾选了自动登录（记住密码），对cookie做相应操作
   if (checkbox.value) {
     // 传入账号名，密码，和保存天数14个参数
@@ -66,35 +67,20 @@ function validate(values: any, { setErrors }: any) {
   const formData = {};
   formData['email'] = email.value
   formData['password'] = password.value
-  http.post('/user/doLogin', formData, { headers: { 'content-type': 'application/json' }})
+  post('/user/login', formData)
     .then(response => {
       // console.log('Login successful', response.data);
       if (response) {
-        localStorage.setItem("isLogin", "true"); 
+        localStorage.setItem("isLogin", "true");
         snackbar.value = true
         text.value = response.data.message
-        //5秒钟之后跳转到指定的页面 
+        //5秒钟之后跳转到指定的页面
         setTimeout(window.location.href = '/', 8);
       }
     })
     .catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
-    });     
+      err(error)
+    });
 }
 </script>
 

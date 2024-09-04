@@ -30,13 +30,13 @@
         </template>
         <v-expand-x-transition>
             <form action="/video/search" method="get">
-                <v-text-field 
-                    v-show="isSearchVisible" 
-                    hide-details 
-                    type="search" 
+                <v-text-field
+                    v-show="isSearchVisible"
+                    hide-details
+                    type="search"
                     name="query"
-                    :style="{ width: searchWidth }" 
-                    density="comfortable" 
+                    :style="{ width: searchWidth }"
+                    density="comfortable"
                     placeholder="Search"
                     variant="outlined"
                 ></v-text-field>
@@ -50,6 +50,7 @@
     </v-navigation-drawer>
 </template>
 <script setup>
+import { get, err } from '@/utils/request';
 import { useTheme } from 'vuetify'
 import { inject } from 'vue';
 
@@ -121,7 +122,7 @@ export default {
             }
         },
         getSession() {
-            this.$http.get('/user/session')
+            get('/user/session')
                 .then(response => {
                     let data = response.data.data;
                     if (data) {
@@ -133,28 +134,12 @@ export default {
                         localStorage.setItem("userNickname", data.nickname);
                         localStorage.setItem("userEmail", data.email);
                         localStorage.setItem("userMobile", data.mobile);
-                        localStorage.setItem("userDesignation", data.designation);      
+                        localStorage.setItem("userDesignation", data.designation);
                     }
                 }).catch(function (error) {
-                    if (error.response) {
-                        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-
-                    } else if (error.request) {
-                        // 请求已经成功发起，但没有收到响应
-                        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                        // 而在node.js中是 http.ClientRequest 的实例
-                        console.log(error.request);
-                    } else {
-                        // 发送请求时出了点问题
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
-                    console.log(error);
+                    err(error)
                 });
-        },  
+        },
     },
 
     watch: {

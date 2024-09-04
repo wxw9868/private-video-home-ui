@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { err, post } from '../../../utils/request.js';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
 const router = useRouter();
 const route = useRoute();
 
@@ -26,38 +25,23 @@ const text = ref('登录成功');
 
 function validate() {
   if (!valid) return
-  
+
   const formData = {};
   formData['reset_password_token'] = route.query.reset_password_token;
   formData['password'] = password.value
   formData['confirm_password'] = conpassword.value
-  http.post('/user/forgotPassword', formData, { headers: { 'content-type': 'application/json' }})
+  post('/user/forgotPassword', formData)
     .then(response => {
       // console.log(response);
       if (response) {
         snackbar.value = true
         text.value = response.data.message
-        setTimeout(() => {router.push('/login');}, 5000); 
+        setTimeout(() => {router.push('/login');}, 5000);
       }
     })
     .catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
-    });     
+      err(error)
+    });
 }
 </script>
 

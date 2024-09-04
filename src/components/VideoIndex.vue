@@ -29,7 +29,7 @@
                 </v-lazy>
 
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                    <v-data-iterator :items="lists" :items-per-page="itemsPerPage" :loading="loading">
+                    <v-data-iterator :items="list" :items-per-page="itemsPerPage" :loading="loading">
                         <template v-slot:default="{ items }">
                             <v-container class="d-flex">
                                 <v-row justify="start" dense>
@@ -71,15 +71,11 @@
 
                         <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
                             <div class="d-flex align-center justify-center pa-4">
-                                <v-btn :disabled="page === 1" density="comfortable" icon="mdi-arrow-left" variant="tonal"
-                                    rounded @click="prevPage"></v-btn>
-
+                                <v-btn :disabled="page === 1" density="comfortable" icon="mdi-arrow-left" variant="tonal" rounded @click="prevPage"></v-btn>
                                 <div class="mx-2 text-caption">
                                     Page {{ page }} of {{ pageCount }}
                                 </div>
-
-                                <v-btn :disabled="page >= pageCount" density="comfortable" icon="mdi-arrow-right"
-                                    variant="tonal" rounded @click="nextPage"></v-btn>
+                                <v-btn :disabled="page >= pageCount" density="comfortable" icon="mdi-arrow-right" variant="tonal" rounded @click="nextPage"></v-btn>
                             </div>
                         </template>
                     </v-data-iterator>
@@ -95,7 +91,7 @@
 }
 </style>
 <script>
-import { http } from '@/utils/request.js';
+import { err, get } from '@/utils/request';
 import { inject } from 'vue';
 
 export default {
@@ -104,11 +100,11 @@ export default {
         return { host }
     },
     data: () => ({
+        loading: true,
         model: 5,
         itemsPerPage: 20,
-        loading: true,
+        list: [],
         cards: [],
-        lists: [],
         path: '/video/play?id=',
     }),
     mounted() {
@@ -116,7 +112,7 @@ export default {
     },
     methods: {
         getData() {
-            this.lists = [
+            this.list = [
                 {id: 1, title: 'Pre-fab homes', poster: './assets/image/card/card1.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
                 {id: 2, title: 'Favorite road trips', poster: './assets/image/card/card2.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
                 {id: 3, title: 'Best airlines', poster: './assets/image/card/card3.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 2 },
@@ -128,15 +124,14 @@ export default {
                 {id: 9, title: 'Favorite road trips', poster: './assets/image/card/card9.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 },
                 {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
             ];
-            this.cards = this.lists.slice(0, 9);
+            this.cards = this.list.slice(0, 9);
             // this.loading = false;
             // return
-            http.get('/video/list', { params: { actress_id: 0, page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
+            get('/video/list', { params: { page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
-                    console.log(response);
-                    return
-                    this.lists = response.data.data.list;
-                    this.cards = this.lists.slice(0, 9);
+                    // console.log(response);
+                    this.list = response.data.data.list;
+                    this.cards = this.list.slice(0, 9);
                     this.loading = false;
                 }).catch(function (error) {
                     err(error)

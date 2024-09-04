@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
+import { post, err } from '../../../utils/request.js';
+import { ref } from 'vue';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 import { Form } from 'vee-validate';
-
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
 
 const valid = ref(false);
 const show1 = ref(false);
@@ -30,31 +28,16 @@ function validate(values: any, { setErrors }: any) {
   formData['email'] = email.value
   formData['password'] = password.value
   formData['repeat_password'] = repeat_password.value
-  http.post('/user/doRegister', formData, { headers: { 'content-type': 'application/json' } })
+  post('/user/register', formData)
     .then(function (response) {
       // console.log(response);
       if (response) {
-        //3秒钟之后跳转到指定的页面 
+        //3秒钟之后跳转到指定的页面
         setTimeout(window.location.href = '/login', 5);
       }
     })
     .catch(function (error) {
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        console.log(error.request);
-      } else {
-        // 发送请求时出了点问题
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-      console.log(error);
+      err(error)
     });
 }
 </script>
@@ -67,14 +50,14 @@ function validate(values: any, { setErrors }: any) {
   <Form v-model="valid" @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
     <div class="mb-6">
       <v-label>{{ $t('Username') }}</v-label>
-      <v-text-field 
+      <v-text-field
         v-model="username"
         :rules="usernameRules"
-        hide-details="auto" 
-        variant="outlined" 
-        class="mt-2" 
+        hide-details="auto"
+        variant="outlined"
+        class="mt-2"
         required
-        color="primary" 
+        color="primary"
         placeholder="Username"
       ></v-text-field>
     </div>
@@ -83,7 +66,7 @@ function validate(values: any, { setErrors }: any) {
       <v-text-field
         v-model="email"
         :rules="emailRules"
-        placeholder="Email address" 
+        placeholder="Email address"
         class="mt-2"
         required
         hide-details="auto"
@@ -117,7 +100,7 @@ function validate(values: any, { setErrors }: any) {
       <v-text-field
         v-model="repeat_password"
         :rules="passwordRules"
-        placeholder="Enter your confirm password" 
+        placeholder="Enter your confirm password"
         required
         variant="outlined"
         color="primary"
@@ -147,7 +130,7 @@ function validate(values: any, { setErrors }: any) {
       <v-alert color="error">{{ errors.apiError }}</v-alert>
     </div>
   </Form>
-  
+
   <div class="text-center ma-2">
     <v-snackbar
       v-model="snackbar"

@@ -78,6 +78,7 @@ export default {
         subtitle: ' 部影片',
         itemsPerPage: 40,
         page: ref(1),
+        pagesize: ref(1000),
         items: [],
         loading: true,
         length: 0,
@@ -92,10 +93,10 @@ export default {
             const obj = this.loadTab(this.tab,action,sort);
             get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
-                    // console.log(response.data);
-                    const data = response.data.data.list;
-                    this.items = data;
-                    this.length = Math.ceil(data.length / this.itemsPerPage);
+                    console.log(response.data);
+                    return
+                    this.items = response.data.data.list;
+                    this.length = Math.ceil(this.items.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

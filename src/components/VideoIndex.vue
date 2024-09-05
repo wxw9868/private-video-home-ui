@@ -125,8 +125,8 @@ export default {
                 {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
             ];
             this.cards = this.list.slice(0, 9);
-            // this.loading = false;
-            // return
+            this.loading = false;
+            return
             get('/video/list', { params: { page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);

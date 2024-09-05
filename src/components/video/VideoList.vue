@@ -99,8 +99,8 @@ export default {
             get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
                     console.log(response.data);
-                    return
-                    this.cards = response.data.data.list;
+                    // return
+                    this.cards = response.data.data;
                     this.length = Math.ceil(this.cards.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();

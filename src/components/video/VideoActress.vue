@@ -94,7 +94,7 @@ export default {
             get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
                     console.log(response.data);
-                    return
+                    // return
                     this.items = response.data.data.list;
                     this.length = Math.ceil(this.items.length / this.itemsPerPage);
                     this.loading = false;

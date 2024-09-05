@@ -126,7 +126,7 @@ export default {
             ];
             this.cards = this.list.slice(0, 9);
             this.loading = false;
-            return
+            // return
             get('/video/list', { params: { page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
                     // console.log(response);

@@ -15,7 +15,7 @@
                     </v-text-field>
                 </v-col>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab value="one" @click="getData('va.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
+                    <v-tab value="one" @click="getData('a.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
                     <v-tab value="two" @click="getData('a.actress','desc')">{{ $t('Alphabetically') }}</v-tab>
                     <v-tab value="three" @click="getData('count','desc')">{{ $t('MostVideos') }}</v-tab>
                 </v-tabs>
@@ -62,6 +62,7 @@
 </style>
 
 <script>
+import { err, get } from '@/utils/request';
 import { inject, ref } from 'vue';
 import { useGoTo } from 'vuetify';
 

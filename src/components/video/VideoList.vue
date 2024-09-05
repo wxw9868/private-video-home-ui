@@ -100,7 +100,7 @@ export default {
                 .then(response => {
                     // console.log(response.data);
                     this.cards = response.data.data.list;
-                    this.length = Math.ceil(data.length / this.itemsPerPage);
+                    this.length = Math.ceil(this.cards.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

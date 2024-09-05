@@ -90,17 +90,18 @@ export default {
         length: 0,
         cards: [],
         loading: true,
-        pagepage: 0,
-        pagesize: 0,
+        pagepage: 1,
+        pagesize: 1000,
     }),
     methods: {
         getData(action,sort) {
             const obj = this.loadTab(this.tab,action,sort);
             get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
-                    // console.log(response.data);
+                    console.log(response.data);
+                    return
                     this.cards = response.data.data.list;
-                    this.length = Math.ceil(data.length / this.itemsPerPage);
+                    this.length = Math.ceil(this.cards.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

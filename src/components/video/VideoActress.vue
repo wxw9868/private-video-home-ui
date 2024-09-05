@@ -86,7 +86,7 @@ export default {
     }),
     methods: {
         searchActress() {
-            console.log(this.query)
+            // console.log(this.query)
             this.getData('', '', this.query);
         },
         getData(action, sort, query) {
@@ -95,8 +95,9 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     // return
-                    this.items = response.data.data.list;
-                    this.length = Math.ceil(this.items.length / this.itemsPerPage);
+                    const data = response.data.data.list;
+                    this.items = data;
+                    this.length = Math.ceil(data.length / this.itemsPerPage);
                     this.loading = false;
                     this.loadPage();
                 }).catch(function (error) {

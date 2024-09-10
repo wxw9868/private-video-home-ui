@@ -71,7 +71,7 @@
 }
 </style>
 <script>
-import { err, get } from '@/utils/request';
+import {err, get, post} from '@/utils/request';
 import { inject, ref } from 'vue';
 import { useGoTo } from 'vuetify';
 
@@ -96,6 +96,14 @@ export default {
     methods: {
         getData(action,sort) {
             const obj = this.loadTab(this.tab,action,sort);
+            // const formData = {};
+            // formData['page'] = this.pagepage
+            // formData['size'] = this.pagesize
+            // formData['actress_id'] = this.actress_id
+            // formData['action'] = obj.action
+            // formData['desc'] = obj.sort
+            // console.log(formData);
+            // post('/video/list', formData)
             get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
                     console.log(response.data);

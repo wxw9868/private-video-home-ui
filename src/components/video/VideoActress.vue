@@ -126,7 +126,7 @@ export default {
         },
     },
     mounted() {
-        this.getData('', '');
+        this.getData('a.CreatedAt', 'desc');
     },
 }
 </script>

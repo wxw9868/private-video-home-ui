@@ -91,7 +91,7 @@
 }
 </style>
 <script>
-import { err, get } from '@/utils/request';
+import {err, get, post} from '@/utils/request';
 import { inject } from 'vue';
 
 export default {
@@ -125,12 +125,18 @@ export default {
                 {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
             ];
             this.cards = this.list.slice(0, 9);
-            this.loading = false;
+            // this.loading = false;
             // return
+            // const formData = {};
+            // formData['page'] = 1
+            // formData['size'] = 32
+            // formData['action'] = 'v.CreatedAt'
+            // formData['desc'] = 'desc'
+            // post('/video/list', formData)
             get('/video/list', { params: { page: 1, size: 32, action: 'v.CreatedAt', sort: 'desc' } })
                 .then(response => {
-                    // console.log(response);
-                    this.list = response.data.data.list;
+                    console.log(response);
+                    this.list = response.data.data;
                     this.cards = this.list.slice(0, 9);
                     this.loading = false;
                 }).catch(function (error) {

@@ -294,8 +294,8 @@ export default {
         getData(id) {
             get('/video/play/'+id)
                 .then(response => {
-                    // console.log(response.data);return;
-                    const data = response.data
+                    console.log(response.data.data)
+                    const data = response.data.data;
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
@@ -579,7 +579,7 @@ export default {
             return y + '年前'
         },
         getDanmuList(id) {
-            get('/danmu/list',  { video_id: parseInt(id) })
+            get('/danmu/list/'+id)
                 .then(response => {
                     // console.log(response.data.data);
                     this.danmuku  = response.data.data

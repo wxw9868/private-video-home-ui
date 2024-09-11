@@ -101,8 +101,7 @@ export default {
             post('/actress/list', formData)
             // get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
-                    console.log(response.data);
-                    return
+                    // console.log(response.data);
                     const data = response.data.data.list;
                     this.items = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);

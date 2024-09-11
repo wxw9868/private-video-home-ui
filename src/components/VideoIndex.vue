@@ -91,7 +91,7 @@
 }
 </style>
 <script>
-import {err, get, post} from '@/utils/request';
+import { err, get } from '@/utils/request';
 import { inject } from 'vue';
 
 export default {
@@ -125,8 +125,8 @@ export default {
                 {id: 10, title: 'Best airlines', poster: './assets/image/card/card10.jpeg', duration: '01:23:46', collect: 236, browse: 89843, flex: 6 }
             ];
             this.cards = this.list.slice(0, 9);
-            // this.loading = false;
-            // return
+            this.loading = false;
+            return
             // const formData = {};
             // formData['page'] = 1
             // formData['size'] = 32

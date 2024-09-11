@@ -292,9 +292,9 @@ export default {
     },
     methods: {
         getData(id) {
-            get('/video/play', { id: id })
+            get('/video/play/'+id)
                 .then(response => {
-                    // console.log(response.data);
+                    // console.log(response.data);return;
                     const data = response.data
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
@@ -330,7 +330,7 @@ export default {
         // 统计浏览量
         addBrowse(id) {
             this.browse = this.browse + 1
-            get('/video/browse', { video_id: parseInt(id) })
+            get('/video/browse/'+id)
                 .then(response => {
                     console.log(response.data);
                 })

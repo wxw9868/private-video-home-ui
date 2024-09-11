@@ -15,9 +15,9 @@
                     </v-text-field>
                 </v-col>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab value="one" @click="getData('a.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
-                    <v-tab value="two" @click="getData('a.actress','desc')">{{ $t('Alphabetically') }}</v-tab>
-                    <v-tab value="three" @click="getData('count','desc')">{{ $t('MostVideos') }}</v-tab>
+                    <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
+                    <v-tab value="two" @click="getData('a.actress', 'desc', '')">{{ $t('Alphabetically') }}</v-tab>
+                    <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
                 </v-tabs>
                 <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
@@ -62,7 +62,7 @@
 </style>
 
 <script>
-import { err, get } from '@/utils/request';
+import { err, post } from '@/utils/request';
 import { inject, ref } from 'vue';
 import { useGoTo } from 'vuetify';
 
@@ -91,10 +91,18 @@ export default {
         },
         getData(action, sort, query) {
             const obj = this.loadTab(this.tab,action,sort);
-            get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
+            const formData = {};
+            formData['page'] = this.page
+            formData['size'] = this.pagesize
+            formData['action'] = obj.action
+            formData['sort'] = obj.sort
+            formData['actress'] = query
+            console.log(formData);
+            post('/actress/list', formData)
+            // get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
                     console.log(response.data);
-                    // return
+                    return
                     const data = response.data.data.list;
                     this.items = data;
                     this.length = Math.ceil(data.length / this.itemsPerPage);
@@ -126,7 +134,7 @@ export default {
         },
     },
     mounted() {
-        this.getData('a.CreatedAt', 'desc');
+        this.getData('a.CreatedAt', 'desc', '');
     },
 }
 </script>

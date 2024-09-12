@@ -299,9 +299,11 @@ export default {
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
-                    if (id > 544) {
+                    if (id > 965) {
+                        this.videoUrl = 'http://192.168.0.9:7070/' + data.videoUrl;
+                    } else if (id > 544 && id < 966) {
                         this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
-                    } else {
+                    } else  {
                         this.videoUrl = this.host + data.videoUrl;
                     }
                     this.videoPoster = this.host + data.Poster;

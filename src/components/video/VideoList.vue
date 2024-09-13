@@ -106,7 +106,7 @@ export default {
             post('/video/list', formData)
             // get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
                 .then(response => {
-                    // console.log(response.data);return;
+                    console.log(response.data);
                     this.cards = response.data.data;
                     this.length = Math.ceil(this.cards.length / this.itemsPerPage);
                     this.loading = false;

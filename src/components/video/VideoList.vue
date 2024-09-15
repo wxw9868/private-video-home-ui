@@ -91,7 +91,7 @@ export default {
         cards: [],
         loading: true,
         pagepage: 1,
-        pagesize: 1000,
+        pagesize: 1100,
     }),
     methods: {
         getData(action,sort) {

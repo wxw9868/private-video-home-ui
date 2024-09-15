@@ -7,8 +7,9 @@ export function get(url, params) {
   return axios.get(url, {params: params}, {headers: {'content-type': 'application/x-www-form-urlencoded'}})
 }
 
-export function post(url, formData) {
-  return axios.post(url, formData, { headers: { 'content-type': 'application/json' } })
+export function post(url, formData, config={headers: {'content-type': 'application/json'}}) {
+
+  return axios.post(url, formData, config)
 }
 
 export function err(error) {

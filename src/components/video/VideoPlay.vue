@@ -13,7 +13,12 @@
                                     <div class="artplayer-danmu pt-1"></div>
                                     <div class="text-uppercase text-h5 pt-4">{{ videoTitle }}</div>
                                     <v-chip-group >
-                                        <v-chip class="pl-0 pr-0" variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">{{ item.actress }}</v-chip>
+                                        <v-chip variant="text" v-for="item in videoActress" :key="item" :to="path + item.id">
+                                            <v-avatar start>
+                                              <v-img :src="host + item.avatar"></v-img>
+                                            </v-avatar>
+                                            {{ item.actress }}
+                                        </v-chip>
                                     </v-chip-group>
                                     <div class="pt-0">
                                         <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
@@ -366,7 +371,7 @@ export default {
         },
         // 获取评论数据
         getCommentList(id) {
-            get('/comment/list', { video_id: parseInt(id) })
+            get('/comment/list/'+id)
                 .then(response => {
                     // console.log(response.data.data);
                     this.comments = response.data.data
@@ -383,7 +388,7 @@ export default {
             this.loading = true
 
             const formData = {};
-            formData['content'] = this.content
+            formData['content'] = this.contentit
             formData['video_id'] = parseInt(this.videoId)
             post('/comment/comment', formData)
                 .then(response => {

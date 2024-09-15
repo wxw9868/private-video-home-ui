@@ -2,7 +2,7 @@
     <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
-                <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
+                <v-lazy :min-width="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-sheet class="mx-auto" :elevation="0">
                         <v-slide-group v-model="model" class="pa-4" center-active :mobile=true>
                             <v-slide-group-item
@@ -10,17 +10,21 @@
                                 :key="n"
                                 v-slot="{ toggle, selectedClass }"
                             >
-                                <v-skeleton-loader type="image" :loading="loading" class="ma-1" height="189" width="336">
+                                <v-skeleton-loader
+                                    type="image"
+                                    :loading="loading"
+                                    class="ma-1"
+                                >
+<!--                                  min-width="175"-->
                                     <v-card
                                         :class="['ma-1', selectedClass]"
                                         color="grey-lighten-1"
-                                        height="189"
-                                        width="336"
+                                        :width="width"
                                         @click="toggle"
                                         :to="path+card.id"
                                         target="_blank"
                                     >
-                                        <v-img :src="host + card.poster" class="h-auto"></v-img>
+                                        <v-img :src="host + card.poster"></v-img>
                                     </v-card>
                                 </v-skeleton-loader>
                             </v-slide-group-item>
@@ -102,12 +106,21 @@ export default {
     data: () => ({
         loading: true,
         model: 5,
+        width: 0,
         itemsPerPage: 20,
         list: [],
         cards: [],
         path: '/video/play?id=',
     }),
     mounted() {
+        //根据不同路由跳转不同页面
+        if( this.isMobile() ){
+            console.log("手机端")
+            this.width = 210
+        }else{
+            console.log("PC端")
+            this.width = 339
+        }
         this.getData();
     },
     methods: {
@@ -142,6 +155,11 @@ export default {
                 }).catch(function (error) {
                     err(error)
                 });
+        },
+        //该方法用于判断是否进入手机端
+        isMobile(){
+          let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+          return flag
         }
     },
 }

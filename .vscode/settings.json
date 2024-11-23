@@ -1,7 +1,5 @@
 {
-    "editor.fontSize": 13,
-    "window.zoomLevel": 0,
-    // "terminal.integrated.fontSize": "12",
-    "terminal.integrated.fontWeight": "normal",
-    "markdown.extension.toc.updateOnSave": false
+    "i18n-ally.localesPaths": [
+        "src/utils/locales"
+    ]
 }

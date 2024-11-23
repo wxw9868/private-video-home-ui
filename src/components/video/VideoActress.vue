@@ -1,27 +1,31 @@
 <template>
     <v-card variant="flat" height="100%">
-        <v-layout>
+        <v-layout :full-height=true>
             <v-main>
-                <v-col>
-                    <v-text-field
-                        type="search"
-                        density="comfortable"
-                        placeholder="Search"
-                        variant="outlined"
-                        v-model="query"
-                        v-on:keyup.enter="searchActress()"
-                    >
-                        <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
-                    </v-text-field>
-                </v-col>
-                <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                    <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
-                    <v-tab value="two" @click="getData('a.actress', 'desc', '')">{{ $t('Alphabetically') }}</v-tab>
-                    <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
-                </v-tabs>
-                <v-list lines="two">
+              <v-container>
+                <v-row no-gutters>
+                  <v-col cols="12">
+                      <v-text-field
+                          type="search"
+                          density="comfortable"
+                          placeholder="Search"
+                          variant="outlined"
+                          v-model="query"
+                          v-on:keyup.enter="searchActress()"
+                      >
+                          <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
+                      </v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
+                        <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
+                        <v-tab value="two" @click="getData('a.actress', 'desc', '')">{{ $t('Alphabetically') }}</v-tab>
+                        <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
+                    </v-tabs>
+                  </v-col>
+                  <v-list lines="two">
                     <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                        <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="page" :loading="loading">
+                        <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="pageNum" :loading="loading">
                             <template v-slot:default="{ items }">
                                 <v-container class="d-flex" fluid>
                                     <v-row justify="start" dense>
@@ -33,7 +37,7 @@
                                                     :href="path + file.raw.id"
                                                 >
                                                     <template v-slot:prepend>
-                                                        <v-avatar>
+                                                        <v-avatar size="32">
                                                             <v-img :src="host + file.raw.avatar"></v-img>
                                                         </v-avatar>
                                                     </template>
@@ -42,11 +46,15 @@
                                         </v-col>
                                     </v-row>
                                 </v-container>
-                                <v-pagination v-model="page" :length="length" @click="pagination()"></v-pagination>
+                                <div class="text-center">
+                                  <v-pagination v-model="pageNum" :length="length" @click="pagination()"></v-pagination>
+                                </div>
                             </template>
                         </v-data-iterator>
                     </v-lazy>
                 </v-list>
+                </v-row>
+              </v-container>
             </v-main>
         </v-layout>
     </v-card>
@@ -63,7 +71,7 @@
 
 <script>
 import { err, post } from '@/utils/request';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {
@@ -77,8 +85,8 @@ export default {
         path: '/video/list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
-        page: ref(1),
-        pagesize: ref(1000),
+        pageNum: 1,
+        pageSize: 1000,
         items: [],
         loading: true,
         length: 0,
@@ -86,18 +94,17 @@ export default {
     }),
     methods: {
         searchActress() {
-            // console.log(this.query)
             this.getData('', '', this.query);
         },
         getData(action, sort, query) {
             const obj = this.loadTab(this.tab,action,sort);
             const formData = {};
-            formData['page'] = this.page
-            formData['size'] = this.pagesize
+            formData['page'] = this.pageNum
+            formData['size'] = this.pageSize
             formData['action'] = obj.action
             formData['sort'] = obj.sort
             formData['actress'] = query
-            console.log(formData);
+
             post('/actress/list', formData)
             // get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
@@ -112,15 +119,15 @@ export default {
                 });
         },
         pagination() {
-            localStorage.setItem('actress-currentPage',this.page);
+            localStorage.setItem('actress-currentPage',this.pageNum);
             this.goTo(0, { container: '#goto-container' });
         },
         loadPage() {
             let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
-            this.page = currentPage || this.page;
+            this.pageNum = currentPage || this.pageNum;
         },
         loadTab(tab,action,sort) {
-            if (action !='' && sort != '') localStorage.setItem('actress-currentPage',1)
+            if (action !=='' && sort !== '') localStorage.setItem('actress-currentPage','1')
 
             this.tab = tab || localStorage.getItem('actress-tab');
             action = action || localStorage.getItem('actress-action');

@@ -72,7 +72,7 @@
 </style>
 <script>
 import { err, post } from '@/utils/request';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {
@@ -86,25 +86,25 @@ export default {
         actress_id: 0,
         path: '/video/play?id=',
         itemsPerPage: 24,
-        page: ref(1),
+        page: 1,
         length: 0,
         cards: [],
         loading: true,
-        pagepage: 1,
-        pagesize: 1100,
+        pagePage: 1,
+        pageSize: 1100,
     }),
     methods: {
         getData(action,sort) {
             const obj = this.loadTab(this.tab,action,sort);
             const formData = {};
-            formData['page'] = this.pagepage
-            formData['size'] = this.pagesize
+            formData['page'] = this.pagePage
+            formData['size'] = this.pageSize
             formData['actress_id'] = parseInt(this.actress_id)
             formData['action'] = obj.action
             formData['sort'] = obj.sort
             // console.log(formData);
             post('/video/list', formData)
-            // get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.pagepage, size: this.pagesize })
+            // get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.page, size: this.pageSize })
                 .then(response => {
                     console.log(response.data);
                     this.cards = response.data.data;
@@ -124,7 +124,7 @@ export default {
             this.goTo(0, { container: '#goto-container' });
         },
         loadTab(tab,action,sort) {
-            if (action !='' && sort != '') localStorage.setItem('list-currentPage',1)
+            if (action !=='' && sort !== '') localStorage.setItem('list-currentPage','1')
 
             this.tab = tab || localStorage.getItem('list-tab');
             action = action || localStorage.getItem('list-action');

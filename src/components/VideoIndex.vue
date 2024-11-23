@@ -95,8 +95,8 @@
 }
 </style>
 <script>
-import { err, post } from '@/utils/request';
-import { inject } from 'vue';
+import {err, post} from '@/utils/request';
+import {inject} from 'vue';
 
 export default {
     setup() {
@@ -158,8 +158,7 @@ export default {
         },
         //该方法用于判断是否进入手机端
         isMobile(){
-          let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
-          return flag
+          return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
         }
     },
 }

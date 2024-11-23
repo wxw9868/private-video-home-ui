@@ -57,7 +57,7 @@ const avatarFile = ref(null)
 function uploadAvatar() {
   const formData = new FormData();
   formData.append('avatar', avatarFile.value.files[0]);
-  post('/user/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  post('/user/avatar', formData, { headers: { "Content-Type": "multipart/form-data" } })
     .then(response => {
       // console.log(response);
       avatar.value = host + response.data.data

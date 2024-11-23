@@ -55,7 +55,7 @@
 </style>
 <script>
 import { get,err } from '@/utils/request';
-import { ref, inject } from 'vue';
+import { inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
 export default {
@@ -67,7 +67,7 @@ export default {
     data: () => ({
         path: '/video/play?id=',
         itemsPerPage: 24,
-        page: ref(1),
+        page: 1,
         length: 0,
         cards: [],
         loading: true,

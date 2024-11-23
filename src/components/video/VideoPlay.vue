@@ -4,7 +4,8 @@
             <v-main>
                 <v-container>
                     <v-row no-gutters>
-                        <v-col class="pa-1" cols="12" sm="8">
+<!--                        <v-col class="pa-1" cols="12" sm="8">-->
+                      <v-col class="pa-1" cols="12">
                             <v-skeleton-loader type="card" :loading="loading" class="mx-auto">
                                 <v-card variant="flat" class="mx-auto">
                                     <v-responsive :aspect-ratio="16 / 9">
@@ -31,26 +32,26 @@
                                 </v-card>
                             </v-skeleton-loader>
                         </v-col>
-                        <v-col class="pa-1" cols="12" sm="4">
-                            <v-card variant="tonal" align="center" justify="center">
-                                <div class="pl-1 pt-4 pb-4">
-                                    <span class="text-h5 me-3">{{ videoTitle }}</span>
-                                    <span class="text-grey text-body-1">84集全</span>
-                                </div>
-                                <div class="pb-4">
-                                    <v-virtual-scroll :items="items" height="338.5">
-                                        <v-btn
-                                            v-for="item in episodes" :key="item"
-                                            class="ma-1"
-                                            variant="tonal"
-                                            border
-                                        >
-                                            {{ item }}
-                                        </v-btn>
-                                    </v-virtual-scroll>
-                                </div>
-                            </v-card>
-                        </v-col>
+<!--                        <v-col class="pa-1" cols="12" sm="4">-->
+<!--                            <v-card variant="tonal" align="center" justify="center">-->
+<!--                                <div class="pl-1 pt-4 pb-4">-->
+<!--                                    <span class="text-h5 me-3">{{ videoTitle }}</span>-->
+<!--                                    <span class="text-grey text-body-1">84集全</span>-->
+<!--                                </div>-->
+<!--                                <div class="pb-4">-->
+<!--                                    <v-virtual-scroll :items="items" height="338.5">-->
+<!--                                        <v-btn-->
+<!--                                            v-for="item in episodes" :key="item"-->
+<!--                                            class="ma-1"-->
+<!--                                            variant="tonal"-->
+<!--                                            border-->
+<!--                                        >-->
+<!--                                            {{ item }}-->
+<!--                                        </v-btn>-->
+<!--                                    </v-virtual-scroll>-->
+<!--                                </div>-->
+<!--                            </v-card>-->
+<!--                        </v-col>-->
                     </v-row>
                 </v-container>
 
@@ -136,7 +137,7 @@
                                 </v-row>
 
                                 <v-expand-transition>
-                                    <div v-show="replyListShow == comment.ID">
+                                    <div v-show="replyListShow === comment.ID">
                                         <v-row v-for="(replies, i) in comment.Childrens" :key="i">
                                             <div class="pt-3 pl-3">
                                                 <v-avatar size="24px" :image="host + replies.Avatar"></v-avatar>
@@ -304,10 +305,8 @@ export default {
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
-                    if (id > 965) {
+                    if (id <= 544) {
                         this.videoUrl = 'http://192.168.0.9:7070/' + data.videoUrl;
-                    } else if (id > 544 && id < 966) {
-                        this.videoUrl = 'http://192.168.0.9:9090/' + data.videoUrl;
                     } else  {
                         this.videoUrl = this.host + data.videoUrl;
                     }
@@ -318,16 +317,6 @@ export default {
                     this.isCollect = data.IsCollect;
                     this.icon.collect = this.isCollect ? 'mdi-heart' : this.icon.collect;
                     this.userAvatar = this.host + data.Avatar;
-
-                    // this.videoTitle = '三国演义';
-                    // this.videoActress = [
-                    //     {"id": "1", "actress": "曹操"},
-                    //     {"id": "2", "actress": "刘备"},
-                    //     {"id": "2", "actress": "孙权"},
-                    // ];
-                    // this.videoUrl = '/src/assets/video/lc.mp4';
-                    // this.videoPoster = '';
-
                     this.loadArtplayer(id,this.$http);
                 })
                 .catch(function (error) {
@@ -348,7 +337,7 @@ export default {
         // 统计收藏量
         statisticsCollect() {
             let num = 0
-            if (this.icon.collect == 'mdi-heart-outline') {
+            if (this.icon.collect === 'mdi-heart-outline') {
                 this.icon.collect = 'mdi-heart'
                 this.collect = this.collect + 1
                 num = 1
@@ -450,7 +439,7 @@ export default {
                         "ParentId": 0,
                         "VideoId": this.videoId,
                         "UserId": this.userId,
-                        "Nickname": comment.userNickname,
+                        "Nickname": comment.userNickame,
                         "Avatar": comment.userAvatar,
                         "Status": "APPROVED",
                         "ZanNum": 0,
@@ -515,6 +504,7 @@ export default {
         },
         loadReply(comments) {
             comments.forEach((comment, index) => {
+                console.log(index)
                 this.replyForms[comment.ID] = false
                 this.replyloadings[comment.ID] = false
                 this.replyTexts[comment.ID] = ''
@@ -541,38 +531,38 @@ export default {
             });
         },
         replyShow(id) {
-            this.replyTextareaShow = (this.replyTextareaShow != id) ? id : 0;
+            this.replyTextareaShow = (this.replyTextareaShow !== id) ? id : 0;
         },
         repliesShow(id) {
-            this.replyListShow = (this.replyListShow != id) ? id : 0;
+            this.replyListShow = (this.replyListShow !== id) ? id : 0;
         },
         isZanAndCai(logUserID, userID, zan, cai) {
             let isZan = false
             let isCai = false
-            if (logUserID == userID) {
-                if (zan == 1) {
+            if (logUserID === userID) {
+                if (zan === 1) {
                     isZan = true
                 }
-                if (cai == 1) {
+                if (cai === 1) {
                     isCai = true
                 }
             }
             return { isZan, isCai }
         },
         doTime(timeString) {
-            if (timeString == '') return '刚刚'
+            if (timeString === '') return '刚刚'
             let old = new Date(timeString);
             let now = new Date();
             let y = now.getFullYear() - old.getFullYear()
-            if (y == 0) {
+            if (y === 0) {
                 let m = now.getMonth() - old.getMonth()
-                if (m == 0) {
+                if (m === 0) {
                     let d = now.getDate() - old.getDate()
-                    if (d == 0) {
+                    if (d === 0) {
                         let h = now.getHours() - old.getHours()
-                        if (h == 0) {
+                        if (h === 0) {
                             let i = now.getMinutes() - old.getMinutes()
-                            if (i == 0) {
+                            if (i === 0) {
                                 return i + '秒钟前'
                             }
                             return i + '分钟前'
@@ -596,7 +586,8 @@ export default {
                 });
         },
         loadArtplayer(id,http) {
-            var $danmu = document.querySelector('.artplayer-danmu');
+            console.log(http)
+            const $danmu = document.querySelector('.artplayer-danmu');
             const art = new Artplayer({
                 id: String(this.videoId),
                 container: '.videoPlayer',
@@ -683,6 +674,7 @@ export default {
                     }),
                 ],
             });
+            console.log(art)
         },
     },
 }

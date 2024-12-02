@@ -1,36 +1,30 @@
 <template>
     <v-card variant="flat" height="100%">
-        <v-layout :full-height=true>
+        <v-layout>
             <v-main>
-              <v-container>
-                <v-row no-gutters>
-                  <v-col cols="12">
-                      <v-text-field
-                          type="search"
-                          density="comfortable"
-                          placeholder="Search"
-                          variant="outlined"
-                          v-model="query"
-                          v-on:keyup.enter="searchActress()"
-                      >
-                          <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
-                      </v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
-                        <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
-                        <v-tab value="two" @click="getData('a.actress', 'desc', '')">{{ $t('Alphabetically') }}</v-tab>
-                        <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
-                    </v-tabs>
-                  </v-col>
-                  <v-list lines="two">
-                    <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                        <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="pageNum" :loading="loading">
-                            <template v-slot:default="{ items }">
-                                <v-container class="d-flex" fluid>
+                <v-text-field
+                    type="search"
+                    density="comfortable"
+                    placeholder="Search"
+                    variant="outlined"
+                    v-model="query"
+                    v-on:keyup.enter="searchActress()"
+                >
+                    <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
+                </v-text-field>
+                <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
+                    <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
+                    <v-tab value="two" @click="getData('a.actress', 'desc', '')">{{ $t('Alphabetically') }}</v-tab>
+                    <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
+                </v-tabs>
+                <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
+                    <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="page" :loading="iteratorLoading">
+                        <template v-slot:default="{ items }">
+                            <v-list lines="two">
+                                <v-container class="d-flex">
                                     <v-row justify="start" dense>
                                         <v-col v-for="(file, i) in items" :key="i" cols="6" sm="3" order="1">
-                                            <v-skeleton-loader type="list-item-avatar-two-line" :loading="loading">
+                                            <v-skeleton-loader type="list-item-avatar-two-line" :loading="skeletonLoading">
                                                 <v-list-item
                                                     :title="file.raw.actress"
                                                     :subtitle="file.raw.count + subtitle"
@@ -46,15 +40,11 @@
                                         </v-col>
                                     </v-row>
                                 </v-container>
-                                <div class="text-center">
-                                  <v-pagination v-model="pageNum" :length="length" @click="pagination()"></v-pagination>
-                                </div>
-                            </template>
-                        </v-data-iterator>
-                    </v-lazy>
-                </v-list>
-                </v-row>
-              </v-container>
+                            </v-list>
+                            <v-pagination v-model="page" :length="length" :total-visible="5" @click="pagination()"></v-pagination>
+                        </template>
+                    </v-data-iterator>
+                </v-lazy>
             </v-main>
         </v-layout>
     </v-card>
@@ -85,10 +75,11 @@ export default {
         path: '/video/list?id=',
         subtitle: ' 部影片',
         itemsPerPage: 40,
-        pageNum: 1,
-        pageSize: 1000,
+        page: 1,
+        pageSize: 40,
         items: [],
-        loading: true,
+        iteratorLoading: false,
+        skeletonLoading: true,
         length: 0,
         query: '',
     }),
@@ -97,29 +88,28 @@ export default {
             this.getData('', '', this.query);
         },
         getData(action, sort, query) {
+            this.loading = true;
             const obj = this.loadTab(this.tab,action,sort);
             const formData = {};
-            formData['page'] = this.pageNum
+            formData['page'] = this.page
             formData['size'] = this.pageSize
             formData['action'] = obj.action
             formData['sort'] = obj.sort
             formData['actress'] = query
 
             post('/actress/list', formData)
-            // get('/actress/list',  { action: obj.action, sort: obj.sort, actress: query })
                 .then(response => {
-                    // console.log(response.data);
-                    const data = response.data.data.list;
-                    this.items = data;
-                    this.length = Math.ceil(data.length / this.itemsPerPage);
-                    this.loading = false;
+                    this.items = response.data.data.list;
+                    this.length = Math.ceil(response.data.data.count / this.itemsPerPage);
+                    this.skeletonLoading = false;
                     this.loadPage();
                 }).catch(function (error) {
                     err(error)
                 });
         },
         pagination() {
-            localStorage.setItem('actress-currentPage',this.pageNum);
+            this.getData('', '', this.query);
+            localStorage.setItem('actress-currentPage',this.page);
             this.goTo(0, { container: '#goto-container' });
         },
         loadPage() {

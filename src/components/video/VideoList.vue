@@ -2,23 +2,18 @@
     <v-card variant="flat" height="100%">
         <v-layout>
             <v-main>
-                <v-tabs
-                    v-model="tab"
-                    align-tabs="center"
-                    :mandatory=true
-                >
+                <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
                     <v-tab value="one" @click="getData('v.CreatedAt','desc')">{{ $t('RecentUpdate') }}</v-tab>
                     <v-tab value="two" @click="getData('l.browse','desc')">{{ $t('MostViewed') }}</v-tab>
                     <v-tab value="three" @click="getData('l.collect','desc')">{{ $t('MostFavourited') }}</v-tab>
                 </v-tabs>
-
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                    <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
+                    <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="iteratorLoading">
                         <template v-slot:default="{ items }">
-                            <v-container class="d-flex" >
+                            <v-container class="d-flex">
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
-                                        <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
+                                        <v-skeleton-loader type="card" :loading="skeletonLoading" class="mx-auto" max-width="300">
                                             <v-card
                                                 variant="flat"
                                                 class="mx-auto"
@@ -51,12 +46,7 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination
-                                v-model="page"
-                                :length="length"
-                                :total-visible="5"
-                                @click="pagination()"
-                            ></v-pagination>
+                            <v-pagination v-model="page" :length="length" :total-visible="5" @click="pagination()"></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>
@@ -86,30 +76,28 @@ export default {
         actress_id: 0,
         path: '/video/play?id=',
         itemsPerPage: 24,
-        page: 1,
         length: 0,
         cards: [],
-        loading: true,
-        pagePage: 1,
-        pageSize: 1100,
+        iteratorLoading: false,
+        skeletonLoading: true,
+        page: 1,
+        pageSize: 24,
     }),
     methods: {
         getData(action,sort) {
+            this.loading = true;
             const obj = this.loadTab(this.tab,action,sort);
             const formData = {};
-            formData['page'] = this.pagePage
+            formData['page'] = this.page
             formData['size'] = this.pageSize
             formData['actress_id'] = parseInt(this.actress_id)
             formData['action'] = obj.action
             formData['sort'] = obj.sort
-            // console.log(formData);
             post('/video/list', formData)
-            // get('/video/list', { actress_id: this.actress_id, action: obj.action, sort: obj.sort, page: this.page, size: this.pageSize })
                 .then(response => {
-                    console.log(response.data);
-                    this.cards = response.data.data;
-                    this.length = Math.ceil(this.cards.length / this.itemsPerPage);
-                    this.loading = false;
+                    this.cards = response.data.data.list;
+                    this.length = Math.ceil(response.data.data.count / this.itemsPerPage);
+                    this.skeletonLoading = false;
                     this.loadPage();
                 }).catch(function (error) {
                     err(error)
@@ -120,6 +108,7 @@ export default {
             this.page = currentPage || this.page;
         },
         pagination() {
+            this.getData('','')
             localStorage.setItem('list-currentPage', this.page);
             this.goTo(0, { container: '#goto-container' });
         },

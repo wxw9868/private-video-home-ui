@@ -126,7 +126,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
                     if (data) {
-                        console.log(data)
                         this.avatar = data.avatar;
                         localStorage.setItem("userID", data.id);
                         localStorage.setItem("userAvatar", data.avatar);

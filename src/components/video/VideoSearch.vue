@@ -5,9 +5,9 @@
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
                     <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
                         <template v-slot:default="{ items }">
-                            <v-container class="d-flex" fluid>
+                            <v-container class="d-flex">
                                 <v-row justify="start" dense>
-                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="2" order="1">
+                                    <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
                                         <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
                                             <v-card
                                                 variant="flat"
@@ -58,7 +58,7 @@
 }
 </style>
 <script>
-import { err, get } from '@/utils/request';
+import { err, post } from '@/utils/request';
 import { inject } from 'vue';
 import { useGoTo } from 'vuetify';
 
@@ -86,10 +86,9 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(query) {
-            // console.log(query);
-            get('/video/search', { query: query } )
+            post('/search/api/query', { query: query } )
                 .then(response => {
-                    // console.log(response)
+                    console.log(response)
                     const data = response.data.data
                     this.cards = data.documents
                     this.length = Math.ceil(data.total / this.itemsPerPage)

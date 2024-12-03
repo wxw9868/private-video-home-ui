@@ -93,7 +93,7 @@ export default {
             formData['actress_id'] = parseInt(this.actress_id)
             formData['action'] = obj.action
             formData['sort'] = obj.sort
-            post('/video/list', formData)
+            post('/video/getVideoList', formData)
                 .then(response => {
                     this.cards = response.data.data.list;
                     this.length = Math.ceil(response.data.data.count / this.itemsPerPage);

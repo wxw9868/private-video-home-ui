@@ -32,7 +32,6 @@ function validate() {
   formData['confirm_password'] = conpassword.value
   post('/user/forgotPassword', formData)
     .then(response => {
-      // console.log(response);
       if (response) {
         snackbar.value = true
         text.value = response.data.message

@@ -87,11 +87,6 @@ const show3 = ref(false);
 
 const { handleSubmit, handleReset } = useForm({
     validationSchema: {
-        // old_password(value) {
-        //   if (value) return true
-        //
-        //   return 'Old Password is required.'
-        // },
         password(value) {
           if (value?.length > 7 && /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$/.test(value)) return true
 

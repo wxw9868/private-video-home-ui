@@ -5,45 +5,45 @@
         <v-card class="mx-auto pa-12 pb-8" elevation="0" max-width="448" rounded="lg">
             <v-form v-model="form" @submit.prevent="submit">
                 <div class="text-subtitle-1 text-medium-emphasis">Username</div>
-                <v-text-field 
-                    v-model="username.value.value" 
+                <v-text-field
+                    v-model="username.value.value"
                     :error-messages="username.errorMessage.value"
                     :readonly="loading"
-                    label="Username" 
-                    density="compact" 
+                    label="Username"
+                    density="compact"
                     placeholder="Username"
-                    prepend-inner-icon="mdi-account-outline" 
-                    variant="outlined" 
+                    prepend-inner-icon="mdi-account-outline"
+                    variant="outlined"
                     clearable
                 ></v-text-field>
 
                 <div class="text-subtitle-1 text-medium-emphasis">Account</div>
-                <v-text-field 
-                    v-model="email.value.value" 
-                    :error-messages="email.errorMessage.value" 
+                <v-text-field
+                    v-model="email.value.value"
+                    :error-messages="email.errorMessage.value"
                     :readonly="loading"
-                    label="Email" 
-                    density="compact" 
-                    placeholder="Email address" 
+                    label="Email"
+                    density="compact"
+                    placeholder="Email address"
                     prepend-inner-icon="mdi-email-outline"
-                    variant="outlined" 
+                    variant="outlined"
                     clearable
                 ></v-text-field>
 
                 <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                     Password
                 </div>
-                <v-text-field 
-                    v-model="password.value.value" 
+                <v-text-field
+                    v-model="password.value.value"
                     :error-messages="password.errorMessage.value"
-                    :readonly="loading" 
-                    label="Password" 
+                    :readonly="loading"
+                    label="Password"
                     :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'" 
-                    density="compact" 
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
                     placeholder="Enter your password"
-                    prepend-inner-icon="mdi-lock-outline" 
-                    variant="outlined" 
+                    prepend-inner-icon="mdi-lock-outline"
+                    variant="outlined"
                     @click:append-inner="visible = !visible"
                     clearable
                 ></v-text-field>
@@ -51,18 +51,18 @@
                 <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                     Confirm Password
                 </div>
-                <v-text-field 
-                    v-model="repeat_password.value.value" 
+                <v-text-field
+                    v-model="repeat_password.value.value"
                     :error-messages="repeat_password.errorMessage.value"
-                    :readonly="loading" 
+                    :readonly="loading"
                     label="Confirm Password"
-                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" 
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
-                    density="compact" 
-                    placeholder="Enter your confirm password" 
+                    density="compact"
+                    placeholder="Enter your confirm password"
                     prepend-inner-icon="mdi-lock-outline"
-                    variant="outlined" 
-                    @click:append-inner="visible = !visible" 
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
                     clearable
                 ></v-text-field>
 
@@ -79,13 +79,11 @@
     </v-main>
 </template>
 <script setup>
+import { post,err } from '@/utils/request';
 import { useField, useForm } from 'vee-validate'
-import { getCurrentInstance} from 'vue';
 import { inject } from 'vue';
 
 const host = inject('serverHost');
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
 
 let visible = false
 let form = false
@@ -125,33 +123,17 @@ const submit = handleSubmit(values => {
     loading = true
     setTimeout(() => (loading = false), 200)
     loading = false
-    
+
     const formData = JSON.stringify(values, null, 2)
-    http.post('/user/doRegister', formData, { headers: { 'content-type': 'application/json' } })
+    post('/user/register', formData)
         .then(function (response) {
-            // console.log(response);
             if (response) {
-                //3秒钟之后跳转到指定的页面 
+                //3秒钟之后跳转到指定的页面
                 setTimeout(window.location.href = '/login', 3);
             }
         })
         .catch(function (error) {
-            if (error.response) {
-                // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // 请求已经成功发起，但没有收到响应
-                // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
-                // 而在node.js中是 http.ClientRequest 的实例
-                console.log(error.request);
-            } else {
-                // 发送请求时出了点问题
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-            console.log(error);
+            err(error)
         });
 })
 </script>

@@ -97,7 +97,7 @@ export default {
             formData['sort'] = obj.sort
             formData['actress'] = query
 
-            post('/actress/list', formData)
+            post('/actress/getActressList', formData)
                 .then(response => {
                     this.items = response.data.data.list;
                     this.length = Math.ceil(response.data.data.count / this.itemsPerPage);

@@ -82,10 +82,8 @@ export default {
             this.page = currentPage || this.page;
         },
         getData(query) {
-            // console.log(query);
-            get('/user/browse', { params: { query: query } })
+            get('/user/getUserBrowseList', { params: { query: query } })
                 .then(response => {
-                    // console.log(response)
                     let data = response.data.data
                     this.cards = data
                     this.length = Math.ceil(data.length / this.itemsPerPage)

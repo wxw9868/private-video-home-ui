@@ -119,7 +119,7 @@ const submit = handleSubmit(values => {
   loading = false
 
   const formData = JSON.stringify(values, null, 2)
-  post('/user/save', formData)
+  post('/user/updateUserInfo', formData)
     .then(response => {
       console.log(response);
     })
@@ -130,11 +130,9 @@ const submit = handleSubmit(values => {
 
 getUserInfo()
 function getUserInfo() {
-  get('/user/info')
+  get('/user/getUserInfo')
     .then(response => {
       let data = response.data.data;
-      if (data) {
-        // console.log(data)
         nickname.value.value = data.Nickname
         username.value.value = data.Username
         email.value.value = data.Email
@@ -142,7 +140,6 @@ function getUserInfo() {
         designation.value.value = data.Designation
         address.value.value = data.Address
         note.value.value = data.Note
-      }
     }).catch(function (error) {
       err(error)
     });

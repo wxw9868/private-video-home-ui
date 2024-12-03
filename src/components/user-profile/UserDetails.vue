@@ -38,10 +38,9 @@ const browseNum = ref(0)
 
 getUserInfo()
 function getUserInfo() {
-  get('/user/info')
+  get('/user/getUserInfo')
     .then(response => {
       let data = response.data.data;
-      // console.log(data)
       if (data) {
         avatar.value = host + data.Avatar
         collectNum.value = data.CollectNum
@@ -57,9 +56,8 @@ const avatarFile = ref(null)
 function uploadAvatar() {
   const formData = new FormData();
   formData.append('avatar', avatarFile.value.files[0]);
-  post('/user/avatar', formData, { headers: { "Content-Type": "multipart/form-data" } })
+  post('/user/changeUserAvatar', formData, { headers: { "Content-Type": "multipart/form-data" } })
     .then(response => {
-      // console.log(response);
       avatar.value = host + response.data.data
       localStorage.setItem("userAvatar",response.data.data)
     })

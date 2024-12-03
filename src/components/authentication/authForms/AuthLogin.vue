@@ -3,11 +3,7 @@ import { getCurrentInstance, ref } from 'vue';
 import { err, post } from '../../../utils/request.js';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
-// import { useAuthStore } from '@/stores/auth';
 import { Form } from 'vee-validate';
-
-const instance = getCurrentInstance();
-const http = instance.appContext.config.globalProperties.$http;
 
 const valid = ref(false);
 const show1 = ref(false);
@@ -69,7 +65,6 @@ function validate(values: any, { setErrors }: any) {
   formData['password'] = password.value
   post('/user/login', formData)
     .then(response => {
-      // console.log('Login successful', response.data);
       if (response) {
         localStorage.setItem("isLogin", "true");
         snackbar.value = true

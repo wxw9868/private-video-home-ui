@@ -17,7 +17,6 @@ function validate() {
   post('/user/sendUrl', formData)
     .then(response => {
       // 登录成功的处理逻辑
-      // console.log(response);
       if (response) {
         router.push('/check-mail');
       }

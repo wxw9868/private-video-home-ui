@@ -30,7 +30,6 @@ function validate(values: any, { setErrors }: any) {
   formData['repeat_password'] = repeat_password.value
   post('/user/register', formData)
     .then(function (response) {
-      // console.log(response);
       if (response) {
         //3秒钟之后跳转到指定的页面
         setTimeout(window.location.href = '/login', 5);

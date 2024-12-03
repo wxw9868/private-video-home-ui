@@ -261,7 +261,7 @@ export default {
     },
     methods: {
         getData(id) {
-            get('/video/play/'+id)
+            get('/video/videoPlay/'+id)
                 .then(response => {
                     const data = response.data.data;
                     this.videoId = data.videoID;
@@ -288,7 +288,7 @@ export default {
         // 统计浏览量
         addBrowse(id) {
             this.browse = this.browse + 1
-            get('/video/browse/'+id)
+            get('/video/browseVideo/'+id)
                 .then(response => {
                     console.log(response.data);
                 })
@@ -312,7 +312,7 @@ export default {
             const formData = {};
             formData['video_id'] = parseInt(this.videoId)
             formData['collect'] = num
-            post('/video/collect', formData)
+            post('/video/collectVideo', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -322,7 +322,7 @@ export default {
         },
         // 获取评论数据
         getCommentList(id) {
-            get('/comment/list/'+id)
+            get('/video/comment/getVideoCommentList/'+id)
                 .then(response => {
                     this.comments = response.data.data
                     this.loadReply(this.comments)
@@ -340,7 +340,7 @@ export default {
             const formData = {};
             formData['content'] = this.contentit
             formData['video_id'] = parseInt(this.videoId)
-            post('/comment/comment', formData)
+            post('/video/comment/videoComment', formData)
                 .then(response => {
                     let comment = response.data.data
                     this.comments.unshift({
@@ -386,9 +386,8 @@ export default {
             formData['content'] = this.replyTexts[id]
             formData['parent_id'] = parseInt(id)
             formData['video_id'] = parseInt(this.videoId)
-            post('/comment/reply', formData)
+            post('/video/comment/replyVideoComment', formData)
                 .then(response => {
-                    // console.log(response.data);
                     let comment = response.data.data
                     if (!this.comments[i].Childrens) this.comments[i].Childrens = []
                     this.comments[i].Childrens.unshift({
@@ -436,7 +435,7 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['zan'] = num
-            post('/comment/zan', formData)
+            post('/video/comment/likeVideoComment', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -455,7 +454,7 @@ export default {
             const formData = {};
             formData['comment_id'] = parseInt(id)
             formData['cai'] = num
-            post('/comment/cai', formData)
+            post('/video/comment/dislikeVideoComment', formData)
                 .then(function (response) {
                     console.log(response.data);
                 })
@@ -537,7 +536,7 @@ export default {
             return y + '年前'
         },
         getDanmuList(id) {
-            get('/danmu/list/'+id)
+            get('/video/danmu/getVideoBarrageList/'+id)
                 .then(response => {
                     this.danmuku  = response.data.data
                 })
@@ -607,7 +606,7 @@ export default {
                             let formData = {};
                             formData = danmu;
                             formData['video_id'] = parseInt(id);
-                            post('/danmu/save', formData)
+                            post('/video/danmu/sendVideoBarrage', formData)
                                 .then(response => {
                                     console.log(response.data)
                                 })

@@ -8,9 +8,9 @@
                     placeholder="Search"
                     variant="outlined"
                     v-model="query"
-                    v-on:keyup.enter="searchActress()"
+                    v-on:keyup.enter="search()"
                 >
-                    <v-btn variant="text" @click="searchActress()" class="text-field-with-button">搜索</v-btn>
+                    <v-btn variant="text" @click="search()" class="text-field-with-button">搜索</v-btn>
                 </v-text-field>
                 <v-tabs v-model="tab" align-tabs="center" :mandatory=true>
                     <v-tab value="one" @click="getData('a.CreatedAt', 'desc', '')">{{ $t('RecentUpdate') }}</v-tab>
@@ -18,7 +18,7 @@
                     <v-tab value="three" @click="getData('count', 'desc', '')">{{ $t('MostVideos') }}</v-tab>
                 </v-tabs>
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                    <v-data-iterator :items="items" :items-per-page="itemsPerPage" :page="page" :loading="iteratorLoading">
+                    <v-data-iterator :items="items" :items-per-page="pageSize" :page="page" :loading="iteratorLoading">
                         <template v-slot:default="{ items }">
                             <v-list lines="two">
                                 <v-container class="d-flex">
@@ -71,66 +71,67 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        tab: '',
-        path: '/video/list?id=',
-        subtitle: ' 部影片',
-        itemsPerPage: 40,
-        page: 1,
-        pageSize: 40,
-        items: [],
+        tab: 'one',
         iteratorLoading: false,
         skeletonLoading: true,
+        page: 1,
+        pageSize: 40,
         length: 0,
+        path: '/video/list?id=',
+        subtitle: ' 部影片',
+        items: [],
         query: '',
+        column: 'a.CreatedAt',
+        order: 'desc',
     }),
     methods: {
-        searchActress() {
+        search() {
             this.getData('', '', this.query);
         },
-        getData(action, sort, query) {
-            this.loading = true;
-            const obj = this.loadTab(this.tab,action,sort);
+        getData(column, order, query) {
+            this.setCache(column, order);
             const formData = {};
             formData['page'] = this.page
             formData['size'] = this.pageSize
-            formData['action'] = obj.action
-            formData['sort'] = obj.sort
+            formData['action'] = this.column
+            formData['sort'] = this.order
             formData['actress'] = query
-
             post('/actress/getActressList', formData)
                 .then(response => {
                     this.items = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.count / this.itemsPerPage);
+                    this.length = Math.ceil(response.data.data.count / this.pageSize);
                     this.skeletonLoading = false;
-                    this.loadPage();
                 }).catch(function (error) {
                     err(error)
                 });
         },
         pagination() {
             this.getData('', '', this.query);
-            localStorage.setItem('actress-currentPage',this.page);
+            localStorage.setItem('actress-page', this.page);
             this.goTo(0, { container: '#goto-container' });
         },
-        loadPage() {
-            let currentPage = parseInt(localStorage.getItem('actress-currentPage'));
-            this.pageNum = currentPage || this.pageNum;
-        },
-        loadTab(tab,action,sort) {
-            if (action !=='' && sort !== '') localStorage.setItem('actress-currentPage','1')
+        setCache(column, order) {
+            if (column !=='' && order !== '') {
+                this.page = 1;
+                localStorage.setItem('actress-page', 1);
+            }
+            this.column = column || this.column;
+            this.order = order || this.order;
 
-            this.tab = tab || localStorage.getItem('actress-tab');
-            action = action || localStorage.getItem('actress-action');
-            sort = sort || localStorage.getItem('actress-sort');
-
-            localStorage.setItem('actress-tab',this.tab);
-            localStorage.setItem('actress-action',action);
-            localStorage.setItem('actress-sort',sort);
-            return {action,sort}
+            localStorage.setItem('actress-tab', this.tab);
+            localStorage.setItem('actress-column', column);
+            localStorage.setItem('actress-order', order);
         },
+        getCache() {
+            this.tab = localStorage.getItem('actress-tab') || this.tab;
+            this.column = localStorage.getItem('actress-column') || this.column;
+            this.order = localStorage.getItem('actress-order') || this.order;
+            this.page = parseInt(localStorage.getItem('actress-page')) || this.page;
+        }
     },
     mounted() {
-        this.getData('a.CreatedAt', 'desc', '');
+        this.getCache()
+        this.getData('', '', '');
     },
 }
 </script>

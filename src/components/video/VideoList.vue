@@ -8,7 +8,7 @@
                     <v-tab value="three" @click="getData('l.collect','desc')">{{ $t('MostFavourited') }}</v-tab>
                 </v-tabs>
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                    <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="iteratorLoading">
+                    <v-data-iterator :items="cards" :items-per-page="pageSize" :page="page" :loading="iteratorLoading">
                         <template v-slot:default="{ items }">
                             <v-container class="d-flex">
                                 <v-row justify="start" dense>
@@ -72,61 +72,63 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        tab: '',
-        actress_id: 0,
-        path: '/video/play?id=',
-        itemsPerPage: 24,
-        length: 0,
-        cards: [],
+        tab: 'one',
         iteratorLoading: false,
         skeletonLoading: true,
         page: 1,
         pageSize: 24,
+        length: 0,
+        actress_id: 0,
+        path: '/video/play?id=',
+        cards: [],
+        column: 'v.CreatedAt',
+        order: 'desc',
     }),
     methods: {
-        getData(action,sort) {
-            this.loading = true;
-            const obj = this.loadTab(this.tab,action,sort);
+        getData(column,order) {
+            this.setCache(column,order);
             const formData = {};
+            formData['actress_id'] = parseInt(this.actress_id)
+            formData['action'] = this.column
+            formData['sort'] = this.order
             formData['page'] = this.page
             formData['size'] = this.pageSize
-            formData['actress_id'] = parseInt(this.actress_id)
-            formData['action'] = obj.action
-            formData['sort'] = obj.sort
             post('/video/getVideoList', formData)
                 .then(response => {
                     this.cards = response.data.data.list;
-                    this.length = Math.ceil(response.data.data.count / this.itemsPerPage);
+                    this.length = Math.ceil(response.data.data.count / this.pageSize);
                     this.skeletonLoading = false;
-                    this.loadPage();
                 }).catch(function (error) {
                     err(error)
                 });
         },
-        loadPage() {
-            let currentPage = parseInt(localStorage.getItem('list-currentPage'));
-            this.page = currentPage || this.page;
-        },
         pagination() {
             this.getData('','')
-            localStorage.setItem('list-currentPage', this.page);
+            localStorage.setItem('list-page', this.page);
             this.goTo(0, { container: '#goto-container' });
         },
-        loadTab(tab,action,sort) {
-            if (action !=='' && sort !== '') localStorage.setItem('list-currentPage','1')
+        setCache(column,order) {
+            if (column !=='' && order !== '') {
+              this.page = 1;
+              localStorage.setItem('list-page','1');
+            }
+            this.column = column || this.column;
+            this.order = order || this.order;
 
-            this.tab = tab || localStorage.getItem('list-tab');
-            action = action || localStorage.getItem('list-action');
-            sort = sort || localStorage.getItem('list-sort');
-
-            localStorage.setItem('list-tab',this.tab);
-            localStorage.setItem('list-action',action);
-            localStorage.setItem('list-sort',sort);
-            return { action, sort }
+            localStorage.setItem('list-tab', this.tab);
+            localStorage.setItem('list-column',column);
+            localStorage.setItem('list-order', order);
+        },
+        getCache() {
+          this.actress_id = this.$route.query.id;
+          this.tab = localStorage.getItem('list-tab') || this.tab;
+          this.column = localStorage.getItem('list-column') || this.column;
+          this.order = localStorage.getItem('list-order') || this.order;
+          this.page = parseInt(localStorage.getItem('list-page')) || this.page;
         },
     },
     mounted() {
-        this.actress_id = this.$route.query.id
+        this.getCache();
         this.getData('','');
     },
 }

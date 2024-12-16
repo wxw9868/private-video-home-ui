@@ -3,23 +3,21 @@
         <v-layout>
             <v-main>
                 <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-                    <v-data-iterator :items="cards" :items-per-page="itemsPerPage" :page="page" :loading="loading">
+                    <v-data-iterator :items="cards" :items-per-page="pageSize" :page="page" :loading="iteratorLoading">
                         <template v-slot:default="{ items }">
                             <v-container class="d-flex">
                                 <v-row justify="start" dense>
                                     <v-col v-for="(card, i) in items" :key="i" cols="6" sm="3" order="1">
-                                        <v-skeleton-loader type="card" :loading="loading" class="mx-auto" max-width="300">
+                                        <v-skeleton-loader type="card" :loading="skeletonLoading" class="mx-auto" max-width="300">
                                             <v-card
                                                 variant="flat"
-                                                :href="path + card.raw.document.id"
                                                 class="mx-auto"
                                                 max-width="300"
                                                 target="_blank"
+                                                :href="path + card.raw.document.id"
                                                 hover
                                             >
-                                                <v-img :src="host + card.raw.document.poster"
-                                                    class="h-auto align-end text-white"
-                                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
+                                                <v-img :src="host + card.raw.document.poster" class="h-auto align-end text-white" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200" cover>
                                                     <v-toolbar color="transparent">
                                                         <template v-slot:append>
                                                             <v-chip variant="tonal" class="bg-black-semi text-body-2 font-weight-light">{{ card.raw.document.duration }}</v-chip>
@@ -29,21 +27,16 @@
                                                 <div class="text-uppercase text-truncate text-body-1 font-weight-light pt-2">{{ card.raw.document.title }}</div>
                                                 <div class="text-overline text-grey-darken-1">
                                                     <v-icon color="grey-darken-1" class="me-1" icon="mdi-eye" size="x-small"></v-icon>
-                                                    <span class="subheading me-2" v-text="card.raw.document.browse"></span>
+                                                    <span class="subheading me-2" v-text="card.raw.document.browse_num"></span>
                                                     <v-icon color="grey-darken-1" class="me-1" icon="mdi-heart" size="x-small"></v-icon>
-                                                    <span class="subheading" v-text="card.raw.document.collect"></span>
+                                                    <span class="subheading" v-text="card.raw.document.collect_num"></span>
                                                 </div>
                                             </v-card>
                                         </v-skeleton-loader>
                                     </v-col>
                                 </v-row>
                             </v-container>
-                            <v-pagination
-                                v-model="page"
-                                :length="length"
-                                :total-visible="5"
-                                @click="pagination()"
-                            ></v-pagination>
+                            <v-pagination v-model="page" :length="length" :total-visible="5" @click="pagination()"></v-pagination>
                         </template>
                     </v-data-iterator>
                 </v-lazy>
@@ -69,37 +62,34 @@ export default {
         return { host, goTo }
     },
     data: () => ({
-        path: 'video/play?id=',
-        itemsPerPage: 24,
+        iteratorLoading: false,
+        skeletonLoading: true,
         page: 1,
+        pageSize: 24,
         length: 0,
         cards: [],
-        loading: true,
+        path: '/video/play?id=',
     }),
     methods: {
-        pagination() {
-            localStorage.setItem('list-currentPage', this.page);
-            this.goTo(0, { container: '#goto-container' });
-        },
-        loadPage() {
-            let currentPage = parseInt(localStorage.getItem('list-currentPage'));
-            this.page = currentPage || this.page;
-        },
         getData(query) {
+            console.log(this.page)
             post('/search/api/query', { query: query } )
                 .then(response => {
-                    console.log(response)
                     const data = response.data.data
                     this.cards = data.documents
-                    this.length = Math.ceil(data.total / this.itemsPerPage)
-                    this.loading = false;
-                    this.loadPage();
+                    this.length = Math.ceil(data.total / this.pageSize)
+                    this.skeletonLoading = false;
                 }).catch(function (error) {
                     err(error)
                 });
         },
+        pagination() {
+            localStorage.setItem('search-page', this.page);
+            this.goTo(0, { container: '#goto-container' });
+        },
     },
     mounted() {
+        this.page = parseInt(localStorage.getItem('search-page')) || this.page;
         this.getData(this.$route.query.query);
     },
 }

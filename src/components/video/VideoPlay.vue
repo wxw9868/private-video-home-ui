@@ -2,7 +2,7 @@
     <v-card variant="flat" height="100%">
         <v-layout :full-height=false>
             <v-main>
-                <v-skeleton-loader type="card" :loading="loading" class="mx-auto">
+                <v-skeleton-loader type="card" :loading="skeletonLoading" class="mx-auto">
                     <v-container>
                         <v-row>
                             <v-col class="pa-1">
@@ -20,7 +20,7 @@
                                     </v-chip>
                                 </v-chip-group>
                                 <div class="pt-0">
-                                    <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="statisticsCollect()"></v-btn>
+                                    <v-btn variant="text" class="me-2" color="medium-emphasis" :icon="icon.collect" size="medium" @click="onCollect()"></v-btn>
                                     <span class="subheading me-5" v-text="videoCollect"></span>
                                     <v-btn variant="text" class="me-2" color="medium-emphasis" icon="mdi-eye" size="medium"></v-btn>
                                     <span class="subheading me-5" v-text="videoBrowse"></span>
@@ -200,6 +200,7 @@ export default {
         return { host, theme }
     },
     data: () => ({
+        skeletonLoading: false,
         loading: false,
         userId: localStorage.getItem("userID"),
         userAvatar: '',
@@ -251,19 +252,12 @@ export default {
         onCommentHtml: null,
         danmuku: [],
     }),
-    mounted() {
-        let id = this.$route.query.id;
-        this.videoId = id;
-        this.getDanmuList(id);
-        this.addBrowse(id);
-        this.getData(id);
-        this.getCommentList(id);
-    },
     methods: {
         getData(id) {
             get('/video/videoPlay/'+id)
                 .then(response => {
                     const data = response.data.data;
+                    console.log(data)
                     this.videoId = data.videoID;
                     this.videoTitle = data.videoTitle;
                     this.videoActress = data.videoActress;
@@ -286,8 +280,7 @@ export default {
                 });
         },
         // 统计浏览量
-        addBrowse(id) {
-            this.browse = this.browse + 1
+        onBrowse(id) {
             get('/video/browseVideo/'+id)
                 .then(response => {
                     console.log(response.data);
@@ -297,15 +290,15 @@ export default {
                 });
         },
         // 统计收藏量
-        statisticsCollect() {
+        onCollect() {
             let num = 0
             if (this.icon.collect === 'mdi-heart-outline') {
                 this.icon.collect = 'mdi-heart'
-                this.collect = this.collect + 1
+                this.videoCollect = this.videoCollect + 1
                 num = 1
             } else {
                 this.icon.collect = 'mdi-heart-outline'
-                this.collect = this.collect - 1
+                this.videoCollect = this.videoCollect - 1
                 num = -1
             }
 
@@ -625,6 +618,14 @@ export default {
             });
             console.log(art)
         },
+    },
+    mounted() {
+        let id = this.$route.query.id;
+        this.videoId = id;
+        this.getData(id);
+        this.getDanmuList(id);
+        this.getCommentList(id);
+        this.onBrowse(id);
     },
 }
 </script>
